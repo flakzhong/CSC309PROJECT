@@ -1,0 +1,309 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f7d022;
+    height: 52px;
+}
+
+li {
+    float: left;
+}
+
+textarea {
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+}
+
+#makePostsContent {
+    position: relative;
+    left: 18px;
+}
+
+a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: #f1c01c;
+}
+
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    height: 50px;
+}
+
+.upperforumtab {
+  height: 50px;
+}
+
+.Forum {
+  height: 50px;
+}
+
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+.tab button:hover {
+    background-color: #ddd;
+}
+
+.tab button.active {
+    background-color: #ccc;
+    outline: none;
+    box-shadow: none;
+}
+
+.tabcontent {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.forumtab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+.forumtab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+.forumtab button:hover {
+    background-color: #ddd;
+}
+
+.forumtab button.active {
+    background-color: #ccc;
+    outline: none;
+    box-shadow: none;
+}
+
+.forumtabcontent {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+
+
+
+.upperforumtab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+.upperforumtab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+.upperforumtab button:hover {
+    background-color: #ddd;
+}
+
+.upperforumtab button.active {
+    background-color: #ccc;
+    outline: none;
+    box-shadow: none;
+}
+
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-family: Arial, "Times New Roman", Times, serif;
+
+}
+table th {
+    text-align: left;
+    color: #FFFFFF;
+    background-color: #008080;
+    padding: 2px 20px 3px 5px;
+}
+table td {
+    border: 1px solid grey;
+    background-color: #FAEBD7;
+    padding: 4px 8px;
+    word-wrap: break-word;
+}
+th, td { 
+    height: 80px;
+}
+
+
+/* =======================user profile======================= */
+.userprofile .column30 {
+    flex: 30%;
+    padding: 10px;
+}
+
+.userprofile .column70 {
+    flex: 70%;
+    padding: 10px;
+}
+
+.userprofile .row {
+    display:flex
+}
+
+#userprofile:target {
+    display:block
+}
+
+#userprofile {
+    display: none
+}
+
+#loginbar:target{
+    display: block
+}
+
+#loginbar{
+    display: none
+}
+
+#forum{
+    display: none
+}
+
+#forum:target{
+    display: block
+}
+
+#home{
+    display: none
+}
+
+#home:target{
+    display: block
+}
+
+#about{
+    display: none
+}
+
+#about:target{
+    display: block
+}
+
+.forumRegister {
+    display: none;
+}
+
+.forumRegister:target {
+    display: block;
+}
+
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { margin: 1rem; }
+h1 { margin: 2rem 0 0; }
+
+
+.makePosts { display: flex; }
+.makePosts .stretch { flex: 1; }
+.makePosts div input { padding: .5em 1em; width: 100%; }
+
+#post{
+    background-color: grey; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+#post:hover {
+    background-color: #f1c01c;
+}
+
+
+@media (max-width: 650px) {
+	.tab {
+		padding: .35em;
+        display: inline;
+
+	}
+
+	.tab ul {
+		margin: 0;
+		display: inline;
+		padding-right: .15em;
+	}
+
+	.tab ul li {
+		display: inline-block;
+		list-style: none;
+		padding: .36em 0.9375em;
+    }
+    .tab-right a {
+        align-content: left;
+    }
+
+    .forumtab {
+        padding: .35em;
+        display: inline;
+    }
+
+    .forumtab ul {
+        margin: 0;
+		display: inline;
+		padding-right: .15em;
+    }
+
+    .forumtab ul li {
+        display: inline-block;
+		list-style: none;
+		padding: .36em 0.9375em;
+    }
+
+    .upperforumtab {
+        padding: .35em;
+        display: inline;
+    }
+
+    .upperforumtab ul {
+        margin: 0;
+		display: inline;
+		padding-right: .15em;
+    }
+
+    .upperforumtab ul li {
+        display: inline-block;
+		list-style: none;
+		padding: .36em 0.9375em;
+    }
+}
