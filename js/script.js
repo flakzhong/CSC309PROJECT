@@ -166,3 +166,20 @@ $(document).ready(function () {
     });
 
 });*/
+
+function makePost() {
+    var submitButton = document.getElementById('post');
+    var title = document.getElementById("postTitle").value;
+    console.log(title);
+    var content = document.getElementById("postContent").value;
+    console.log(content);
+    if (title.length < 5) {
+        alert("Title too short.");
+    }
+
+    if (content.length < 5) {
+        alert("Content too short.")
+    }
+    var images = document.getElementById("postImgUpload").files;
+
+}
