@@ -203,3 +203,46 @@ function makePost() {
     var images = document.getElementById("postImgUpload").files;
 
 }
+
+function register() {
+    var firstName = document.getElementById("rFirstName").value;
+    var lastName = document.getElementById("rLastName").value;
+    var address = document.getElementById("rAddress").value;
+    var email = document.getElementById("rEmail").value;
+    var username = document.getElementById("rUsername").value;
+    var pw = document.getElementById("rPassword").value;
+    var cpw = document.getElementById("rCPassword").value;
+    var correct = 1;
+    
+    if (firstName.length == 0) {
+        alert("Invalid first name.")
+        correct = 0;
+    }
+    if (lastName.length == 0) {
+        alert("Invalid last name.")
+        correct = 0;
+    }
+    if (address.length == 0) {
+        alert("Invalid address")
+        correct = 0;
+    }
+    if (email.length == 0 || email.indexOf("@") == -1 || email.indexOf(".") == -1) {
+        alert("Invalid email address")
+        correct = 0;
+    }
+    if (username.length < 5) {
+        alert("Username too short")
+        correct = 0;
+    }
+    if (pw.length < 5) {
+        alert("Password too simple")
+        correct = 0;
+    }
+    if (pw != cpw) {
+        alert("Confirm password does not match password.")
+        correct = 0;
+    }
+    if (correct == 1) {
+
+    }
+}
