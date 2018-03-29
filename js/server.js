@@ -2,12 +2,12 @@
 var firebase = require('firebase');
 
 var config = {
-apiKey: "AIzaSyBI4Jb71gkU1LsQYCTRu7gw769Nb7-wQoo",
-authDomain: "a3default.firebaseapp.com",
-databaseURL: "https://a3default.firebaseio.com",
-projectId: "a3default",
-storageBucket: "",
-messagingSenderId: "877503307659"
+  apiKey: "AIzaSyBI4Jb71gkU1LsQYCTRu7gw769Nb7-wQoo",
+  authDomain: "a3default.firebaseapp.com",
+  databaseURL: "https://a3default.firebaseio.com",
+  projectId: "a3default",
+  storageBucket: "",
+  messagingSenderId: "877503307659"
 };
 firebase.initializeApp(config);
 
@@ -28,6 +28,17 @@ var path = require('path');
 const cookieParser = require('cookie-parser');
 var app = express();
 
+var cloudinary = require('cloudinary');
+cloudinary.config({ 
+  cloud_name: 'dfpktpjp8', 
+  api_key: '628676291839431', 
+  api_secret: 'dZjwflkh9gZdNisiK_MWzhr8y4s' 
+});
+
+// cloudinary.v2.uploader.upload("../images/back.png", function(error, result) {
+//   console.log(error);
+//   console.log(result); 
+// });
 
 function myLogger(req, res, next) {
   // console.log("Raw Cookies: ",req.headers.cookie)
@@ -67,7 +78,10 @@ app.post('/api/posts', function(req, res) {
   var title = req.body.title; 
   var username = req.body.username;
   var content = req.body.content; 
-  var file = req.body.file; 
+  var file = req.body.file;
+
+  writeNewPost(title, username, content, file);
+
   res.send('Post request received!\n');
 });
 
@@ -93,6 +107,26 @@ app.delete('/api/posts/:id', function(req, res) {
   console.log(post_id);
   res.send('Delete request received!\n');
 });
+
+function writeNewPost(title, username, content, picture) {
+  // A post entry.
+  var postData = {
+    title: title,
+    author: username,
+    content: content,
+    picture: picture
+  };
+
+  // Get a key for a new Post.
+  var newPostKey = firebase.database().ref().child('posts').push().key;
+
+  // Write the new post's data simultaneously in the posts list and the user's post list.
+  var updates = {};
+  updates['/posts/' + newPostKey] = postData;
+
+  return firebase.database().ref().update(updates);
+}
+
 //=============================== Web page ===============================
 app.get('/', function(req, res) {
     res.cookie('securecookie', 51, {maxAge: 100000, secure: true});
@@ -108,9 +142,13 @@ app.get('/js/script.js', function(req, res) {
     res.sendFile(path.join(__dirname + '/../js/script.js'));
 });
 
-//=============================== Images ===============================
+//=============================== Files ===============================
 app.get('/images/:img', function(req, res) {
   res.sendFile(path.join(__dirname + '/../images/' + req.params.img));
+});
+
+app.get('/lib/:file', function(req, res) {
+  res.sendFile(path.join(__dirname + '/../lib/' + req.params.file));
 });
 
 app.get('/favicon.ico', function(req, res) {
