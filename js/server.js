@@ -15,7 +15,7 @@ firebase.initializeApp(config);
 //const preObject = document.getElementById('object');
 
 //create references
-const dbRefObject = firebase.database().ref().child('object');
+const dbRefObject = firebase.database().ref().child('accounts');
 
 //sync object changes
 //console.log("abc");
@@ -137,13 +137,13 @@ app.get('/api/accounts/:id', function(req, res) {
 
 app.post('/api/accounts', function(req, res) {
   // Client create an account
-  var firstName = req.body.title; 
-  var username = req.body.username;
+  var firstName = req.body.firstName; 
+  var lastName = req.body.lastName;
   var email = req.body.email;
   var address = req.body.address;
   var username = req.body.username;
-  var pw = req.body.pw;
-  writeNewPost(title, username, content, file);
+  var pw = req.body.password;
+  createNewAccount(firstName, lastName, email, address, username, pw);
 
   res.send('Post request received!\n');
 });
@@ -152,7 +152,7 @@ app.put('/api/account/:id', function(req, res) {
   // Client attempts to update a post
   var account_id = req.params.id;
 
-  var firstName = req.body.title; 
+  var firstName = req.body.firstName; 
   var username = req.body.username;
   var email = req.body.email;
   var address = req.body.address;

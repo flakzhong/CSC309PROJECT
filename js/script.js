@@ -229,7 +229,7 @@ function register() {
         $(function(){
             console.log("ajax is about to run...")
             $.ajax({
-              url: "http://11c6c406.ngrok.io/api/accounts",
+              url: "https://fa8bcd37.ngrok.io/api/accounts",
               type: "POST",
               data: {'firstName' : firstName, 
                     'lastName': lastName,
