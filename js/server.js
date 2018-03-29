@@ -1,3 +1,27 @@
+// Initialize Firebase
+var firebase = require('firebase');
+
+var config = {
+apiKey: "AIzaSyBI4Jb71gkU1LsQYCTRu7gw769Nb7-wQoo",
+authDomain: "a3default.firebaseapp.com",
+databaseURL: "https://a3default.firebaseio.com",
+projectId: "a3default",
+storageBucket: "",
+messagingSenderId: "877503307659"
+};
+firebase.initializeApp(config);
+
+//get elements
+//const preObject = document.getElementById('object');
+
+//create references
+const dbRefObject = firebase.database().ref().child('object');
+
+//sync object changes
+//console.log("abc");
+dbRefObject.on('value', snap => console.log(snap.val()));
+// ======================  ======================
+
 var express = require('express');
 var bodyParser = require('body-parser')
 var path = require('path');
