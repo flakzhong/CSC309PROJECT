@@ -55,6 +55,13 @@ app.get('/api/posts', function(req, res) {
   res.send('Get request received!\n');
 });
 
+app.get('/api/posts/:id', function(req, res) {
+  // Client requests a certain post
+  var post_id = req.params.id;
+
+  res.send('Get request for post: ' + post_id + ' received!\n');
+});
+
 app.post('/api/posts', function(req, res) {
   // Client submits a post
   var title = req.body.title; 
