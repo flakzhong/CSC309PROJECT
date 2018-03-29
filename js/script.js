@@ -1,3 +1,22 @@
+var title = "Corgi!!!";
+var content = "The best way to raise a Corgi";
+var file = "Placeholder: filename or file, not working now";
+
+console.log("script.js is running...");
+
+$(function(){
+    console.log("ajax is about to run...")
+    $.ajax({
+      url: "http://9726e14f.ngrok.io/api/posts",
+      type: "POST",
+      data: {'title' : title, 
+            'content': content,
+            'file'   : file},
+      dataType: "json"
+    });
+});
+
+
 // Initialize Firebase
 var config = {
 apiKey: "AIzaSyBI4Jb71gkU1LsQYCTRu7gw769Nb7-wQoo",

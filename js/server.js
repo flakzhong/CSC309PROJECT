@@ -2,6 +2,21 @@ var express = require('express');
 var app = express();
 var path = require('path');
 
+var bodyParser = require('body-parser')
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+// ====================== handling POST at /posts ======================
+app.post('/api/posts', function(req, res) {
+	console.log('received post');
+	var title = req.body.title; 
+	var content = req.body.content; 
+	var file = req.body.file; 
+	console.log(title);
+	console.log(content);
+	console.log(file);
+	res.send('Post received!');
+});
+
 //=============================== Web page ===============================
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/../index.html'));
