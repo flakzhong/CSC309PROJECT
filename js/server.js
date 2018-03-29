@@ -30,9 +30,9 @@ var app = express();
 
 
 function myLogger(req, res, next) {
-  console.log("Raw Cookies: ",req.headers.cookie)
-  console.log("Cookie Parser: ",req.cookies)
-  console.log("Signed Cookies: ",req.signedCookies)
+  // console.log("Raw Cookies: ",req.headers.cookie)
+  // console.log("Cookie Parser: ",req.cookies)
+  // console.log("Signed Cookies: ",req.signedCookies)
   if (req.body) {
     console.log('LOG:',req.method,req.url,req.body)
   }
@@ -43,27 +43,53 @@ function myLogger(req, res, next) {
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser("Cookies!"));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser("Pets!"));
 app.use(myLogger)
 
 
-// ====================== handling POST at /posts ======================
-app.post('/api/posts', function(req, res) {
-	console.log('received post');
-	var title = req.body.title; 
-	var content = req.body.content; 
-	var file = req.body.file; 
-	console.log(title);
-	console.log(content);
-	console.log(file);
-	res.send('Post received!');
-	console.log("After post: ", req.cookies);
+// ====================== handling api/posts, R/W into DB ======================
+app.get('/api/posts', function(req, res) {
+  // Client requests posts
 
+  res.send('Get request received!\n');
 });
 
+app.post('/api/posts', function(req, res) {
+  // Client submits a post
+  var title = req.body.title; 
+  var username = req.body.username;
+  var content = req.body.content; 
+  var file = req.body.file; 
+  res.send('Post request received!\n');
+});
+
+app.put('/api/posts/:id', function(req, res) {
+  // Client attempts to update a post
+  var post_id = req.params.id;
+
+  var title = req.body.title; 
+  var username = req.body.username;
+  var content = req.body.content; 
+  var file = req.body.file; 
+
+  console.log(post_id);
+  res.send('Update request received!\n');
+});
+
+app.delete('/api/posts/:id', function(req, res) {
+  // Client attempts to delete a post,
+  // NEED to check if this post belong to this user
+  var post_id = req.params.id;
+  var username = req.body.username;
+
+  console.log(post_id);
+  res.send('Delete request received!\n');
+});
 //=============================== Web page ===============================
 app.get('/', function(req, res) {
+    res.cookie('securecookie', 51, {maxAge: 100000, secure: true});
+    res.cookie('name', 'Tom', { signed: true });
     res.sendFile(path.join(__dirname + '/../index.html'));
 });
 
@@ -76,20 +102,12 @@ app.get('/js/script.js', function(req, res) {
 });
 
 //=============================== Images ===============================
-app.get('/images/back.png', function(req, res) {
-    res.sendFile(path.join(__dirname + '/../images/back.png'));
-});
-
-app.get('/images/logo.png', function(req, res) {
-    res.sendFile(path.join(__dirname + '/../images/logo.png'));
-});
-
-app.get('/images/panda.jpg', function(req, res) {
-    res.sendFile(path.join(__dirname + '/../images/panda.jpg'));
+app.get('/images/:img', function(req, res) {
+  res.sendFile(path.join(__dirname + '/../images/' + req.params.img));
 });
 
 app.get('/favicon.ico', function(req, res) {
-    res.sendFile(path.join(__dirname + '/../images/favicon.ico'));
+  res.sendFile(path.join(__dirname + '/../images/favicon.ico'));
 });
 
 app.listen(PORT, () => {
