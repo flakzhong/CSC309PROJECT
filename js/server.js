@@ -1,10 +1,29 @@
 var express = require('express');
-var app = express();
-var path = require('path');
-
 var bodyParser = require('body-parser')
+var path = require('path');
+const cookieParser = require('cookie-parser');
+var app = express();
+
+
+function myLogger(req, res, next) {
+  console.log("Raw Cookies: ",req.headers.cookie)
+  console.log("Cookie Parser: ",req.cookies)
+  console.log("Signed Cookies: ",req.signedCookies)
+  if (req.body) {
+    console.log('LOG:',req.method,req.url,req.body)
+  }
+   res.append('Set-Cookie', 'lastPage='+req.url);
+  next()
+}
+
+const PORT = process.env.PORT || 3000;
+
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser("Cookies!"));
+app.use(myLogger)
+
+
 // ====================== handling POST at /posts ======================
 app.post('/api/posts', function(req, res) {
 	console.log('received post');
@@ -15,6 +34,8 @@ app.post('/api/posts', function(req, res) {
 	console.log(content);
 	console.log(file);
 	res.send('Post received!');
+	console.log("After post: ", req.cookies);
+
 });
 
 //=============================== Web page ===============================
@@ -47,4 +68,6 @@ app.get('/favicon.ico', function(req, res) {
     res.sendFile(path.join(__dirname + '/../images/favicon.ico'));
 });
 
-app.listen(3000);
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});

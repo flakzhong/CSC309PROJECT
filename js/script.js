@@ -3,11 +3,12 @@ var content = "The best way to raise a Corgi";
 var file = "Placeholder: filename or file, not working now";
 
 console.log("script.js is running...");
+document.cookie = "username=smith;"
 
 $(function(){
     console.log("ajax is about to run...")
     $.ajax({
-      url: "http://9726e14f.ngrok.io/api/posts",
+      url: "http://c7e4c2b5.ngrok.io/api/posts",
       type: "POST",
       data: {'title' : title, 
             'content': content,
