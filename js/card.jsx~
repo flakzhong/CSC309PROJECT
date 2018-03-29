@@ -110,7 +110,7 @@ class PostList extends React.Component {
 
     }
     
-    render() {return null}
+    render() {}
 }
 
 class Post extends React.Component {
@@ -118,7 +118,7 @@ class Post extends React.Component {
         super(props);
     }
     
-    render() {return null}
+    render() {}
 }
 
 ReactDOM.render(<ForumBody />, document.getElementById('webbody'));
