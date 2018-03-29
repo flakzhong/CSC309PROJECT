@@ -187,23 +187,6 @@ $(document).ready(function () {
 
 });*/
 
-function makePost() {
-    var submitButton = document.getElementById('post');
-    var title = document.getElementById("postTitle").value;
-    console.log(title);
-    var content = document.getElementById("postContent").value;
-    console.log(content);
-    if (title.length < 5) {
-        alert("Title too short.");
-    }
-
-    if (content.length < 5) {
-        alert("Content too short.")
-    }
-    var images = document.getElementById("postImgUpload").files;
-
-}
-
 function register() {
     var firstName = document.getElementById("rFirstName").value;
     var lastName = document.getElementById("rLastName").value;
@@ -243,6 +226,22 @@ function register() {
         correct = 0;
     }
     if (correct == 1) {
-
+        $(function(){
+            console.log("ajax is about to run...")
+            $.ajax({
+              url: "http://11c6c406.ngrok.io/api/accounts",
+              type: "POST",
+              data: {'firstName' : firstName, 
+                    'lastName': lastName,
+                    'address': address,
+                    'email': email,
+                    'username': username,
+                    'password': pw},
+              dataType: "json",
+              success: function(response) {
+                  alert(response);
+              }
+            });
+        });
     }
 }

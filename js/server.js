@@ -126,6 +126,63 @@ function writeNewPost(title, username, content, picture) {
 
   return firebase.database().ref().update(updates);
 }
+// ====================== handling api/accounts, R/W into DB ======================
+
+app.get('/api/accounts/:id', function(req, res) {
+  // Client requests a certain post
+  var post_id = req.params.id;
+
+  res.send('Get request for account: ' + post_id + ' received!\n');
+});
+
+app.post('/api/accounts', function(req, res) {
+  // Client create an account
+  var firstName = req.body.title; 
+  var username = req.body.username;
+  var email = req.body.email;
+  var address = req.body.address;
+  var username = req.body.username;
+  var pw = req.body.pw;
+  writeNewPost(title, username, content, file);
+
+  res.send('Post request received!\n');
+});
+
+app.put('/api/account/:id', function(req, res) {
+  // Client attempts to update a post
+  var account_id = req.params.id;
+
+  var firstName = req.body.title; 
+  var username = req.body.username;
+  var email = req.body.email;
+  var address = req.body.address;
+  var pw = req.body.pw;
+
+  console.log(post_id);
+  res.send('Update request received!\n');
+});
+
+
+function createNewAccount(firstName, lastName, email, address, username, pw) {
+  // A post entry.
+  var postData = {
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    address: address,
+    username: username,
+    password: pw
+  };
+
+  // Get a key for a new Post.
+  var newPostKey = firebase.database().ref().child('accounts').push().key;
+
+  // Write the new post's data simultaneously in the posts list and the user's post list.
+  var updates = {};
+  updates['/accounts/' + newPostKey] = postData;
+
+  return firebase.database().ref().update(updates);
+}
 
 //=============================== Web page ===============================
 app.get('/', function(req, res) {
