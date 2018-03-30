@@ -5,8 +5,7 @@ class ForumBody extends React.Component {
             firstfilter:"All",
             secondfilter:"All",
             posts:[],
-            postsperpage:10,
-            pagenum:1
+            postsperpage:10
         }
         this.updatePosts = this.updatePosts.bind(this);
         this.updateFirstFilter = this.updateFirstFilter.bind(this);
@@ -14,7 +13,7 @@ class ForumBody extends React.Component {
     }
 
     updatePosts() {
-        fetch("http://" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter)
+        fetch("http://" + "?mode=page&first=" + this.state.firstfilter + "&second=" + this.state.secondfilter)
         .then(response => {
             console.log(response.status, response.statusCode)
             if (response.ok) {
@@ -35,7 +34,7 @@ class ForumBody extends React.Component {
             <div>
                 <FirstFilterList filterUpdate={this.updateFirstFilter}/>
                 <SecondFilterList filterUpdate={this.updateSecondFilter}/>
-                <PostList/>
+                <PostList posts={this.posts} postsperpage={this.postsperpage}/>
             </div>
         );
     }
@@ -102,18 +101,81 @@ class SecondFilterList extends React.Component {
 class PostList extends React.Component {
     constructor(props) {
         super(props);
+        maxpagenum = Math.ceil(props.posts.length / props.postsperpage)
+        this.state = {
+            posts:props.posts,
+            postsperpage:props.postsperpage,
+            currpageposts:[],
+            pagenum:1,
+            maxpnum: maxpagenum
+        }
+        this.nextpage = this.nextpage.bind(this)
+        this.prevpage = this.prevpage.bind(this)
+    }
 
+    updatecurrpage() {
+        temp=[]
+        starti = (this.state.pagenum - 1) * 10
+        endi = (this.state.pagenum) * 10
+        for (i = starti; i < endi || i < this.state.posts.length; i++) {
+            temp.push(this.state.posts[i])
+        }
+        this.setState({currpageposts:temp})
+    }
+
+    nextpage(e) {
+        if (this.state.pagenum + 1 <= this.state.maxpnum) {
+            this.setState({pagenum: this.state.pagenum + 1})
+        }
+        this.updatecurrpage()
+    }
+
+    prevpage(e) {
+        if (this.state.pagenum - 1 >= 1) {
+            this.setState({pagenum: this.state.pagenum - 1})
+        }
+        this.updatecurrpage()
     }
     
-    render() {return null}
+    render() {
+        return (
+            <div>
+                <ul>
+                    {this.state.currpageposts.map(item => (
+                        <Post post={item}></Post>
+                    ))}
+                </ul>
+                <PageSelector max={this.state.maxpnum} curr={this.state.pagenum} next={this.nextpage} prev={this.prevpage}/>
+            </div>
+        )
+    }
 }
 
 class Post extends React.Component {
+    render() {
+        return (
+            <div>
+                <h3> {this.props.post["title"]}</h3>  {this.props.post["auth"]}
+            </div>
+        )
+    }
+}
+
+class PageSelector extends React.Component {
     constructor(props) {
         super(props);
+
     }
-    
-    render() {return null}
+
+    render() {
+        return(
+            <ul>
+                <button onClick={this.props.prev}>Prev Page</button>
+                <div>{this.props.curr}/{this.props.max}</div>
+                <button onClick={this.props.next}>Next Page</button>
+            </ul>
+        )
+    }
 }
 
 ReactDOM.render(<ForumBody />, document.getElementById('webbody'));
