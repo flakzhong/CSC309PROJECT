@@ -101,10 +101,10 @@ class SecondFilterList extends React.Component {
 class PostList extends React.Component {
     constructor(props) {
         super(props);
-        maxpagenum = Math.ceil(props.posts.length / props.postsperpage)
+        maxpagenum = Math.ceil(this.props.posts.length / this.props.postsperpage)
         this.state = {
-            posts:props.posts,
-            postsperpage:props.postsperpage,
+            posts:this.props.posts,
+            postsperpage:this.props.postsperpage,
             currpageposts:[],
             pagenum:1,
             maxpnum: maxpagenum
@@ -151,14 +151,13 @@ class PostList extends React.Component {
     }
 }
 
-class Post extends React.Component {
-    render() {
-        return (
-            <div>
-                <h3> {this.props.post["title"]}</h3>  {this.props.post["auth"]}
-            </div>
-        )
-    }
+
+function Post(props) {
+    return (
+        <div>
+            <h3> {props.post["title"]}</h3>  {props.post["auth"]}
+        </div>
+    )
 }
 
 class PageSelector extends React.Component {
