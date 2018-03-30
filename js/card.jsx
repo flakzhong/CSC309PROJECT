@@ -34,7 +34,7 @@ class ForumBody extends React.Component {
             <div>
                 <FirstFilterList filterUpdate={this.updateFirstFilter}/>
                 <SecondFilterList filterUpdate={this.updateSecondFilter}/>
-                <PostList posts={this.posts} postsperpage={this.postsperpage}/>
+                <PostList posts={this.state.posts} postsperpage={this.state.postsperpage}/>
             </div>
         );
     }
