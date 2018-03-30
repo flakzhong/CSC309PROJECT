@@ -5,17 +5,17 @@ var file = "Placeholder: filename or file, not working now";
 console.log("script.js is running...");
 document.cookie = "username=smith;"
 
-$(function(){
-    console.log("ajax is about to run...")
-    $.ajax({
-      url: "http://c7e4c2b5.ngrok.io/api/posts",
-      type: "POST",
-      data: {'title' : title, 
-            'content': content,
-            'file'   : file},
-      dataType: "json"
-    });
-});
+// $(function(){
+//     console.log("ajax is about to run...")
+//     $.ajax({
+//       url: "http://c7e4c2b5.ngrok.io/api/posts",
+//       type: "POST",
+//       data: {'title' : title, 
+//             'content': content,
+//             'file'   : file},
+//       dataType: "json"
+//     });
+// });
 
 
 // Initialize Firebase
@@ -53,12 +53,24 @@ function account(evt) {
     }
 }
 
-// fake login button
-// only takes username user and password pass
+
 function login(evt) {
-    username = document.getElementById("userid").value
-    password = document.getElementById("userpass").value
-    if (username == "user" && password == "pass") {
+    username = document.getElementById("userid").value;
+    password = document.getElementById("userpass").value;
+    var success = 0;
+    $(function(){
+        $.ajax({
+            url: "https://fa8bcd37.ngrok.io/api/accounts",
+            type: "POST",
+            data: {'username': username,
+                'password': password},
+            dataType: "json",
+            success: function(response) {
+                alert(response);
+            }
+        });
+    });
+    if (success) {
         currentUser = username
         welcome = document.getElementById("hello-info")
         welcome.style.display = "block"
@@ -239,7 +251,10 @@ function register() {
                     'password': pw},
               dataType: "json",
               success: function(response) {
-                  alert(response);
+                  if (response['success'] != 'success') {
+                    alert("Username already exist.");
+                  }
+                  
               }
             });
         });

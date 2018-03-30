@@ -143,9 +143,17 @@ app.post('/api/accounts', function(req, res) {
   var address = req.body.address;
   var username = req.body.username;
   var pw = req.body.password;
-  createNewAccount(firstName, lastName, email, address, username, pw);
+  firebase.database().ref().child('accounts').orderByChild('username').equalTo(username).once('value', function(snapshot) {
+    if (snapshot.val() === null) {
+      createNewAccount(firstName, lastName, email, address, username, pw);
+      res.send({'success':"success"});
+    } else{
+      res.send({'success':"failed"});
+    }
 
-  res.send('Post request received!\n');
+  });
+  // createNewAccount(firstName, lastName, email, address, username, pw);
+
 });
 
 app.put('/api/account/:id', function(req, res) {
