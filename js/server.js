@@ -19,7 +19,7 @@ const dbRefObject = firebase.database().ref().child('accounts');
 
 //sync object changes
 //console.log("abc");
-dbRefObject.on('value', snap => console.log(snap.val()));
+// dbRefObject.on('value', snap => console.log(snap.val()));
 // ======================  ======================
 
 var express = require('express');
@@ -89,6 +89,15 @@ app.use(myLogger)
 
 
 // ====================== handling api/posts, R/W into DB ======================
+app.get('/page', function(req, res) {
+  // Client requests posts
+
+  console.log(req.query.first);
+  console.log(req.query.second);
+
+  res.send('Page filter request received!\n');
+});
+
 app.get('/api/posts', function(req, res) {
   // Client requests posts
 
