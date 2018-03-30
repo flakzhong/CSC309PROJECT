@@ -253,8 +253,9 @@ function register() {
               success: function(response) {
                   if (response['success'] != 'success') {
                     alert("Username already exist.");
-                  }
-                  
+                  } else {
+                    alert("Registered.")
+                  }       
               }
             });
         });
