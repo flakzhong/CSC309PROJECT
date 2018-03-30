@@ -1,4 +1,4 @@
-var URL = "https://3f2770f9.ngrok.io"
+var URL = "https://a285392a.ngrok.io"
 
 var title = "Corgi!!!";
 var content = "The best way to raise a Corgi";
@@ -7,7 +7,7 @@ var file = "Placeholder: filename or file, not working now";
 $(function(){
     $('form#post').submit((event) => {
         $.ajax({
-          url: URL+"/api/posts",
+          url: URL + "/api/posts",
           type: "POST",
           data: {'title' : title, 
                 'content': content,
@@ -61,7 +61,7 @@ function login(evt) {
     var success = 0;
     $(function(){
         $.ajax({
-            url: "https://a285392a.ngrok.io/api/login",
+            url: URL + "/api/login",
             type: "POST",
             data: {'username': username,
                 'password': password},
@@ -248,7 +248,7 @@ function register() {
         $(function(){
             console.log("ajax is about to run...")
             $.ajax({
-              url: "https://a285392a.ngrok.io/api/accounts",
+              url: URL + "/api/accounts",
               type: "POST",
               data: {'firstName' : firstName, 
                     'lastName': lastName,
