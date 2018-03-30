@@ -15,7 +15,7 @@ firebase.initializeApp(config);
 //const preObject = document.getElementById('object');
 
 //create references
-const dbRefObject = firebase.database().ref().child('object');
+const dbRefObject = firebase.database().ref().child('accounts');
 
 //sync object changes
 //console.log("abc");
@@ -34,6 +34,35 @@ cloudinary.config({
   api_key: '628676291839431', 
   api_secret: 'dZjwflkh9gZdNisiK_MWzhr8y4s' 
 });
+
+var formidable = require('formidable');
+var fs = require('fs');
+
+app.post('/fileupload', (req, res) => {
+  var form = new formidable.IncomingForm();
+  //form.parse(req, function (err, fields, files) {
+  //   res.write('File uploaded');
+  //   res.end();
+  // });  
+
+  form.parse(req, function (err, fields, files) {
+    var oldpath = files.filetoupload.path;
+    var newpath = '../uploads/' + files.filetoupload.name;
+    fs.rename(oldpath, newpath, function (err) {
+      if (err) throw err;
+      //res.write('File uploaded and moved!');
+      res.redirect("/#forum");
+      //res.send('File received!\n');
+    });
+
+    cloudinary.v2.uploader.upload(newpath, function(error, result) {
+      console.log(error);
+      console.log(result); 
+    });
+  });
+
+});
+
 
 // cloudinary.v2.uploader.upload("../images/back.png", function(error, result) {
 //   console.log(error);
@@ -123,6 +152,71 @@ function writeNewPost(title, username, content, picture) {
   // Write the new post's data simultaneously in the posts list and the user's post list.
   var updates = {};
   updates['/posts/' + newPostKey] = postData;
+
+  return firebase.database().ref().update(updates);
+}
+// ====================== handling api/accounts, R/W into DB ======================
+
+app.get('/api/accounts/:id', function(req, res) {
+  // Client requests a certain post
+  var post_id = req.params.id;
+
+  res.send('Get request for account: ' + post_id + ' received!\n');
+});
+
+app.post('/api/accounts', function(req, res) {
+  // Client create an account
+  var firstName = req.body.firstName; 
+  var lastName = req.body.lastName;
+  var email = req.body.email;
+  var address = req.body.address;
+  var username = req.body.username;
+  var pw = req.body.password;
+  firebase.database().ref().child('accounts').orderByChild('username').equalTo(username).once('value', function(snapshot) {
+    if (snapshot.val() === null) {
+      createNewAccount(firstName, lastName, email, address, username, pw);
+      res.send({'success':"success"});
+    } else{
+      res.send({'success':"failed"});
+    }
+
+  });
+  // createNewAccount(firstName, lastName, email, address, username, pw);
+
+});
+
+app.put('/api/account/:id', function(req, res) {
+  // Client attempts to update a post
+  var account_id = req.params.id;
+
+  var firstName = req.body.firstName; 
+  var username = req.body.username;
+  var email = req.body.email;
+  var address = req.body.address;
+  var pw = req.body.pw;
+
+  console.log(post_id);
+  res.send('Update request received!\n');
+});
+
+
+function createNewAccount(firstName, lastName, email, address, username, pw) {
+  // A post entry.
+  var postData = {
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    address: address,
+    username: username,
+    password: pw
+  };
+
+  // Get a key for a new Post.
+  var newPostKey = firebase.database().ref().child('accounts').push().key;
+
+  // Write the new post's data simultaneously in the posts list and the user's post list.
+  var updates = {};
+  updates['/accounts/' + newPostKey] = postData;
 
   return firebase.database().ref().update(updates);
 }

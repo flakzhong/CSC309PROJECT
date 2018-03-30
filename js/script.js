@@ -1,43 +1,44 @@
+var URL = "https://3f2770f9.ngrok.io"
+
 var title = "Corgi!!!";
 var content = "The best way to raise a Corgi";
 var file = "Placeholder: filename or file, not working now";
 
-console.log("script.js is running...");
-document.cookie = "username=smith;"
-
 $(function(){
-    console.log("ajax is about to run...")
-    $.ajax({
-      url: "http://c7e4c2b5.ngrok.io/api/posts",
-      type: "POST",
-      data: {'title' : title, 
-            'content': content,
-            'file'   : file},
-      dataType: "json"
+    $('form#post').submit((event) => {
+        $.ajax({
+          url: URL+"/api/posts",
+          type: "POST",
+          data: {'title' : title, 
+                'content': content,
+                'file'   : file,
+                'username' : "Tommy"},
+          dataType: "json"
+        });
     });
 });
 
+// // Initialize Firebase
+// var config = {
+//     apiKey: "AIzaSyBI4Jb71gkU1LsQYCTRu7gw769Nb7-wQoo",
+//     authDomain: "a3default.firebaseapp.com",
+//     databaseURL: "https://a3default.firebaseio.com",
+//     projectId: "a3default",
+//     storageBucket: "",
+//     messagingSenderId: "877503307659"
+// };
 
-// Initialize Firebase
-var config = {
-apiKey: "AIzaSyBI4Jb71gkU1LsQYCTRu7gw769Nb7-wQoo",
-authDomain: "a3default.firebaseapp.com",
-databaseURL: "https://a3default.firebaseio.com",
-projectId: "a3default",
-storageBucket: "",
-messagingSenderId: "877503307659"
-};
-firebase.initializeApp(config);
+// firebase.initializeApp(config);
 
-//get elements
-const preObject = document.getElementById('object');
+// //get elements
+// const preObject = document.getElementById('object');
 
-//create references
-const dbRefObject = firebase.database().ref().child('object');
+// //create references
+// const dbRefObject = firebase.database().ref().child('object');
 
-//sync object changes
-//console.log("abc");
-dbRefObject.on('value', snap => console.log(snap.val()));
+// //sync object changes
+// //console.log("abc");
+// dbRefObject.on('value', snap => console.log(snap.val()));
 
 var currentPage = 0
 var currentFilter = 0
@@ -53,12 +54,24 @@ function account(evt) {
     }
 }
 
-// fake login button
-// only takes username user and password pass
+
 function login(evt) {
-    username = document.getElementById("userid").value
-    password = document.getElementById("userpass").value
-    if (username == "user" && password == "pass") {
+    username = document.getElementById("userid").value;
+    password = document.getElementById("userpass").value;
+    var success = 0;
+    $(function(){
+        $.ajax({
+            url: "https://fa8bcd37.ngrok.io/api/accounts",
+            type: "POST",
+            data: {'username': username,
+                'password': password},
+            dataType: "json",
+            success: function(response) {
+                alert(response);
+            }
+        });
+    });
+    if (success) {
         currentUser = username
         welcome = document.getElementById("hello-info")
         welcome.style.display = "block"
@@ -187,23 +200,6 @@ $(document).ready(function () {
 
 });*/
 
-function makePost() {
-    var submitButton = document.getElementById('post');
-    var title = document.getElementById("postTitle").value;
-    console.log(title);
-    var content = document.getElementById("postContent").value;
-    console.log(content);
-    if (title.length < 5) {
-        alert("Title too short.");
-    }
-
-    if (content.length < 5) {
-        alert("Content too short.")
-    }
-    var images = document.getElementById("postImgUpload").files;
-
-}
-
 function register() {
     var firstName = document.getElementById("rFirstName").value;
     var lastName = document.getElementById("rLastName").value;
@@ -243,6 +239,26 @@ function register() {
         correct = 0;
     }
     if (correct == 1) {
-
+        $(function(){
+            console.log("ajax is about to run...")
+            $.ajax({
+              url: "https://fa8bcd37.ngrok.io/api/accounts",
+              type: "POST",
+              data: {'firstName' : firstName, 
+                    'lastName': lastName,
+                    'address': address,
+                    'email': email,
+                    'username': username,
+                    'password': pw},
+              dataType: "json",
+              success: function(response) {
+                  if (response['success'] != 'success') {
+                    alert("Username already exist.");
+                  } else {
+                    alert("Registered.")
+                  }       
+              }
+            });
+        });
     }
 }

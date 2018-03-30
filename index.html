@@ -255,8 +255,11 @@
 				</section>
 				<div>
 					<label for="postImgUpload" style="float:left">Insert IMG</label>
-					<input type="file" id="postImgUpload" style="float:left" accept=".jpg, .jpeg, .png" multiple>
-					<button id="post" style="float:right" onclick="makePost()">Post</button>
+
+					<form id="post" action="fileupload" method="post" enctype="multipart/form-data" action="upload.php">
+					<input type="file" name="filetoupload" style="float:left" accept=".jpg, .jpeg, .png" multiple>
+					<input type="submit" style="float:right">
+					</form>
 				</div>
 
 				
