@@ -41,24 +41,24 @@ class ForumBody extends React.Component {
 
     updateFirstFilter(choice) {
         this.setState({firstfilter: choice})
-        console.log("firstFilterupdated to" + this.state.secondfilter)
-	    this.updatePosts();
+	console.log("firstfilter -> " + this.state.firstfilter)
+	this.updatePosts();
     }
 
     updateSecondFilter(choice) {
         this.setState({secondfilter: choice})
-        console.log("secondFilterupdated to "+ this.state.secondfilter)
-	    this.updatePosts();
+	console.log("firstfilter -> " + this.state.firstfilter)
+	this.updatePosts();
     }
 }
 
 function FirstFilterList(props) {
     return(
         <ul>
-            <li><button onClick={this.props.updateFilter("All")}>All</button></li>
-            <li><button onClick={this.props.updateFilter("Adoption")}>Adoption</button></li>
-            <li><button onClick={this.props.updateFilter("Lost")}>Lost</button></li>
-            <li><button onClick={this.props.updateFilter("Others")}>Others</button></li>
+            <li><button onClick={props.updateFilter("All")}>All</button></li>
+            <li><button onClick={props.updateFilter("Adoption")}>Adoption</button></li>
+            <li><button onClick={props.updateFilter("Lost")}>Lost</button></li>
+            <li><button onClick={props.updateFilter("Others")}>Others</button></li>
         </ul>
     )
 }
@@ -66,10 +66,10 @@ function FirstFilterList(props) {
 function SecondFilterList(props) {
     return(
         <ul>
-            <li><button onClick={this.props.updateFilter("All")}>All</button></li>
-            <li><button onClick={this.props.updateFilter("Dogs")}>Dogs</button></li>
-            <li><button onClick={this.props.updateFilter("Cats")}>Cats</button></li>
-            <li><button onClick={this.props.updateFilter("Others")}>Others</button></li>
+            <li><button onClick={props.updateFilter("All")}>All</button></li>
+            <li><button onClick={props.updateFilter("Dogs")}>Dogs</button></li>
+            <li><button onClick={props.updateFilter("Cats")}>Cats</button></li>
+            <li><button onClick={props.updateFilter("Others")}>Others</button></li>
         </ul>
     )
 }
@@ -134,9 +134,9 @@ class PostList extends React.Component {
 
 function Post(props) {
     return (
-        <div>
+        <li>
             <h3> {props.post["title"]}</h3>  {props.post["auth"]}
-        </div>
+        </li>
     )
 }
 
