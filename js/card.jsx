@@ -41,15 +41,16 @@ class ForumBody extends React.Component {
 
     updateFirstFilter(choice) {
         this.setState({firstfilter: choice})
-        console.log("firstFilterupdated")
+        console.log("firstFilterupdated to" + this.state.secondfilter)
+	this.updatePosts();
     }
 
     updateSecondFilter(choice) {
         this.setState({secondfilter: choice})
-        console.log("secondFilterupdated")
+        console.log("secondFilterupdated to "+ this.state.secondfilter)
+	this.updatePosts();
     }
 }
-
 
 class FirstFilterList extends React.Component {
     constructor(props) {
@@ -59,7 +60,7 @@ class FirstFilterList extends React.Component {
     
     updateFilter(e) {
     	this.props.filterUpdate(e.target.text)
-    	console.log("updating first filter")
+    	console.log("updating first filter to " + e.target.text)
     }
 
     render() {
@@ -82,7 +83,7 @@ class SecondFilterList extends React.Component {
     
     updateFilter(e) {
     	this.props.filterUpdate(e.target.text)
-    	console.log("updating second filter")
+    	console.log("updating second filter to " + e.target.text)
     }
 
     render() {
@@ -101,13 +102,12 @@ class SecondFilterList extends React.Component {
 class PostList extends React.Component {
     constructor(props) {
         super(props);
-        maxpagenum = Math.ceil(this.props.posts.length / this.props.postsperpage)
         this.state = {
             posts:this.props.posts,
             postsperpage:this.props.postsperpage,
             currpageposts:[],
             pagenum:1,
-            maxpnum: maxpagenum
+            maxpnum: Math.ceil(this.props.posts.length / this.props.postsperpage)
         }
         this.nextpage = this.nextpage.bind(this)
         this.prevpage = this.prevpage.bind(this)
@@ -124,6 +124,8 @@ class PostList extends React.Component {
     }
 
     nextpage(e) {
+	console.log("nextpage")
+	console.log("trying to set page to " + (this.state.pagenum + 1))
         if (this.state.pagenum + 1 <= this.state.maxpnum) {
             this.setState({pagenum: this.state.pagenum + 1})
         }
@@ -131,6 +133,8 @@ class PostList extends React.Component {
     }
 
     prevpage(e) {
+	console.log("prevpage")
+	console.log("trying to set page to " + (this.state.pagenum - 1))
         if (this.state.pagenum - 1 >= 1) {
             this.setState({pagenum: this.state.pagenum - 1})
         }
