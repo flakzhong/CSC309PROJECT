@@ -185,20 +185,6 @@ app.post('/api/accounts', function(req, res) {
 
 });
 
-app.put('/api/account/:id', function(req, res) {
-  // Client attempts to update a post
-  var account_id = req.params.id;
-
-  var firstName = req.body.firstName; 
-  var username = req.body.username;
-  var email = req.body.email;
-  var address = req.body.address;
-  var pw = req.body.pw;
-
-  console.log(post_id);
-  res.send('Update request received!\n');
-});
-
 
 function createNewAccount(firstName, lastName, email, address, username, pw) {
   // A post entry.
@@ -211,15 +197,53 @@ function createNewAccount(firstName, lastName, email, address, username, pw) {
     password: pw
   };
 
-  // Get a key for a new Post.
+  // Get a key for a new account
   var newPostKey = firebase.database().ref().child('accounts').push().key;
-
-  // Write the new post's data simultaneously in the posts list and the user's post list.
   var updates = {};
   updates['/accounts/' + newPostKey] = postData;
 
   return firebase.database().ref().update(updates);
 }
+
+// ====================== handling login ======================
+
+app.post('/api/login', function(req, res) {
+  // get username and password
+  var username = req.body.username;
+  var pw = req.body.password;
+  firebase.database().ref().child('accounts').orderByChild('username').equalTo(username).once('value', function(snapshot) {
+    if (snapshot.val() === null) {
+      res.send({'success':"failed"});
+    } else{
+      if (snapshot.val().password == pw && snapshot.val().username == username) {
+        res.send({'success':"success"});
+      } else {
+        res.send({'success':"failed"});
+      }
+    }
+
+  });
+});
+
+// ====================== handling myacc ======================
+
+app.get('/api/login', function(req, res) {
+  // get username and password
+  var username = req.body.username;
+  var pw = req.body.password;
+  firebase.database().ref().child('accounts').orderByChild('username').equalTo(username).once('value', function(snapshot) {
+    if (snapshot.val() === null) {
+      res.send({'success':"failed"});
+    } else{
+      if (snapshot.val().password == pw && snapshot.val().username == username) {
+        res.send(snapshot.val());
+      } else {
+        res.send({'success':"failed"});
+      }
+    }
+
+  });
+});
 
 //=============================== Web page ===============================
 app.get('/', function(req, res) {
