@@ -13,7 +13,7 @@ class ForumBody extends React.Component {
     }
 
     updatePosts() {
-        fetch("http://" + "?mode=page&first=" + this.state.firstfilter + "&second=" + this.state.secondfilter).then(response => {
+        fetch("http://a285392a.ngrok.io/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter).then(response => {
             console.log(response.status, response.statusCode);
             if (response.ok) {
                 return response.json();
@@ -27,6 +27,7 @@ class ForumBody extends React.Component {
     }
 
     render() {
+        this.updatePosts();
         return React.createElement(
             "div",
             null,
@@ -39,100 +40,124 @@ class ForumBody extends React.Component {
     updateFirstFilter(choice) {
         this.setState({ firstfilter: choice });
         console.log("firstfilter -> " + this.state.firstfilter);
-        this.updatePosts();
     }
 
     updateSecondFilter(choice) {
         this.setState({ secondfilter: choice });
         console.log("firstfilter -> " + this.state.firstfilter);
-        this.updatePosts();
     }
 }
 
-function FirstFilterList(props) {
-    return React.createElement(
-        "ul",
-        null,
-        React.createElement(
-            "li",
+class FirstFilterList extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return React.createElement(
+            "ul",
             null,
             React.createElement(
-                "button",
-                { onClick: props.updateFilter("All") },
-                "All"
-            )
-        ),
-        React.createElement(
-            "li",
-            null,
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: () => {
+                            this.props.updateFilter("All");
+                        } },
+                    "All"
+                )
+            ),
             React.createElement(
-                "button",
-                { onClick: props.updateFilter("Adoption") },
-                "Adoption"
-            )
-        ),
-        React.createElement(
-            "li",
-            null,
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: () => {
+                            this.props.updateFilter("Adoption");
+                        } },
+                    "Adoption"
+                )
+            ),
             React.createElement(
-                "button",
-                { onClick: props.updateFilter("Lost") },
-                "Lost"
-            )
-        ),
-        React.createElement(
-            "li",
-            null,
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: () => {
+                            this.props.updateFilter("Lost");
+                        } },
+                    "Lost"
+                )
+            ),
             React.createElement(
-                "button",
-                { onClick: props.updateFilter("Others") },
-                "Others"
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: () => {
+                            this.props.updateFilter("Others");
+                        } },
+                    "Others"
+                )
             )
-        )
-    );
+        );
+    }
 }
 
-function SecondFilterList(props) {
-    return React.createElement(
-        "ul",
-        null,
-        React.createElement(
-            "li",
+class SecondFilterList extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return React.createElement(
+            "ul",
             null,
             React.createElement(
-                "button",
-                { onClick: props.updateFilter("All") },
-                "All"
-            )
-        ),
-        React.createElement(
-            "li",
-            null,
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: () => {
+                            this.props.updateFilter("All");
+                        } },
+                    "All"
+                )
+            ),
             React.createElement(
-                "button",
-                { onClick: props.updateFilter("Dogs") },
-                "Dogs"
-            )
-        ),
-        React.createElement(
-            "li",
-            null,
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: () => {
+                            this.props.updateFilter("Dog");
+                        } },
+                    "Dog"
+                )
+            ),
             React.createElement(
-                "button",
-                { onClick: props.updateFilter("Cats") },
-                "Cats"
-            )
-        ),
-        React.createElement(
-            "li",
-            null,
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: () => {
+                            this.props.updateFilter("Cat");
+                        } },
+                    "Cat"
+                )
+            ),
             React.createElement(
-                "button",
-                { onClick: props.updateFilter("Others") },
-                "Others"
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: () => {
+                            this.props.updateFilter("Others");
+                        } },
+                    "Others"
+                )
             )
-        )
-    );
+        );
+    }
 }
 
 class PostList extends React.Component {

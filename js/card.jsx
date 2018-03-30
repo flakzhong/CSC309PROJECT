@@ -13,7 +13,7 @@ class ForumBody extends React.Component {
     }
 
     updatePosts() {
-        fetch("http://" + "?mode=page&first=" + this.state.firstfilter + "&second=" + this.state.secondfilter)
+        fetch("http://a285392a.ngrok.io/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter)
         .then(response => {
             console.log(response.status, response.statusCode)
             if (response.ok) {
@@ -30,6 +30,7 @@ class ForumBody extends React.Component {
     }
 
     render() {
+	this.updatePosts();
         return (
             <div>
                 <FirstFilterList updateFilter={this.updateFirstFilter}/>
@@ -42,36 +43,44 @@ class ForumBody extends React.Component {
     updateFirstFilter(choice) {
         this.setState({firstfilter: choice})
 	console.log("firstfilter -> " + this.state.firstfilter)
-	this.updatePosts();
     }
 
     updateSecondFilter(choice) {
         this.setState({secondfilter: choice})
 	console.log("firstfilter -> " + this.state.firstfilter)
-	this.updatePosts();
     }
 }
 
-function FirstFilterList(props) {
-    return(
-        <ul>
-            <li><button onClick={props.updateFilter("All")}>All</button></li>
-            <li><button onClick={props.updateFilter("Adoption")}>Adoption</button></li>
-            <li><button onClick={props.updateFilter("Lost")}>Lost</button></li>
-            <li><button onClick={props.updateFilter("Others")}>Others</button></li>
-        </ul>
-    )
+class FirstFilterList extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	render() {
+		return(
+			<ul>
+			    <li><button onClick={() => {this.props.updateFilter("All")}}>All</button></li>
+			    <li><button onClick={() => {this.props.updateFilter("Adoption")}}>Adoption</button></li>
+			    <li><button onClick={() => {this.props.updateFilter("Lost")}}>Lost</button></li>
+			    <li><button onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
+			</ul>
+		)
+	}
 }
 
-function SecondFilterList(props) {
-    return(
-        <ul>
-            <li><button onClick={props.updateFilter("All")}>All</button></li>
-            <li><button onClick={props.updateFilter("Dogs")}>Dogs</button></li>
-            <li><button onClick={props.updateFilter("Cats")}>Cats</button></li>
-            <li><button onClick={props.updateFilter("Others")}>Others</button></li>
-        </ul>
-    )
+class SecondFilterList extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	render() {
+		return(
+			<ul>
+			    <li><button onClick={() => {this.props.updateFilter("All")}}>All</button></li>
+			    <li><button onClick={() => {this.props.updateFilter("Dog")}}>Dog</button></li>
+			    <li><button onClick={() => {this.props.updateFilter("Cat")}}>Cat</button></li>
+			    <li><button onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
+			</ul>
+		)
+	}
 }
 
 
