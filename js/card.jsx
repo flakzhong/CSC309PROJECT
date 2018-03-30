@@ -32,8 +32,8 @@ class ForumBody extends React.Component {
     render() {
         return (
             <div>
-                <FirstFilterList filterUpdate={this.updateFirstFilter}/>
-                <SecondFilterList filterUpdate={this.updateSecondFilter}/>
+                <FirstFilterList updateFilter={this.updateFirstFilter}/>
+                <SecondFilterList updateFilter={this.updateSecondFilter}/>
                 <PostList posts={this.state.posts} postsperpage={this.state.postsperpage}/>
             </div>
         );
@@ -41,73 +41,49 @@ class ForumBody extends React.Component {
 
     updateFirstFilter(choice) {
         this.setState({firstfilter: choice})
-        console.log("firstFilterupdated")
+	console.log("firstfilter -> " + this.state.firstfilter)
+	this.updatePosts();
     }
 
     updateSecondFilter(choice) {
         this.setState({secondfilter: choice})
-        console.log("secondFilterupdated")
+	console.log("firstfilter -> " + this.state.firstfilter)
+	this.updatePosts();
     }
 }
 
-
-class FirstFilterList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.updateFilter = this.updateFilter.bind(this)
-    }
-    
-    updateFilter(e) {
-    	this.props.filterUpdate(e.target.text)
-    	console.log("updating first filter")
-    }
-
-    render() {
-        return (
-            <ul>
-                <li><button onClick={this.updateFilter} text="All">All</button></li>
-                <li><button onClick={this.updateFilter} text="Adoption">Adoption</button></li>
-                <li><button onClick={this.updateFilter} text="Lost">Lost</button></li>
-                <li><button onClick={this.updateFilter} text="Others">Others</button></li>
-            </ul>
-        )
-    }
+function FirstFilterList(props) {
+    return(
+        <ul>
+            <li><button onClick={props.updateFilter("All")}>All</button></li>
+            <li><button onClick={props.updateFilter("Adoption")}>Adoption</button></li>
+            <li><button onClick={props.updateFilter("Lost")}>Lost</button></li>
+            <li><button onClick={props.updateFilter("Others")}>Others</button></li>
+        </ul>
+    )
 }
 
-class SecondFilterList extends React.Component {
-     constructor(props) {
-        super(props);
-        this.updateFilter = this.updateFilter.bind(this)
-    }
-    
-    updateFilter(e) {
-    	this.props.filterUpdate(e.target.text)
-    	console.log("updating second filter")
-    }
-
-    render() {
-        return (
-            <ul>
-                <li><button onClick={this.updateFilter} text="All">All</button></li>
-                <li><button onClick={this.updateFilter} text="Dog">Dog</button></li>
-                <li><button onClick={this.updateFilter} text="Cat">Cat</button></li>
-                <li><button onClick={this.updateFilter} text="Others">Others</button></li>
-            </ul>
-        )
-    }
+function SecondFilterList(props) {
+    return(
+        <ul>
+            <li><button onClick={props.updateFilter("All")}>All</button></li>
+            <li><button onClick={props.updateFilter("Dogs")}>Dogs</button></li>
+            <li><button onClick={props.updateFilter("Cats")}>Cats</button></li>
+            <li><button onClick={props.updateFilter("Others")}>Others</button></li>
+        </ul>
+    )
 }
 
 
 class PostList extends React.Component {
     constructor(props) {
         super(props);
-        maxpagenum = Math.ceil(this.props.posts.length / this.props.postsperpage)
         this.state = {
             posts:this.props.posts,
             postsperpage:this.props.postsperpage,
             currpageposts:[],
             pagenum:1,
-            maxpnum: maxpagenum
+            maxpnum: Math.ceil(this.props.posts.length / this.props.postsperpage)
         }
         this.nextpage = this.nextpage.bind(this)
         this.prevpage = this.prevpage.bind(this)
@@ -124,6 +100,8 @@ class PostList extends React.Component {
     }
 
     nextpage(e) {
+	console.log("nextpage")
+	console.log("trying to set page to " + (this.state.pagenum + 1))
         if (this.state.pagenum + 1 <= this.state.maxpnum) {
             this.setState({pagenum: this.state.pagenum + 1})
         }
@@ -131,6 +109,8 @@ class PostList extends React.Component {
     }
 
     prevpage(e) {
+	console.log("prevpage")
+	console.log("trying to set page to " + (this.state.pagenum - 1))
         if (this.state.pagenum - 1 >= 1) {
             this.setState({pagenum: this.state.pagenum - 1})
         }
@@ -154,9 +134,9 @@ class PostList extends React.Component {
 
 function Post(props) {
     return (
-        <div>
+        <li>
             <h3> {props.post["title"]}</h3>  {props.post["auth"]}
-        </div>
+        </li>
     )
 }
 

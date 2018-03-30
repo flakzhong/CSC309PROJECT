@@ -5,8 +5,7 @@ class ForumBody extends React.Component {
             firstfilter: "All",
             secondfilter: "All",
             posts: [],
-            postsperpage: 10,
-            pagenum: 1
+            postsperpage: 10
         };
         this.updatePosts = this.updatePosts.bind(this);
         this.updateFirstFilter = this.updateFirstFilter.bind(this);
@@ -14,7 +13,7 @@ class ForumBody extends React.Component {
     }
 
     updatePosts() {
-        fetch("http://" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter).then(response => {
+        fetch("http://" + "?mode=page&first=" + this.state.firstfilter + "&second=" + this.state.secondfilter).then(response => {
             console.log(response.status, response.statusCode);
             if (response.ok) {
                 return response.json();
@@ -31,150 +30,209 @@ class ForumBody extends React.Component {
         return React.createElement(
             "div",
             null,
-            React.createElement(FirstFilterList, { filterUpdate: this.updateFirstFilter }),
-            React.createElement(SecondFilterList, { filterUpdate: this.updateSecondFilter }),
-            React.createElement(PostList, null)
+            React.createElement(FirstFilterList, { updateFilter: this.updateFirstFilter }),
+            React.createElement(SecondFilterList, { updateFilter: this.updateSecondFilter }),
+            React.createElement(PostList, { posts: this.state.posts, postsperpage: this.state.postsperpage })
         );
     }
 
     updateFirstFilter(choice) {
         this.setState({ firstfilter: choice });
-        console.log("firstFilterupdated");
+        console.log("firstfilter -> " + this.state.firstfilter);
+        this.updatePosts();
     }
 
     updateSecondFilter(choice) {
         this.setState({ secondfilter: choice });
-        console.log("secondFilterupdated");
+        console.log("firstfilter -> " + this.state.firstfilter);
+        this.updatePosts();
     }
 }
 
-class FirstFilterList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.updateFilter = this.updateFilter.bind(this);
-    }
-
-    updateFilter(e) {
-        this.props.filterUpdate(e.target.text);
-        console.log("updating first filter");
-    }
-
-    render() {
-        return React.createElement(
-            "ul",
+function FirstFilterList(props) {
+    return React.createElement(
+        "ul",
+        null,
+        React.createElement(
+            "li",
             null,
             React.createElement(
-                "li",
-                null,
-                React.createElement(
-                    "button",
-                    { onClick: this.updateFilter, text: "All" },
-                    "All"
-                )
-            ),
-            React.createElement(
-                "li",
-                null,
-                React.createElement(
-                    "button",
-                    { onClick: this.updateFilter, text: "Adoption" },
-                    "Adoption"
-                )
-            ),
-            React.createElement(
-                "li",
-                null,
-                React.createElement(
-                    "button",
-                    { onClick: this.updateFilter, text: "Lost" },
-                    "Lost"
-                )
-            ),
-            React.createElement(
-                "li",
-                null,
-                React.createElement(
-                    "button",
-                    { onClick: this.updateFilter, text: "Others" },
-                    "Others"
-                )
+                "button",
+                { onClick: props.updateFilter("All") },
+                "All"
             )
-        );
-    }
+        ),
+        React.createElement(
+            "li",
+            null,
+            React.createElement(
+                "button",
+                { onClick: props.updateFilter("Adoption") },
+                "Adoption"
+            )
+        ),
+        React.createElement(
+            "li",
+            null,
+            React.createElement(
+                "button",
+                { onClick: props.updateFilter("Lost") },
+                "Lost"
+            )
+        ),
+        React.createElement(
+            "li",
+            null,
+            React.createElement(
+                "button",
+                { onClick: props.updateFilter("Others") },
+                "Others"
+            )
+        )
+    );
 }
 
-class SecondFilterList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.updateFilter = this.updateFilter.bind(this);
-    }
-
-    updateFilter(e) {
-        this.props.filterUpdate(e.target.text);
-        console.log("updating second filter");
-    }
-
-    render() {
-        return React.createElement(
-            "ul",
+function SecondFilterList(props) {
+    return React.createElement(
+        "ul",
+        null,
+        React.createElement(
+            "li",
             null,
             React.createElement(
-                "li",
-                null,
-                React.createElement(
-                    "button",
-                    { onClick: this.updateFilter, text: "All" },
-                    "All"
-                )
-            ),
-            React.createElement(
-                "li",
-                null,
-                React.createElement(
-                    "button",
-                    { onClick: this.updateFilter, text: "Dog" },
-                    "Dog"
-                )
-            ),
-            React.createElement(
-                "li",
-                null,
-                React.createElement(
-                    "button",
-                    { onClick: this.updateFilter, text: "Cat" },
-                    "Cat"
-                )
-            ),
-            React.createElement(
-                "li",
-                null,
-                React.createElement(
-                    "button",
-                    { onClick: this.updateFilter, text: "Others" },
-                    "Others"
-                )
+                "button",
+                { onClick: props.updateFilter("All") },
+                "All"
             )
-        );
-    }
+        ),
+        React.createElement(
+            "li",
+            null,
+            React.createElement(
+                "button",
+                { onClick: props.updateFilter("Dogs") },
+                "Dogs"
+            )
+        ),
+        React.createElement(
+            "li",
+            null,
+            React.createElement(
+                "button",
+                { onClick: props.updateFilter("Cats") },
+                "Cats"
+            )
+        ),
+        React.createElement(
+            "li",
+            null,
+            React.createElement(
+                "button",
+                { onClick: props.updateFilter("Others") },
+                "Others"
+            )
+        )
+    );
 }
 
 class PostList extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            posts: this.props.posts,
+            postsperpage: this.props.postsperpage,
+            currpageposts: [],
+            pagenum: 1,
+            maxpnum: Math.ceil(this.props.posts.length / this.props.postsperpage)
+        };
+        this.nextpage = this.nextpage.bind(this);
+        this.prevpage = this.prevpage.bind(this);
+    }
+
+    updatecurrpage() {
+        temp = [];
+        starti = (this.state.pagenum - 1) * 10;
+        endi = this.state.pagenum * 10;
+        for (i = starti; i < endi || i < this.state.posts.length; i++) {
+            temp.push(this.state.posts[i]);
+        }
+        this.setState({ currpageposts: temp });
+    }
+
+    nextpage(e) {
+        console.log("nextpage");
+        console.log("trying to set page to " + (this.state.pagenum + 1));
+        if (this.state.pagenum + 1 <= this.state.maxpnum) {
+            this.setState({ pagenum: this.state.pagenum + 1 });
+        }
+        this.updatecurrpage();
+    }
+
+    prevpage(e) {
+        console.log("prevpage");
+        console.log("trying to set page to " + (this.state.pagenum - 1));
+        if (this.state.pagenum - 1 >= 1) {
+            this.setState({ pagenum: this.state.pagenum - 1 });
+        }
+        this.updatecurrpage();
     }
 
     render() {
-        return null;
+        return React.createElement(
+            "div",
+            null,
+            React.createElement(
+                "ul",
+                null,
+                this.state.currpageposts.map(item => React.createElement(Post, { post: item }))
+            ),
+            React.createElement(PageSelector, { max: this.state.maxpnum, curr: this.state.pagenum, next: this.nextpage, prev: this.prevpage })
+        );
     }
 }
 
-class Post extends React.Component {
+function Post(props) {
+    return React.createElement(
+        "li",
+        null,
+        React.createElement(
+            "h3",
+            null,
+            " ",
+            props.post["title"]
+        ),
+        "  ",
+        props.post["auth"]
+    );
+}
+
+class PageSelector extends React.Component {
     constructor(props) {
         super(props);
     }
 
     render() {
-        return null;
+        return React.createElement(
+            "ul",
+            null,
+            React.createElement(
+                "button",
+                { onClick: this.props.prev },
+                "Prev Page"
+            ),
+            React.createElement(
+                "div",
+                null,
+                this.props.curr,
+                "/",
+                this.props.max
+            ),
+            React.createElement(
+                "button",
+                { onClick: this.props.next },
+                "Next Page"
+            )
+        );
     }
 }
 
