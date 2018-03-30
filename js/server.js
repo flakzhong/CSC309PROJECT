@@ -205,8 +205,47 @@ function createNewAccount(firstName, lastName, email, address, username, pw) {
   return firebase.database().ref().update(updates);
 }
 
-// ====================== handling login ======================
+//=============================== Sessions Management ===============================
+var sessions = {};
 
+function generate_cookie_name(length) {
+  var lowercase = "abcdefghijklmnopqrstuvwxyz";
+  var uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var numbers = "0123456789";
+  var special_char = "~!@#$%^&*_+?";
+  var candidate = lowercase + uppercase + numbers + special_char;
+
+  var cookie_name = "";
+  do {
+    cookie_name = "";
+    for (var i = 0; i < length; i++)
+      cookie_name += candidate.charAt(Math.floor(Math.random() * candidate.length));
+  } while (cookie_name in sessions);
+
+  sessions[cookie_name] = undefined;
+
+  return cookie_name;
+}
+
+// cookie_name can be get from req.signedCookies.name
+function bind_username_to_cookie(username, cookie_name) {
+  console.log(sessions);  
+  console.log(cookie_name);
+  if (sessions[cookie_name] == undefined) {
+    sessions[cookie_name] = username;
+  }
+}
+
+function get_username_by_cookie(cookie_name) {
+  return sessions[cookie_name]
+}
+
+function remove_username_from_sessions(cookie_name) {
+  delete sessions[cookie_name];
+}
+
+
+// ====================== handling login ======================
 app.post('/api/login', function(req, res) {
   // get username and password
   var username = req.body.username;
