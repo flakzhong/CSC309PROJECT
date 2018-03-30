@@ -233,8 +233,6 @@ function generate_cookie_name(length) {
 
 // cookie_name can be get from req.signedCookies.name
 function bind_username_to_cookie(username, cookie_name) {
-  console.log(sessions);  
-  console.log(cookie_name);
   if (sessions[cookie_name] == undefined) {
     sessions[cookie_name] = username;
   }
@@ -258,9 +256,18 @@ app.post('/api/login', function(req, res) {
 
     if (snapshot.val() === null) {
       res.send({'success':"failed"});
-    } else{
+    } else {
       if (snapshot.child(username + '/' + 'password').val() == pw) {
-        res.send({'success':"success"});
+        bind_username_to_cookie(username, req.signedCookies.name);
+
+        user_info = {}
+        user_info['firstName'] = snapshot.child(username + '/' + 'firstName').val();
+        user_info['lastName'] = snapshot.child(username + '/' + 'lastName').val();
+        user_info['address'] = snapshot.child(username + '/' + 'address').val();
+        user_info['email'] = snapshot.child(username + '/' + 'email').val();
+        user_info['username'] = username;
+
+        res.send({'success':"success", "payload" : user_info});
       } else {
         res.send({'success':"failed"});
       }
@@ -269,24 +276,31 @@ app.post('/api/login', function(req, res) {
   });
 });
 
-// ====================== handling myacc ======================
-
 app.get('/api/login', function(req, res) {
   // get username and password
-  var username = req.body.username;
-  var pw = req.body.password;
-  firebase.database().ref().child('accounts').orderByChild('username').equalTo(username).once('value', function(snapshot) {
-    if (snapshot.val() === null) {
-      res.send({'success':"failed"});
-    } else{
-      if (snapshot.val().password == pw && snapshot.val().username == username) {
-        res.send(snapshot.val());
-      } else {
-        res.send({'success':"failed"});
-      }
-    }
+  var username = get_username_by_cookie(req.signedCookies.name);
+  console.log(sessions);
 
-  });
+  if (!username) {
+    res.send({'success':"failed"});
+  } else {
+    firebase.database().ref().child('accounts').orderByChild('username').equalTo(username).once('value', function(snapshot) {
+      if (snapshot.val() === null) {
+        res.send({'success':"failed"});
+      } else {
+        user_info = {}
+        user_info['firstName'] = snapshot.child(username + '/' + 'firstName').val();
+        user_info['lastName'] = snapshot.child(username + '/' + 'lastName').val();
+        user_info['address'] = snapshot.child(username + '/' + 'address').val();
+        user_info['email'] = snapshot.child(username + '/' + 'email').val();
+        user_info['username'] = username;
+
+        res.send({'success':"success", "payload" : user_info});
+      }
+
+    });    
+  }
+
 });
 
 //=============================== Web page ===============================

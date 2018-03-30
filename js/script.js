@@ -1,4 +1,4 @@
-var URL = "https://a285392a.ngrok.io"
+var URL = "https://3cd7e1a8.ngrok.io"
 
 var title = "Corgi!!!";
 var content = "The best way to raise a Corgi";
@@ -17,6 +17,32 @@ $(function(){
         });
     });
 });
+
+$(function(){
+    $.ajax({
+        url: URL + "/api/login",
+        type: "GET",
+        dataType: false,
+        success: function(response) {
+            if(response['success'] == 'success') {
+                put_account_info(response.payload);
+                currentUser = response.payload.username
+                welcome = document.getElementById("hello-info")
+                welcome.style.display = "block"
+                welcome.innerHTML = "Welcome, " + response.payload.username;
+                loginbar = document.getElementById("loginbar")
+                loginbar.style.display = "none"
+                account = document.getElementById("myacc")
+                account.innerHTML = "My Account"
+                account.href="#userprofile"
+                // hide register button
+                document.getElementById("registerButton").style.display = "none";
+                // document.cookie = "username=" + username;
+            }
+        }
+    });
+});
+
 
 // // Initialize Firebase
 // var config = {
@@ -54,7 +80,6 @@ function account(evt) {
     }
 }
 
-
 function login(evt) {
     username = document.getElementById("userid").value;
     password = document.getElementById("userpass").value;
@@ -70,21 +95,19 @@ function login(evt) {
                 if(response['success'] == 'failed') {
                     alert("Failed to login. Please check your username and password.");
                 } else {
-                    success = 1;
-                    if (success) {
-                        currentUser = username
-                        welcome = document.getElementById("hello-info")
-                        welcome.style.display = "block"
-                        welcome.innerHTML = "Welcome, " + username;
-                        loginbar = document.getElementById("loginbar")
-                        loginbar.style.display = "none"
-                        account = document.getElementById("myacc")
-                        account.innerHTML = "My Account"
-                        account.href="#userprofile"
-                        // hide register button
-                        document.getElementById("registerButton").style.display = "none";
-                        // document.cookie = "username=" + username;
-                    }
+                    put_account_info(response.payload);
+                    currentUser = username
+                    welcome = document.getElementById("hello-info")
+                    welcome.style.display = "block"
+                    welcome.innerHTML = "Welcome, " + username;
+                    loginbar = document.getElementById("loginbar")
+                    loginbar.style.display = "none"
+                    account = document.getElementById("myacc")
+                    account.innerHTML = "My Account"
+                    account.href="#userprofile"
+                    // hide register button
+                    document.getElementById("registerButton").style.display = "none";
+                    // document.cookie = "username=" + username;
                 }
             }
         });
@@ -93,6 +116,13 @@ function login(evt) {
 
 }
 
+function put_account_info(user_info) {
+    $('div.info-group#myaccFName').text("First name: "+user_info.firstName);
+    $('div.info-group#myaccLName').text("Last name: "+user_info.lastName);
+    $('div.info-group#myaccAddress').text("Address: "+user_info.address);
+    $('div.info-group#myaccEmail').text("Email: "+user_info.email);
+    $('div.info-group#myaccUsername').text("Username: "+user_info.username);
+}
 
 // global variable to save the navigation bars' status for forum.
 var allUpper = ["upperAll", "Adoption", "Lost", "upperOthers"];
