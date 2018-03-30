@@ -107,11 +107,13 @@ app.post('/api/posts', function(req, res) {
   var title = req.body.title; 
   var username = req.body.username;
   var content = req.body.content; 
-  var file = req.body.file;
+  var images= req.body.images;
+  var filter1 = req.body.filter1;
+  var filter2 = req.body.filter2;
+  writeNewPost(title, username, content, images, filter1, filter2);
+  console.log(title + username + content);
 
-  writeNewPost(title, username, content, file);
-
-  res.send('Post request received!\n');
+  res.send({'success':'success'});
 });
 
 app.put('/api/posts/:id', function(req, res) {
@@ -137,13 +139,15 @@ app.delete('/api/posts/:id', function(req, res) {
   res.send('Delete request received!\n');
 });
 
-function writeNewPost(title, username, content, picture) {
+function writeNewPost(title, username, content, images, filter1, filter2) {
   // A post entry.
   var postData = {
     title: title,
-    author: username,
+    username: username,
     content: content,
-    picture: picture
+    images: images,
+    filter1: filter1,
+    filter2: filter2
   };
 
   // Get a key for a new Post.
