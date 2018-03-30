@@ -10,6 +10,7 @@ class ForumBody extends React.Component {
         this.updatePosts = this.updatePosts.bind(this);
         this.updateFirstFilter = this.updateFirstFilter.bind(this);
         this.updateSecondFilter = this.updateSecondFilter.bind(this);
+        this.newPostSubmit = this.newPostSubmit.bind(this);
     }
 
     updatePosts() {
@@ -36,6 +37,7 @@ class ForumBody extends React.Component {
                 <FirstFilterList updateFilter={this.updateFirstFilter}/>
                 <SecondFilterList updateFilter={this.updateSecondFilter}/>
                 <PostList posts={this.state.posts} postsperpage={this.state.postsperpage}/>
+                <PostEditor post={this.newPostSubmit}/>
             </div>
         );
     }
@@ -48,6 +50,10 @@ class ForumBody extends React.Component {
     updateSecondFilter(choice) {
         this.setState({secondfilter: choice})
 	console.log("firstfilter -> " + this.state.firstfilter)
+    }
+    
+    newPostSubmit(object) {
+        //TODO: this is used to submit the object to the given domain
     }
 }
 
@@ -162,6 +168,67 @@ class PageSelector extends React.Component {
                 <div>{this.props.curr}/{this.props.max}</div>
                 <button onClick={this.props.next}>Next Page</button>
             </ul>
+        )
+    }
+}
+
+class PostEditor extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            title:"",
+            content:"",
+            images:[]
+        }
+        this.addImageToPost = this.addImageToPost.bind(this)
+    }
+
+    generateNewPost() {
+        //TODO: use this.props.post(object) to post the post onto the given url
+        
+    }
+
+    addImageToPost(img) {
+        this.setState({images: this.state.images.concat(img)})
+    }
+
+    render() {
+        return (
+            <div>
+                <h1>Title:</h1>
+                <section class="makePosts">
+                        <div class="stretch">
+                            <input type="text" id="postTitle"/>
+                        </div>
+                </section>
+                    
+                <h1>Content: </h1>
+                <section class="makePosts">
+                        <textarea class="stretch" rows="20" id="postContent"></textarea>						
+                </section>
+                <ImagePicker addImg={this.addImageToPost}/>
+                <button onClick={this.props.submit}>Post!</button>
+            </div>
+        )
+    }
+}
+
+class ImagePicker extends React.Component {
+    //TODO: this should be the implementation of Image picker and uploader
+    //TODO use this.props.addImg(img) to add an image to the editing post
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+        return (
+            <div>
+                <label for="postImgUpload" style="float:left">Insert IMG</label>
+                <form id="post" method="post" enctype="multipart/form-data" action="/uploads">
+                    <input type="file" name="filetoupload" style="float:left" accept=".jpg, .jpeg, .png" multiple></input>
+                    <input type="submit" style="float:right"></input>
+                </form>
+            </div>
         )
     }
 }
