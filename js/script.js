@@ -1,4 +1,4 @@
-var URL = "https://3cd7e1a8.ngrok.io"
+var URL = "https://cscdefault01.ngrok.io"
 
 var title = "Corgi!!!";
 var content = "The best way to raise a Corgi";
@@ -333,33 +333,34 @@ function makePost() {
             data: formData
         }).then(function(res) {
             img_url.push(res['data']['secure_url']);
+                if (img_url.length == images.length) {
+                    $(function(){
+                        $.ajax({
+                            url: URL + "/api/posts",
+                            type: "POST",
+                            data: {
+                                title: title,
+                                username: "placeholder, waiting for cookie",
+                                content: content,
+                                images: img_url,
+                                filter1: "filter1",
+                                filter2: "filter2"
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                if (response['success'] != 'success') {
+                                alert("failed to post");
+                                } else {
+                                alert("posted")
+                                }       
+                            }
+                        });
+                    });
+                }
         }).catch(function(err) {
             console.log(err);
         });
     }
 
-    if (img_url.length == images.length) {
-        $(function(){
-            $.ajax({
-                url: URL + "/api/posts",
-                type: "POST",
-                data: {
-                    title: title,
-                    username: "placeholder, waiting for cookie",
-                    content: content,
-                    images: img_url,
-                    filter1: "filter1",
-                    filter2: "filter2"
-                },
-                dataType: "json",
-                success: function(response) {
-                    if (response['success'] != 'success') {
-                    alert("failed to post");
-                    } else {
-                    alert("posted")
-                    }       
-                }
-            });
-        });
-    }
+
 }
