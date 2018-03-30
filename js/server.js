@@ -35,6 +35,35 @@ cloudinary.config({
   api_secret: 'dZjwflkh9gZdNisiK_MWzhr8y4s' 
 });
 
+var formidable = require('formidable');
+var fs = require('fs');
+
+app.post('/fileupload', (req, res) => {
+  var form = new formidable.IncomingForm();
+  //form.parse(req, function (err, fields, files) {
+  //   res.write('File uploaded');
+  //   res.end();
+  // });  
+
+  form.parse(req, function (err, fields, files) {
+    var oldpath = files.filetoupload.path;
+    var newpath = '../uploads/' + files.filetoupload.name;
+    fs.rename(oldpath, newpath, function (err) {
+      if (err) throw err;
+      //res.write('File uploaded and moved!');
+      res.redirect("/#forum");
+      //res.send('File received!\n');
+    });
+
+    cloudinary.v2.uploader.upload(newpath, function(error, result) {
+      console.log(error);
+      console.log(result); 
+    });
+  });
+
+});
+
+
 // cloudinary.v2.uploader.upload("../images/back.png", function(error, result) {
 //   console.log(error);
 //   console.log(result); 

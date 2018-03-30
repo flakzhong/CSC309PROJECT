@@ -1,43 +1,44 @@
+var URL = "https://3f2770f9.ngrok.io"
+
 var title = "Corgi!!!";
 var content = "The best way to raise a Corgi";
 var file = "Placeholder: filename or file, not working now";
 
-console.log("script.js is running...");
-document.cookie = "username=smith;"
+$(function(){
+    $('form#post').submit((event) => {
+        $.ajax({
+          url: URL+"/api/posts",
+          type: "POST",
+          data: {'title' : title, 
+                'content': content,
+                'file'   : file,
+                'username' : "Tommy"},
+          dataType: "json"
+        });
+    });
+});
 
-// $(function(){
-//     console.log("ajax is about to run...")
-//     $.ajax({
-//       url: "http://c7e4c2b5.ngrok.io/api/posts",
-//       type: "POST",
-//       data: {'title' : title, 
-//             'content': content,
-//             'file'   : file},
-//       dataType: "json"
-//     });
-// });
+// // Initialize Firebase
+// var config = {
+//     apiKey: "AIzaSyBI4Jb71gkU1LsQYCTRu7gw769Nb7-wQoo",
+//     authDomain: "a3default.firebaseapp.com",
+//     databaseURL: "https://a3default.firebaseio.com",
+//     projectId: "a3default",
+//     storageBucket: "",
+//     messagingSenderId: "877503307659"
+// };
 
+// firebase.initializeApp(config);
 
-// Initialize Firebase
-var config = {
-apiKey: "AIzaSyBI4Jb71gkU1LsQYCTRu7gw769Nb7-wQoo",
-authDomain: "a3default.firebaseapp.com",
-databaseURL: "https://a3default.firebaseio.com",
-projectId: "a3default",
-storageBucket: "",
-messagingSenderId: "877503307659"
-};
-firebase.initializeApp(config);
+// //get elements
+// const preObject = document.getElementById('object');
 
-//get elements
-const preObject = document.getElementById('object');
+// //create references
+// const dbRefObject = firebase.database().ref().child('object');
 
-//create references
-const dbRefObject = firebase.database().ref().child('object');
-
-//sync object changes
-//console.log("abc");
-dbRefObject.on('value', snap => console.log(snap.val()));
+// //sync object changes
+// //console.log("abc");
+// dbRefObject.on('value', snap => console.log(snap.val()));
 
 var currentPage = 0
 var currentFilter = 0
