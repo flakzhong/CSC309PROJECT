@@ -9,6 +9,8 @@ class ForumBody extends React.Component {
             pagenum:1
         }
         this.updatePosts = this.updatePosts.bind(this);
+        this.updateFirstFilter = this.updateFirstFilter.bind(this);
+        this.updateSecondFilter = this.updateSecondFilter.bind(this);
     }
 
     updatePosts() {
@@ -31,8 +33,8 @@ class ForumBody extends React.Component {
     render() {
         return (
             <div>
-                <FirstFilterList/>
-                <SecondFilterList/>
+                <FirstFilterList filterUpdate={this.updateFirstFilter}/>
+                <SecondFilterList filterUpdate={this.updateSecondFilter}/>
                 <PostList/>
             </div>
         );
@@ -40,10 +42,12 @@ class ForumBody extends React.Component {
 
     updateFirstFilter(choice) {
         this.setState({firstfilter: choice})
+        console.log("firstFilterupdated")
     }
 
     updateSecondFilter(choice) {
         this.setState({secondfilter: choice})
+        console.log("secondFilterupdated")
     }
 }
 
@@ -53,56 +57,47 @@ class FirstFilterList extends React.Component {
         super(props);
         this.updateFilter = this.updateFilter.bind(this)
     }
-
+    
     updateFilter(e) {
-        this.updateFirstFilter(e.target.value)
+    	this.props.filterUpdate(e.target.text)
+    	console.log("updating first filter")
     }
 
     render() {
         return (
             <ul>
-                <FilterItem text="All"/>
-                <FilterItem text="Adoption"/>
-                <FilterItem text="Lost"/>
-                <FilterItem text="Others"/>
+                <li><button onClick={this.updateFilter} text="All">All</button></li>
+                <li><button onClick={this.updateFilter} text="Adoption">Adoption</button></li>
+                <li><button onClick={this.updateFilter} text="Lost">Lost</button></li>
+                <li><button onClick={this.updateFilter} text="Others">Others</button></li>
             </ul>
         )
     }
 }
 
 class SecondFilterList extends React.Component {
-    constructor(props) {
+     constructor(props) {
         super(props);
         this.updateFilter = this.updateFilter.bind(this)
     }
-
+    
     updateFilter(e) {
-        this.updateSecondFilter(e.target.value)
+    	this.props.filterUpdate(e.target.text)
+    	console.log("updating second filter")
     }
 
     render() {
         return (
             <ul>
-                <FilterItem text="All"/>
-                <FilterItem text="Dog"/>
-                <FilterItem text="Cat"/>
-                <FilterItem text="Others"/>
+                <li><button onClick={this.updateFilter} text="All">All</button></li>
+                <li><button onClick={this.updateFilter} text="Dog">Dog</button></li>
+                <li><button onClick={this.updateFilter} text="Cat">Cat</button></li>
+                <li><button onClick={this.updateFilter} text="Others">Others</button></li>
             </ul>
         )
     }
 }
 
-class FilterItem extends React.Component {
-    constructor(props) {
-        super(props);
-        this.value = props.text
-    }
-    render() {
-        return (
-            <li><button onClick={this.updateFilter}>{this.value}</button></li>
-        )
-    }
-}
 
 class PostList extends React.Component {
     constructor(props) {

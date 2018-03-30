@@ -9,6 +9,8 @@ class ForumBody extends React.Component {
             pagenum: 1
         };
         this.updatePosts = this.updatePosts.bind(this);
+        this.updateFirstFilter = this.updateFirstFilter.bind(this);
+        this.updateSecondFilter = this.updateSecondFilter.bind(this);
     }
 
     updatePosts() {
@@ -29,18 +31,20 @@ class ForumBody extends React.Component {
         return React.createElement(
             "div",
             null,
-            React.createElement(FirstFilterList, null),
-            React.createElement(SecondFilterList, null),
+            React.createElement(FirstFilterList, { filterUpdate: this.updateFirstFilter }),
+            React.createElement(SecondFilterList, { filterUpdate: this.updateSecondFilter }),
             React.createElement(PostList, null)
         );
     }
 
     updateFirstFilter(choice) {
         this.setState({ firstfilter: choice });
+        console.log("firstFilterupdated");
     }
 
     updateSecondFilter(choice) {
         this.setState({ secondfilter: choice });
+        console.log("secondFilterupdated");
     }
 }
 
@@ -51,17 +55,50 @@ class FirstFilterList extends React.Component {
     }
 
     updateFilter(e) {
-        this.updateFirstFilter(e.target.value);
+        this.props.filterUpdate(e.target.text);
+        console.log("updating first filter");
     }
 
     render() {
         return React.createElement(
             "ul",
             null,
-            React.createElement(FilterItem, { text: "All" }),
-            React.createElement(FilterItem, { text: "Adoption" }),
-            React.createElement(FilterItem, { text: "Lost" }),
-            React.createElement(FilterItem, { text: "Others" })
+            React.createElement(
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: this.updateFilter, text: "All" },
+                    "All"
+                )
+            ),
+            React.createElement(
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: this.updateFilter, text: "Adoption" },
+                    "Adoption"
+                )
+            ),
+            React.createElement(
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: this.updateFilter, text: "Lost" },
+                    "Lost"
+                )
+            ),
+            React.createElement(
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: this.updateFilter, text: "Others" },
+                    "Others"
+                )
+            )
         );
     }
 }
@@ -73,34 +110,49 @@ class SecondFilterList extends React.Component {
     }
 
     updateFilter(e) {
-        this.updateSecondFilter(e.target.value);
+        this.props.filterUpdate(e.target.text);
+        console.log("updating second filter");
     }
 
     render() {
         return React.createElement(
             "ul",
             null,
-            React.createElement(FilterItem, { text: "All" }),
-            React.createElement(FilterItem, { text: "Dog" }),
-            React.createElement(FilterItem, { text: "Cat" }),
-            React.createElement(FilterItem, { text: "Others" })
-        );
-    }
-}
-
-class FilterItem extends React.Component {
-    constructor(props) {
-        super(props);
-        this.value = props.text;
-    }
-    render() {
-        return React.createElement(
-            "li",
-            null,
             React.createElement(
-                "button",
-                { onClick: this.updateFilter },
-                this.value
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: this.updateFilter, text: "All" },
+                    "All"
+                )
+            ),
+            React.createElement(
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: this.updateFilter, text: "Dog" },
+                    "Dog"
+                )
+            ),
+            React.createElement(
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: this.updateFilter, text: "Cat" },
+                    "Cat"
+                )
+            ),
+            React.createElement(
+                "li",
+                null,
+                React.createElement(
+                    "button",
+                    { onClick: this.updateFilter, text: "Others" },
+                    "Others"
+                )
             )
         );
     }
