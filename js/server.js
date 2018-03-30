@@ -200,7 +200,7 @@ function createNewAccount(firstName, lastName, email, address, username, pw) {
   // Get a key for a new account
   var newPostKey = firebase.database().ref().child('accounts').push().key;
   var updates = {};
-  updates['/accounts/' + newPostKey] = postData;
+  updates['/accounts/' + username] = postData;
 
   return firebase.database().ref().update(updates);
 }
@@ -212,10 +212,11 @@ app.post('/api/login', function(req, res) {
   var username = req.body.username;
   var pw = req.body.password;
   firebase.database().ref().child('accounts').orderByChild('username').equalTo(username).once('value', function(snapshot) {
+
     if (snapshot.val() === null) {
       res.send({'success':"failed"});
     } else{
-      if (snapshot.val().password == pw && snapshot.val().username == username) {
+      if (snapshot.child(username + '/' + 'password').val() == pw) {
         res.send({'success':"success"});
       } else {
         res.send({'success':"failed"});

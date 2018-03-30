@@ -61,7 +61,7 @@ function login(evt) {
     var success = 0;
     $(function(){
         $.ajax({
-            url: "https://fa8bcd37.ngrok.io/api/login",
+            url: "https://a285392a.ngrok.io/api/login",
             type: "POST",
             data: {'username': username,
                 'password': password},
@@ -71,24 +71,25 @@ function login(evt) {
                     alert("Failed to login. Please check your username and password.");
                 } else {
                     success = 1;
+                    if (success) {
+                        currentUser = username
+                        welcome = document.getElementById("hello-info")
+                        welcome.style.display = "block"
+                        welcome.innerHTML = "Welcome, " + username;
+                        loginbar = document.getElementById("loginbar")
+                        loginbar.style.display = "none"
+                        account = document.getElementById("myacc")
+                        account.innerHTML = "My Account"
+                        account.href="#userprofile"
+                        // hide register button
+                        document.getElementById("registerButton").style.display = "none";
+                        // document.cookie = "username=" + username;
+                    }
                 }
             }
         });
     });
-    if (success) {
-        currentUser = username
-        welcome = document.getElementById("hello-info")
-        welcome.style.display = "block"
-        welcome.innerHTML = "Welcome, " + username;
-        loginbar = document.getElementById("loginbar")
-        loginbar.style.display = "none"
-        account = document.getElementById("myacc")
-        account.innerHTML = "My Account"
-        account.href="#userprofile"
-        // hide register button
-        document.getElementById("registerButton").style.display = "none";
-        document.cookie = "username=" + username;
-    }
+
 
 }
 
@@ -247,7 +248,7 @@ function register() {
         $(function(){
             console.log("ajax is about to run...")
             $.ajax({
-              url: "https://fa8bcd37.ngrok.io/api/accounts",
+              url: "https://a285392a.ngrok.io/api/accounts",
               type: "POST",
               data: {'firstName' : firstName, 
                     'lastName': lastName,
