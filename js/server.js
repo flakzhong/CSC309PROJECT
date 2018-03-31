@@ -28,48 +28,6 @@ var path = require('path');
 const cookieParser = require('cookie-parser');
 var app = express();
 
-// var cloudinary = require('cloudinary');
-// cloudinary.config({ 
-//   cloud_name: 'dfpktpjp8', 
-//   api_key: '628676291839431', 
-//   api_secret: 'dZjwflkh9gZdNisiK_MWzhr8y4s' 
-// });
-
-// var formidable = require('formidable');
-// var fs = require('fs');
-
-// app.post('/fileupload', (req, res) => {
-//   var form = new formidable.IncomingForm();
-//   //form.parse(req, function (err, fields, files) {
-//   //   res.write('File uploaded');
-//   //   res.end();
-//   // });  
-
-//   form.parse(req, function (err, fields, files) {
-//     var oldpath = files.filetoupload.path;
-//     var newpath = '../uploads/' + files.filetoupload.name;
-//     fs.rename(oldpath, newpath, function (err) {
-//       if (err) throw err;
-//       //res.write('File uploaded and moved!');
-//       res.redirect("/#forum");
-//       //res.send('File received!\n');
-//     });
-
-//     cloudinary.v2.uploader.upload(newpath, function(error, result) {
-//       console.log(error);
-//       console.log(result); 
-//     });
-//   });
-
-// });
-
-
-// cloudinary.v2.uploader.upload("../images/back.png", function(error, result) {
-//   console.log(error);
-//   console.log(result); 
-// });
-
-
 function myLogger(req, res, next) {
   // console.log("Raw Cookies: ",req.headers.cookie)
   // console.log("Cookie Parser: ",req.cookies)
@@ -88,8 +46,35 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser("Pets!"));
 app.use(myLogger)
 
+// ====================== handling api/posts, R/W into DB ======================
+app.get('/api/posts', function(req, res) {
+  // Client requests posts
+  var result = [];
 
-app.get('/api/page', function(req, res) {
+  var ref = firebase.database().ref("posts");
+  ref.on('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+      result.push(childSnapshot.val());
+    });
+
+    res.send({'status':'Get request received!', data : result});
+  });
+
+});
+
+app.get('/api/posts/:id', function(req, res) {
+  // Client requests a certain post
+  var post_id = req.params.id;
+
+  var ref = firebase.database().ref("posts");
+  ref.child(post_id).once('value').then(function(snapshot) {
+    var post = snapshot.val();
+    res.send(post);
+  })
+
+});
+
+app.get('/api/posts/page', function(req, res) {
   // Client requests posts
 
   var filter1 = req.query.first;
@@ -133,34 +118,6 @@ app.get('/api/page', function(req, res) {
       res.send({posts: result});
     });
   }
-
-});
-
-// ====================== handling api/posts, R/W into DB ======================
-app.get('/api/posts', function(req, res) {
-  // Client requests posts
-  var result = [];
-
-  var ref = firebase.database().ref("posts");
-  ref.on('value', function(snapshot) {
-    snapshot.forEach(function(childSnapshot) {
-      result.push(childSnapshot.val());
-    });
-
-    res.send({'status':'Get request received!', data : result});
-  });
-
-});
-
-app.get('/api/posts/:id', function(req, res) {
-  // Client requests a certain post
-  var post_id = req.params.id;
-
-  var ref = firebase.database().ref("posts");
-  ref.child(post_id).once('value').then(function(snapshot) {
-    var post = snapshot.val();
-    res.send(post);
-  })
 
 });
 
@@ -224,6 +181,8 @@ function writeNewPost(title, username, content, images, filter1, filter2) {
 
   return firebase.database().ref().update(updates);
 }
+
+
 // ====================== handling api/accounts, R/W into DB ======================
 
 app.get('/api/accounts/:id', function(req, res) {
@@ -250,10 +209,39 @@ app.post('/api/accounts', function(req, res) {
     }
 
   });
-  // createNewAccount(firstName, lastName, email, address, username, pw);
 
 });
 
+app.put('/api/accounts', function(req, res) {
+  // Client update account info
+  var firstName = req.body.firstName; 
+  var lastName = req.body.lastName;
+  var email = req.body.email;
+  var address = req.body.address;
+  var username = req.body.username;
+  var old_password = req.body.old_password;
+  var new_password = req.body.new_password;
+
+  firebase.database().ref().child('accounts').orderByChild('username').equalTo(username).once('value', function(snapshot) {
+    if (snapshot.val() === null) {
+      res.send({'success':"failed"});
+    } else {
+      if (snapshot.child(username + '/' + 'password').val() == old_password) {
+        snapshot.child(username).ref.update({'firstName': firstName})
+        snapshot.child(username).ref.update({'lastName': lastName})
+        snapshot.child(username).ref.update({'email': email})
+        snapshot.child(username).ref.update({'address': address})
+        snapshot.child(username).ref.update({'password': new_password})
+
+        res.send({'success':"success"});
+      } else {
+        res.send({'success':"failed"});
+      }
+    }
+
+  });
+
+});
 
 function createNewAccount(firstName, lastName, email, address, username, pw) {
   // A post entry.

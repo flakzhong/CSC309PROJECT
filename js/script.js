@@ -1,4 +1,22 @@
-var URL = "http://2978d949.ngrok.io"
+var URL = "https://b3ce8815.ngrok.io"
+
+// This ajax is used for updating account info
+$(function(){
+    console.log("ajax is about to run...")
+    $.ajax({
+      url: URL + "/api/accounts",
+      type: "PUT",
+      data: {'firstName' : 'tiny', 
+            'lastName': 'jacay',
+            'address': "homeless",
+            'email': 'nobody@nowhere.com',
+            'username': "tttttt",
+            'old_password': "tttt",
+            'new_password': "tttttt"},
+      dataType: "json",
+      success: function(response) {}
+    });
+});
 
 
 $(function(){
