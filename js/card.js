@@ -13,7 +13,7 @@ class ForumBody extends React.Component {
     }
 
     updatePosts() {
-        fetch("https://2978d949.ngrok.io/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter).then(response => {
+        fetch("http://a285392a.ngrok.io/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter).then(response => {
             console.log(response.status, response.statusCode);
             if (response.ok) {
                 return response.json();
@@ -38,7 +38,7 @@ class ForumBody extends React.Component {
                 React.createElement(SecondFilterList, { updateFilter: this.updateSecondFilter })
             ),
             React.createElement(PostList, { posts: this.state.posts, postsperpage: this.state.postsperpage }),
-            React.createElement(PostEditor, null)
+            React.createElement(PostEditor, { filter1: this.state.firstfilter, filter2: this.state.secondfilter })
         );
     }
 
@@ -333,77 +333,49 @@ class PostEditor extends React.Component {
         }
 
         if (content.length < 5) {
-            alert("Content too short.")
+            alert("Content too short.");
         }
         var images = document.getElementById("postImgUpload").files;
-        if (images.length > 0) {
-            var img_url = [];
-            for(var i = 0; i < images.length; i++) {
-                var formData = new FormData();
-                formData.append('file', images[i]);
-                formData.append('upload_preset', 'tsqi28bt');
-                axios({
-                    url: "https://api.cloudinary.com/v1_1/dfpktpjp8/image/upload",
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    data: formData
-                }).then(function(res) {
-                    img_url.push(res['data']['secure_url']);
-                        if (img_url.length == images.length) {
-                            $(function(){
-                                $.ajax({
-                                    url: URL + "/api/posts",
-                                    type: "POST",
-                                    data: {
-                                        title: title,
-                                        username: currentUser,
-                                        content: content,
-                                        images: img_url,
-                                        filter1: "filter1",
-                                        filter2: "filter2"
-                                    },
-                                    dataType: "json",
-                                    success: function(response) {
-                                        if (response['success'] != 'success') {
-                                            alert("failed to post");
-                                        } else {
-                                            $("#postTitle").val("");
-                                            $("#postContent").val("");
-                                            $("#postImgUpload").val(null);
-                                            alert("posted")
-                                        }       
-                                    }
-                                });
-                            });
-                        }
-                }).catch(function(err) {
-                    console.log(err);
-                });
-            }
-        } else {
-            $(function(){
-                $.ajax({
-                    url: URL + "/api/posts",
-                    type: "POST",
-                    data: {
-                        title: title,
-                        username: currentUser,
-                        content: content,
-                        images: null,
-                        filter1: "filter1",
-                        filter2: "filter2"
-                    },
-                    dataType: "json",
-                    success: function(response) {
-                        if (response['success'] != 'success') {
-                        alert("failed to post");
-                        } else {
-                        alert("posted")
-                        }       
-                    }
-                });
+        var img_url = [];
+        for (var i = 0; i < images.length; i++) {
+            var formData = new FormData();
+            formData.append('file', images[i]);
+            formData.append('upload_preset', 'tsqi28bt');
+            axios({
+                url: "https://api.cloudinary.com/v1_1/dfpktpjp8/image/upload",
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                data: formData
+            }).then(function (res) {
+                img_url.push(res['data']['secure_url']);
+                if (img_url.length == images.length) {
+                    $(function () {
+                        $.ajax({
+                            url: URL + "/api/posts",
+                            type: "POST",
+                            data: {
+                                title: title,
+                                username: "placeholder, waiting for cookie",
+                                content: content,
+                                images: img_url,
+                                filter1: this.props.filter1,
+                                filter2: this.props.filter2
+                            },
+                            dataType: "json",
+                            success: function (response) {
+                                if (response['success'] != 'success') {
+                                    alert("failed to post");
+                                } else {
+                                    alert("posted");
+                                }
+                            }
+                        });
+                    });
+                }
+            }).catch(function (err) {
+                console.log(err);
             });
         }
     }

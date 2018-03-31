@@ -38,7 +38,7 @@ class ForumBody extends React.Component {
                     <SecondFilterList updateFilter={this.updateSecondFilter}/>
                 </div>
                 <PostList posts={this.state.posts} postsperpage={this.state.postsperpage}/>
-                <PostEditor/>
+                <PostEditor filter1={this.state.firstfilter} filter2={this.state.secondfilter}/>
             </div>
         );
     }
@@ -240,8 +240,8 @@ class PostEditor extends React.Component {
                                     username: "placeholder, waiting for cookie",
                                     content: content,
                                     images: img_url,
-                                    filter1: "filter1",
-                                    filter2: "filter2"
+                                    filter1: this.props.filter1,
+                                    filter2: this.props.filter2
                                 },
                                 dataType: "json",
                                 success: function(response) {
