@@ -10,7 +10,6 @@ class ForumBody extends React.Component {
         this.updatePosts = this.updatePosts.bind(this);
         this.updateFirstFilter = this.updateFirstFilter.bind(this);
         this.updateSecondFilter = this.updateSecondFilter.bind(this);
-        this.newPostSubmit = this.newPostSubmit.bind(this);
     }
 
     updatePosts() {
@@ -37,23 +36,25 @@ class ForumBody extends React.Component {
                 <FirstFilterList updateFilter={this.updateFirstFilter}/>
                 <SecondFilterList updateFilter={this.updateSecondFilter}/>
                 <PostList posts={this.state.posts} postsperpage={this.state.postsperpage}/>
-                <PostEditor post={this.newPostSubmit}/>
+                <PostEditor/>
             </div>
         );
     }
 
     updateFirstFilter(choice) {
+        var currfilter = document.getElementById("upper" + this.state.firstfilter + "Filter")
+        currfilter.className = currfilter.className.replace(" active","")
+        var targetfilter = document.getElementById("upper" + choice + "Filter")
+        targetfilter.className += " active"
         this.setState({firstfilter: choice})
-	console.log("firstfilter -> " + this.state.firstfilter)
     }
 
     updateSecondFilter(choice) {
+        var currfilter = document.getElementById("lower" + this.state.firstfilter + "Filter")
+        currfilter.className = currfilter.className.replace(" active","")
+        var targetfilter = document.getElementById("lower" + choice + "Filter")
+        targetfilter.className += " active"
         this.setState({secondfilter: choice})
-	console.log("firstfilter -> " + this.state.firstfilter)
-    }
-    
-    newPostSubmit(object) {
-        //TODO: this is used to submit the object to the given domain
     }
 }
 
@@ -64,10 +65,10 @@ class FirstFilterList extends React.Component {
 	render() {
 		return(
 			<ul>
-			    <li><button onClick={() => {this.props.updateFilter("All")}}>All</button></li>
-			    <li><button onClick={() => {this.props.updateFilter("Adoption")}}>Adoption</button></li>
-			    <li><button onClick={() => {this.props.updateFilter("Lost")}}>Lost</button></li>
-			    <li><button onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
+			    <li><button id="upperAllFilter" onClick={() => {this.props.updateFilter("All")}}>All</button></li>
+			    <li><button id="upperAdoptionFilter" onClick={() => {this.props.updateFilter("Adoption")}}>Adoption</button></li>
+			    <li><button id="upperLostFilter" onClick={() => {this.props.updateFilter("Lost")}}>Lost</button></li>
+			    <li><button id="upperOthersFilter" onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
 			</ul>
 		)
 	}
@@ -80,10 +81,10 @@ class SecondFilterList extends React.Component {
 	render() {
 		return(
 			<ul>
-			    <li><button onClick={() => {this.props.updateFilter("All")}}>All</button></li>
-			    <li><button onClick={() => {this.props.updateFilter("Dog")}}>Dog</button></li>
-			    <li><button onClick={() => {this.props.updateFilter("Cat")}}>Cat</button></li>
-			    <li><button onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
+			    <li><button id="lowerAllFilter" onClick={() => {this.props.updateFilter("All")}}>All</button></li>
+			    <li><button id="lowerDogFilter" onClick={() => {this.props.updateFilter("Dog")}}>Dog</button></li>
+			    <li><button id="lowerCatFilter" onClick={() => {this.props.updateFilter("Cat")}}>Cat</button></li>
+			    <li><button id="lowerOthersFilter" onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
 			</ul>
 		)
 	}
@@ -172,65 +173,91 @@ class PageSelector extends React.Component {
     }
 }
 
+
 class PostEditor extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {
-            title:"",
-            content:"",
-            images:[]
+        this.makePost=this.makePost.bind(this)
+    }
+
+    render() {
+        return (
+            <div className="postEditor" id="postEditor">
+            <h1>Title:</h1>
+            <section className="makePosts">
+                <div className="stretch">
+                    <input type="text" id="postTitle"/>
+                </div>
+            </section>
+            <h1>Content: </h1>
+            <section className="makePosts">
+                <textarea className="stretch" rows="20" id="postContent"></textarea>						
+            </section>
+            <div>
+                <label htmlFor="postImgUpload" style={{float:"left"}}>Insert IMG</label>
+                <input type="file" id="postImgUpload" style={{float:"left"}} accept=".jpg, .jpeg, .png" multiple/>
+                <button id="post" style={{float:"right"}} onClick={this.makePost}>Post</button>
+            </div>
+        </div>
+        )
+    }
+
+    makePost() {
+        var submitButton = document.getElementById('post');
+        var title = document.getElementById("postTitle").value;
+        var content = document.getElementById("postContent").value;
+        if (title.length < 5) {
+            alert("Title too short.");
         }
-        this.addImageToPost = this.addImageToPost.bind(this)
-    }
-
-    generateNewPost() {
-        //TODO: use this.props.post(object) to post the post onto the given url
-        
-    }
-
-    addImageToPost(img) {
-        this.setState({images: this.state.images.concat(img)})
-    }
-
-    render() {
-        return (
-            <div>
-                <h1>Title:</h1>
-                <section class="makePosts">
-                        <div class="stretch">
-                            <input type="text" id="postTitle"/>
-                        </div>
-                </section>
-                    
-                <h1>Content: </h1>
-                <section class="makePosts">
-                        <textarea class="stretch" rows="20" id="postContent"></textarea>						
-                </section>
-                <ImagePicker addImg={this.addImageToPost}/>
-                <button onClick={this.props.submit}>Post!</button>
-            </div>
-        )
-    }
-}
-
-class ImagePicker extends React.Component {
-    //TODO: this should be the implementation of Image picker and uploader
-    //TODO use this.props.addImg(img) to add an image to the editing post
-    constructor(props) {
-        super(props)
-    }
-
-    render() {
-        return (
-            <div>
-                <label for="postImgUpload" style="float:left">Insert IMG</label>
-                <form id="post" method="post" enctype="multipart/form-data" action="/uploads">
-                    <input type="file" name="filetoupload" style="float:left" accept=".jpg, .jpeg, .png" multiple></input>
-                    <input type="submit" style="float:right"></input>
-                </form>
-            </div>
-        )
+    
+        if (content.length < 5) {
+            alert("Content too short.")
+        }
+        var images = document.getElementById("postImgUpload").files;
+        var img_url = [];
+        for(var i = 0; i < images.length; i++) {
+            var formData = new FormData();
+            formData.append('file', images[i]);
+            formData.append('upload_preset', 'tsqi28bt');
+            axios({
+                url: "https://api.cloudinary.com/v1_1/dfpktpjp8/image/upload",
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                data: formData
+            }).then(function(res) {
+                img_url.push(res['data']['secure_url']);
+                    if (img_url.length == images.length) {
+                        $(function(){
+                            $.ajax({
+                                url: URL + "/api/posts",
+                                type: "POST",
+                                data: {
+                                    title: title,
+                                    username: "placeholder, waiting for cookie",
+                                    content: content,
+                                    images: img_url,
+                                    filter1: "filter1",
+                                    filter2: "filter2"
+                                },
+                                dataType: "json",
+                                success: function(response) {
+                                    if (response['success'] != 'success') {
+                                    alert("failed to post");
+                                    } else {
+                                    alert("posted")
+                                    }       
+                                }
+                            });
+                        });
+                    }
+            }).catch(function(err) {
+                console.log(err);
+            });
+        }
     }
 }
 
-ReactDOM.render(<ForumBody />, document.getElementById('webbody'));
+
+ReactDOM.render(<ForumBody />, document.getElementById("forum"));

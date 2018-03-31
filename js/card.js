@@ -33,18 +33,25 @@ class ForumBody extends React.Component {
             null,
             React.createElement(FirstFilterList, { updateFilter: this.updateFirstFilter }),
             React.createElement(SecondFilterList, { updateFilter: this.updateSecondFilter }),
-            React.createElement(PostList, { posts: this.state.posts, postsperpage: this.state.postsperpage })
+            React.createElement(PostList, { posts: this.state.posts, postsperpage: this.state.postsperpage }),
+            React.createElement(PostEditor, null)
         );
     }
 
     updateFirstFilter(choice) {
+        var currfilter = document.getElementById("upper" + this.state.firstfilter + "Filter");
+        currfilter.className = currfilter.className.replace(" active", "");
+        var targetfilter = document.getElementById("upper" + choice + "Filter");
+        targetfilter.className += " active";
         this.setState({ firstfilter: choice });
-        console.log("firstfilter -> " + this.state.firstfilter);
     }
 
     updateSecondFilter(choice) {
+        var currfilter = document.getElementById("lower" + this.state.firstfilter + "Filter");
+        currfilter.className = currfilter.className.replace(" active", "");
+        var targetfilter = document.getElementById("lower" + choice + "Filter");
+        targetfilter.className += " active";
         this.setState({ secondfilter: choice });
-        console.log("firstfilter -> " + this.state.firstfilter);
     }
 }
 
@@ -61,7 +68,7 @@ class FirstFilterList extends React.Component {
                 null,
                 React.createElement(
                     "button",
-                    { onClick: () => {
+                    { id: "upperAllFilter", onClick: () => {
                             this.props.updateFilter("All");
                         } },
                     "All"
@@ -72,7 +79,7 @@ class FirstFilterList extends React.Component {
                 null,
                 React.createElement(
                     "button",
-                    { onClick: () => {
+                    { id: "upperAdoptionFilter", onClick: () => {
                             this.props.updateFilter("Adoption");
                         } },
                     "Adoption"
@@ -83,7 +90,7 @@ class FirstFilterList extends React.Component {
                 null,
                 React.createElement(
                     "button",
-                    { onClick: () => {
+                    { id: "upperLostFilter", onClick: () => {
                             this.props.updateFilter("Lost");
                         } },
                     "Lost"
@@ -94,7 +101,7 @@ class FirstFilterList extends React.Component {
                 null,
                 React.createElement(
                     "button",
-                    { onClick: () => {
+                    { id: "upperOthersFilter", onClick: () => {
                             this.props.updateFilter("Others");
                         } },
                     "Others"
@@ -117,7 +124,7 @@ class SecondFilterList extends React.Component {
                 null,
                 React.createElement(
                     "button",
-                    { onClick: () => {
+                    { id: "lowerAllFilter", onClick: () => {
                             this.props.updateFilter("All");
                         } },
                     "All"
@@ -128,7 +135,7 @@ class SecondFilterList extends React.Component {
                 null,
                 React.createElement(
                     "button",
-                    { onClick: () => {
+                    { id: "lowerDogFilter", onClick: () => {
                             this.props.updateFilter("Dog");
                         } },
                     "Dog"
@@ -139,7 +146,7 @@ class SecondFilterList extends React.Component {
                 null,
                 React.createElement(
                     "button",
-                    { onClick: () => {
+                    { id: "lowerCatFilter", onClick: () => {
                             this.props.updateFilter("Cat");
                         } },
                     "Cat"
@@ -150,7 +157,7 @@ class SecondFilterList extends React.Component {
                 null,
                 React.createElement(
                     "button",
-                    { onClick: () => {
+                    { id: "lowerOthersFilter", onClick: () => {
                             this.props.updateFilter("Others");
                         } },
                     "Others"
@@ -261,5 +268,114 @@ class PageSelector extends React.Component {
     }
 }
 
-ReactDOM.render(React.createElement(ForumBody, null), document.getElementById('webbody'));
+class PostEditor extends React.Component {
+    constructor(props) {
+        super(props);
+        this.makePost = this.makePost.bind(this);
+    }
+
+    render() {
+        return React.createElement(
+            "div",
+            { className: "postEditor", id: "postEditor" },
+            React.createElement(
+                "h1",
+                null,
+                "Title:"
+            ),
+            React.createElement(
+                "section",
+                { className: "makePosts" },
+                React.createElement(
+                    "div",
+                    { className: "stretch" },
+                    React.createElement("input", { type: "text", id: "postTitle" })
+                )
+            ),
+            React.createElement(
+                "h1",
+                null,
+                "Content: "
+            ),
+            React.createElement(
+                "section",
+                { className: "makePosts" },
+                React.createElement("textarea", { className: "stretch", rows: "20", id: "postContent" })
+            ),
+            React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "label",
+                    { htmlFor: "postImgUpload", style: { float: "left" } },
+                    "Insert IMG"
+                ),
+                React.createElement("input", { type: "file", id: "postImgUpload", style: { float: "left" }, accept: ".jpg, .jpeg, .png", multiple: true }),
+                React.createElement(
+                    "button",
+                    { id: "post", style: { float: "right" }, onClick: this.makePost },
+                    "Post"
+                )
+            )
+        );
+    }
+
+    makePost() {
+        var submitButton = document.getElementById('post');
+        var title = document.getElementById("postTitle").value;
+        var content = document.getElementById("postContent").value;
+        if (title.length < 5) {
+            alert("Title too short.");
+        }
+
+        if (content.length < 5) {
+            alert("Content too short.");
+        }
+        var images = document.getElementById("postImgUpload").files;
+        var img_url = [];
+        for (var i = 0; i < images.length; i++) {
+            var formData = new FormData();
+            formData.append('file', images[i]);
+            formData.append('upload_preset', 'tsqi28bt');
+            axios({
+                url: "https://api.cloudinary.com/v1_1/dfpktpjp8/image/upload",
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                data: formData
+            }).then(function (res) {
+                img_url.push(res['data']['secure_url']);
+                if (img_url.length == images.length) {
+                    $(function () {
+                        $.ajax({
+                            url: URL + "/api/posts",
+                            type: "POST",
+                            data: {
+                                title: title,
+                                username: "placeholder, waiting for cookie",
+                                content: content,
+                                images: img_url,
+                                filter1: "filter1",
+                                filter2: "filter2"
+                            },
+                            dataType: "json",
+                            success: function (response) {
+                                if (response['success'] != 'success') {
+                                    alert("failed to post");
+                                } else {
+                                    alert("posted");
+                                }
+                            }
+                        });
+                    });
+                }
+            }).catch(function (err) {
+                console.log(err);
+            });
+        }
+    }
+}
+
+ReactDOM.render(React.createElement(ForumBody, null), document.getElementById("forum"));
 
