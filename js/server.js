@@ -95,6 +95,7 @@ app.get('/api/page', function(req, res) {
   var filter1 = req.query.first;
   var filter2 = req.query.second;
 
+  var result = [];
   var ref = firebase.database().ref("posts");
   var f1;
   if (filter1 == "All") {    
@@ -105,18 +106,34 @@ app.get('/api/page', function(req, res) {
 
   var f2;
   if (filter2 == "All") {    
-    f2 = f1.on('child_added', function(snapshot) { 
-      var post = snapshot.val();
+    f2 = f1.on('value', function(snapshot) {
+      snapshot.forEach(function(childSnapshot) {
+        var post = {
+          "username" : childSnapshot.val().username,
+          "title" : childSnapshot.val().title
+        };
+        result.push(post);
+      });
+      console.log(result);
+      res.send({posts: result});
     });
   } else {
-    f2 = f1.on('child_added', function(snapshot) { 
-      var post = snapshot.val();
-      if (post.filter2 == filter2) {
-      }
+    f2 = f1.on('value', function(snapshot) {
+      snapshot.forEach(function(childSnapshot) {
+        if (childSnapshot.val().filter2 == filter2) {
+          var post = {
+            "username" : childSnapshot.val().author,
+            "title" : childSnapshot.val().title
+          };
+          result.push(post);
+        }
+      });
+
+      console.log(result);
+      res.send({posts: result});
     });
   }
 
-  res.send('Page filter request received!\n');
 });
 
 // ====================== handling api/posts, R/W into DB ======================
@@ -142,7 +159,7 @@ app.get('/api/posts/:id', function(req, res) {
   var ref = firebase.database().ref("posts");
   ref.child(post_id).once('value').then(function(snapshot) {
     var post = snapshot.val();
-    res.send({'status' : 'Get request for post: ' + post_id + ' received!', 'data' : post});
+    res.send(post);
   })
 
 });
