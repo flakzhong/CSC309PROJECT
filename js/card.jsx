@@ -1,3 +1,87 @@
+class Webbody extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            login:false,
+            username:"",
+            currpage:"forum"
+        }
+        this.updateSession = this.updateSession.bind(this)
+    }
+    
+    render() {
+        return(
+            <LoginBar style={{"background-color": "#f1c01c"}} updateSession={this.updateSession} lgin={this.state.login} usrn={this.state.username}/>
+        )
+    }
+
+    updateSession(login, username) {
+        this.setState({login: login})
+        this.setState({username: username})
+    }
+}
+
+
+class LoginBar extends React.Component {
+    constructor(props) {
+        super(props)
+        this.put_account_info = this.put_account_info.bind(this)
+        this.login=this.login.bind(this)
+    }
+
+    render() {
+        if (this.props.lgin) {
+            return (
+                <div>
+                    Welcome, {this.props.usrn}!
+                </div>
+            )
+        } else {
+            return (
+                <div className="loginbar" id="loginbar">
+                    User name: <input type="text" id="userid" placeholder="User name" />
+                    Password: <input type="password" id="userpass" placeholder="Password" />
+                    <button id="loginbutton" onClick={this.login}>Submit</button>
+                </div>
+            )
+        }
+    }
+
+    put_account_info(user_info) {
+        $('div.info-group#myaccFName').text("First name: "+user_info.firstName);
+        $('div.info-group#myaccLName').text("Last name: "+user_info.lastName);
+        $('div.info-group#myaccAddress').text("Address: "+user_info.address);
+        $('div.info-group#myaccEmail').text("Email: "+user_info.email);
+        $('div.info-group#myaccUsername').text("Username: "+user_info.username);
+    }
+
+    login() {
+        var username = document.getElementById("userid").value;
+        var password = document.getElementById("userpass").value;
+        var success = 0;
+        console.log("trying to login")
+        $(function(){
+            $.ajax({
+                url: "https://7d46c159.ngrok.io/api/login",
+                type: "POST",
+                data: {'username': username,
+                    'password': password},
+                dataType: "json",
+                success: function(response) {
+                    console.log("succeed")
+                    if(response['success'] == 'failed') {
+                        alert("Failed to login. Please check your username and password.");
+                    } else {
+                        put_account_info(response.payload);
+                        this.props.updateSession(true, username)
+                    }
+                }
+            });
+        });
+    }
+}
+
+
 class ForumBody extends React.Component {
     constructor(props) {
         super(props);
@@ -13,7 +97,7 @@ class ForumBody extends React.Component {
     }
 
     updatePosts() {
-        fetch("http://a285392a.ngrok.io/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter)
+        fetch("https://7d46c159.ngrok.io/api/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter)
         .then(response => {
             console.log(response.status, response.statusCode)
             if (response.ok) {
@@ -32,7 +116,7 @@ class ForumBody extends React.Component {
     render() {
 	this.updatePosts();
         return (
-            <div>
+            <div className="block">
                 <div className="forumtab">
                     <FirstFilterList updateFilter={this.updateFirstFilter}/>
                     <SecondFilterList updateFilter={this.updateSecondFilter}/>
@@ -66,12 +150,14 @@ class FirstFilterList extends React.Component {
 	}
 	render() {
 		return(
-            <ul>
-                <li><button id="upperAllFilter" className=" active" onClick={() => {this.props.updateFilter("All")}}>All</button></li>
-                <li><button id="upperAdoptionFilter" onClick={() => {this.props.updateFilter("Adoption")}}>Adoption</button></li>
-                <li><button id="upperLostFilter" onClick={() => {this.props.updateFilter("Lost")}}>Lost</button></li>
-                <li><button id="upperOthersFilter" onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
-            </ul>
+            <div className="block">
+                <ul>
+                    <li><button id="upperAllFilter" className=" active" onClick={() => {this.props.updateFilter("All")}}>All</button></li>
+                    <li><button id="upperAdoptionFilter" onClick={() => {this.props.updateFilter("Adoption")}}>Adoption</button></li>
+                    <li><button id="upperLostFilter" onClick={() => {this.props.updateFilter("Lost")}}>Lost</button></li>
+                    <li><button id="upperOthersFilter" onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
+                </ul>
+            </div>
 		)
 	}
 }
@@ -82,12 +168,14 @@ class SecondFilterList extends React.Component {
 	}
 	render() {
 		return(
-			<ul>
-			    <li><button id="lowerAllFilter" className=" active" onClick={() => {this.props.updateFilter("All")}}>All</button></li>
-			    <li><button id="lowerDogFilter" onClick={() => {this.props.updateFilter("Dog")}}>Dog</button></li>
-			    <li><button id="lowerCatFilter" onClick={() => {this.props.updateFilter("Cat")}}>Cat</button></li>
-			    <li><button id="lowerOthersFilter" onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
-			</ul>
+            <div className="block">
+                <ul>
+                    <li><button id="lowerAllFilter" className=" active" onClick={() => {this.props.updateFilter("All")}}>All</button></li>
+                    <li><button id="lowerDogFilter" onClick={() => {this.props.updateFilter("Dog")}}>Dog</button></li>
+                    <li><button id="lowerCatFilter" onClick={() => {this.props.updateFilter("Cat")}}>Cat</button></li>
+                    <li><button id="lowerOthersFilter" onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
+                </ul>
+            </div>
 		)
 	}
 }
@@ -137,7 +225,7 @@ class PostList extends React.Component {
     
     render() {
         return (
-            <div>
+            <div className="block">
                 <ul>
                     {this.state.currpageposts.map(item => (
                         <Post post={item}></Post>
@@ -166,11 +254,13 @@ class PageSelector extends React.Component {
 
     render() {
         return(
-            <ul>
-                <button onClick={this.props.prev}>Prev Page</button>
-                <div>{this.props.curr}/{this.props.max}</div>
-                <button onClick={this.props.next}>Next Page</button>
-            </ul>
+            <div className="block">
+                <ul>
+                    <button onClick={this.props.prev}>Prev Page</button>
+                    <div>{this.props.curr}/{this.props.max}</div>
+                    <button onClick={this.props.next}>Next Page</button>
+                </ul>
+            </div>
         )
     }
 }
@@ -184,23 +274,23 @@ class PostEditor extends React.Component {
 
     render() {
         return (
-            <div className="postEditor" id="postEditor">
-            <h1>Title:</h1>
-            <section className="makePosts">
-                <div className="stretch">
-                    <input type="text" id="postTitle"/>
+            <div className="postEditor block" id="postEditor">
+                <h1>Title:</h1>
+                <section className="makePosts">
+                    <div className="stretch">
+                        <input type="text" id="postTitle"/>
+                    </div>
+                </section>
+                <h1>Content: </h1>
+                <section className="makePosts">
+                    <textarea className="stretch" rows="20" id="postContent"></textarea>						
+                </section>
+                <div>
+                    <label htmlFor="postImgUpload" style={{float:"left"}}>Insert IMG</label>
+                    <input type="file" id="postImgUpload" style={{float:"left"}} accept=".jpg, .jpeg, .png" multiple/>
+                    <button id="post" style={{float:"right"}} onClick={() => {this.makePost(this.props.filter1, this.props.filter2)}}>Post</button>
                 </div>
-            </section>
-            <h1>Content: </h1>
-            <section className="makePosts">
-                <textarea className="stretch" rows="20" id="postContent"></textarea>						
-            </section>
-            <div>
-                <label htmlFor="postImgUpload" style={{float:"left"}}>Insert IMG</label>
-                <input type="file" id="postImgUpload" style={{float:"left"}} accept=".jpg, .jpeg, .png" multiple/>
-                <button id="post" style={{float:"right"}} onClick={() => {this.makePost(this.props.filter1, this.props.filter2)}}>Post</button>
             </div>
-        </div>
         )
     }
 

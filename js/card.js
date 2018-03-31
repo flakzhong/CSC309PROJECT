@@ -1,3 +1,91 @@
+class Webbody extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            login: false,
+            username: "",
+            currpage: "forum"
+        };
+        this.updateSession = this.updateSession.bind(this);
+    }
+
+    render() {
+        return React.createElement(LoginBar, { style: { "background-color": "#f1c01c" }, updateSession: this.updateSession, lgin: this.state.login, usrn: this.state.username });
+    }
+
+    updateSession(login, username) {
+        this.setState({ login: login });
+        this.setState({ username: username });
+    }
+}
+
+class LoginBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.put_account_info = this.put_account_info.bind(this);
+        this.login = this.login.bind(this);
+    }
+
+    render() {
+        if (this.props.lgin) {
+            return React.createElement(
+                "div",
+                null,
+                "Welcome, ",
+                this.props.usrn,
+                "!"
+            );
+        } else {
+            return React.createElement(
+                "div",
+                { className: "loginbar", id: "loginbar" },
+                "User name: ",
+                React.createElement("input", { type: "text", id: "userid", placeholder: "User name" }),
+                "Password: ",
+                React.createElement("input", { type: "password", id: "userpass", placeholder: "Password" }),
+                React.createElement(
+                    "button",
+                    { id: "loginbutton", onClick: this.login },
+                    "Submit"
+                )
+            );
+        }
+    }
+
+    put_account_info(user_info) {
+        $('div.info-group#myaccFName').text("First name: " + user_info.firstName);
+        $('div.info-group#myaccLName').text("Last name: " + user_info.lastName);
+        $('div.info-group#myaccAddress').text("Address: " + user_info.address);
+        $('div.info-group#myaccEmail').text("Email: " + user_info.email);
+        $('div.info-group#myaccUsername').text("Username: " + user_info.username);
+    }
+
+    login() {
+        var username = document.getElementById("userid").value;
+        var password = document.getElementById("userpass").value;
+        var success = 0;
+        console.log("trying to login");
+        $(function () {
+            $.ajax({
+                url: "https://7d46c159.ngrok.io/api/login",
+                type: "POST",
+                data: { 'username': username,
+                    'password': password },
+                dataType: "json",
+                success: function (response) {
+                    console.log("succeed");
+                    if (response['success'] == 'failed') {
+                        alert("Failed to login. Please check your username and password.");
+                    } else {
+                        put_account_info(response.payload);
+                        this.props.updateSession(true, username);
+                    }
+                }
+            });
+        });
+    }
+}
+
 class ForumBody extends React.Component {
     constructor(props) {
         super(props);
@@ -13,7 +101,7 @@ class ForumBody extends React.Component {
     }
 
     updatePosts() {
-        fetch("http://a285392a.ngrok.io/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter).then(response => {
+        fetch("https://7d46c159.ngrok.io/api/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter).then(response => {
             console.log(response.status, response.statusCode);
             if (response.ok) {
                 return response.json();
@@ -30,7 +118,7 @@ class ForumBody extends React.Component {
         this.updatePosts();
         return React.createElement(
             "div",
-            null,
+            { className: "block" },
             React.createElement(
                 "div",
                 { className: "forumtab" },
@@ -65,50 +153,54 @@ class FirstFilterList extends React.Component {
     }
     render() {
         return React.createElement(
-            "ul",
-            null,
+            "div",
+            { className: "block" },
             React.createElement(
-                "li",
+                "ul",
                 null,
                 React.createElement(
-                    "button",
-                    { id: "upperAllFilter", className: " active", onClick: () => {
-                            this.props.updateFilter("All");
-                        } },
-                    "All"
-                )
-            ),
-            React.createElement(
-                "li",
-                null,
+                    "li",
+                    null,
+                    React.createElement(
+                        "button",
+                        { id: "upperAllFilter", className: " active", onClick: () => {
+                                this.props.updateFilter("All");
+                            } },
+                        "All"
+                    )
+                ),
                 React.createElement(
-                    "button",
-                    { id: "upperAdoptionFilter", onClick: () => {
-                            this.props.updateFilter("Adoption");
-                        } },
-                    "Adoption"
-                )
-            ),
-            React.createElement(
-                "li",
-                null,
+                    "li",
+                    null,
+                    React.createElement(
+                        "button",
+                        { id: "upperAdoptionFilter", onClick: () => {
+                                this.props.updateFilter("Adoption");
+                            } },
+                        "Adoption"
+                    )
+                ),
                 React.createElement(
-                    "button",
-                    { id: "upperLostFilter", onClick: () => {
-                            this.props.updateFilter("Lost");
-                        } },
-                    "Lost"
-                )
-            ),
-            React.createElement(
-                "li",
-                null,
+                    "li",
+                    null,
+                    React.createElement(
+                        "button",
+                        { id: "upperLostFilter", onClick: () => {
+                                this.props.updateFilter("Lost");
+                            } },
+                        "Lost"
+                    )
+                ),
                 React.createElement(
-                    "button",
-                    { id: "upperOthersFilter", onClick: () => {
-                            this.props.updateFilter("Others");
-                        } },
-                    "Others"
+                    "li",
+                    null,
+                    React.createElement(
+                        "button",
+                        { id: "upperOthersFilter", onClick: () => {
+                                this.props.updateFilter("Others");
+                            } },
+                        "Others"
+                    )
                 )
             )
         );
@@ -121,50 +213,54 @@ class SecondFilterList extends React.Component {
     }
     render() {
         return React.createElement(
-            "ul",
-            null,
+            "div",
+            { className: "block" },
             React.createElement(
-                "li",
+                "ul",
                 null,
                 React.createElement(
-                    "button",
-                    { id: "lowerAllFilter", className: " active", onClick: () => {
-                            this.props.updateFilter("All");
-                        } },
-                    "All"
-                )
-            ),
-            React.createElement(
-                "li",
-                null,
+                    "li",
+                    null,
+                    React.createElement(
+                        "button",
+                        { id: "lowerAllFilter", className: " active", onClick: () => {
+                                this.props.updateFilter("All");
+                            } },
+                        "All"
+                    )
+                ),
                 React.createElement(
-                    "button",
-                    { id: "lowerDogFilter", onClick: () => {
-                            this.props.updateFilter("Dog");
-                        } },
-                    "Dog"
-                )
-            ),
-            React.createElement(
-                "li",
-                null,
+                    "li",
+                    null,
+                    React.createElement(
+                        "button",
+                        { id: "lowerDogFilter", onClick: () => {
+                                this.props.updateFilter("Dog");
+                            } },
+                        "Dog"
+                    )
+                ),
                 React.createElement(
-                    "button",
-                    { id: "lowerCatFilter", onClick: () => {
-                            this.props.updateFilter("Cat");
-                        } },
-                    "Cat"
-                )
-            ),
-            React.createElement(
-                "li",
-                null,
+                    "li",
+                    null,
+                    React.createElement(
+                        "button",
+                        { id: "lowerCatFilter", onClick: () => {
+                                this.props.updateFilter("Cat");
+                            } },
+                        "Cat"
+                    )
+                ),
                 React.createElement(
-                    "button",
-                    { id: "lowerOthersFilter", onClick: () => {
-                            this.props.updateFilter("Others");
-                        } },
-                    "Others"
+                    "li",
+                    null,
+                    React.createElement(
+                        "button",
+                        { id: "lowerOthersFilter", onClick: () => {
+                                this.props.updateFilter("Others");
+                            } },
+                        "Others"
+                    )
                 )
             )
         );
@@ -216,7 +312,7 @@ class PostList extends React.Component {
     render() {
         return React.createElement(
             "div",
-            null,
+            { className: "block" },
             React.createElement(
                 "ul",
                 null,
@@ -249,24 +345,28 @@ class PageSelector extends React.Component {
 
     render() {
         return React.createElement(
-            "ul",
-            null,
+            "div",
+            { className: "block" },
             React.createElement(
-                "button",
-                { onClick: this.props.prev },
-                "Prev Page"
-            ),
-            React.createElement(
-                "div",
+                "ul",
                 null,
-                this.props.curr,
-                "/",
-                this.props.max
-            ),
-            React.createElement(
-                "button",
-                { onClick: this.props.next },
-                "Next Page"
+                React.createElement(
+                    "button",
+                    { onClick: this.props.prev },
+                    "Prev Page"
+                ),
+                React.createElement(
+                    "div",
+                    null,
+                    this.props.curr,
+                    "/",
+                    this.props.max
+                ),
+                React.createElement(
+                    "button",
+                    { onClick: this.props.next },
+                    "Next Page"
+                )
             )
         );
     }
@@ -281,7 +381,7 @@ class PostEditor extends React.Component {
     render() {
         return React.createElement(
             "div",
-            { className: "postEditor", id: "postEditor" },
+            { className: "postEditor block", id: "postEditor" },
             React.createElement(
                 "h1",
                 null,
