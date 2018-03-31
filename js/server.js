@@ -2,12 +2,12 @@
 var firebase = require('firebase');
 
 var config = {
-  apiKey: "AIzaSyBI4Jb71gkU1LsQYCTRu7gw769Nb7-wQoo",
-  authDomain: "a3default.firebaseapp.com",
-  databaseURL: "https://a3default.firebaseio.com",
-  projectId: "a3default",
-  storageBucket: "",
-  messagingSenderId: "877503307659"
+  apiKey: "AIzaSyBth10-QBKlvZf-hbeRFwusiN1yW6_tXSc",
+  authDomain: "csc309-3251e.firebaseapp.com",
+  databaseURL: "https://csc309-3251e.firebaseio.com",
+  projectId: "csc309-3251e",
+  storageBucket: "csc309-3251e.appspot.com",
+  messagingSenderId: "38046406915"
 };
 firebase.initializeApp(config);
 

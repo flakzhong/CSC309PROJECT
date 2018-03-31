@@ -1,22 +1,5 @@
-var URL = "https://2faf1cee.ngrok.io"
+var URL = "http://2978d949.ngrok.io"
 
-var title = "Corgi!!!";
-var content = "The best way to raise a Corgi";
-var file = "Placeholder: filename or file, not working now";
-
-$(function(){
-    $('form#post').submit((event) => {
-        $.ajax({
-          url: URL + "/api/posts",
-          type: "POST",
-          data: {'title' : title, 
-                'content': content,
-                'file'   : file,
-                'username' : "Tommy"},
-          dataType: "json"
-        });
-    });
-});
 
 $(function(){
     $.ajax({
@@ -37,48 +20,14 @@ $(function(){
                 account.href="#userprofile"
                 // hide register button
                 document.getElementById("registerButton").style.display = "none";
-                // document.cookie = "username=" + username;
+                // u can make posts after logging in.
+                document.getElementById("makeposts").style.display = "block";
             }
         }
     });
 });
 
-
-// // Initialize Firebase
-// var config = {
-//     apiKey: "AIzaSyBI4Jb71gkU1LsQYCTRu7gw769Nb7-wQoo",
-//     authDomain: "a3default.firebaseapp.com",
-//     databaseURL: "https://a3default.firebaseio.com",
-//     projectId: "a3default",
-//     storageBucket: "",
-//     messagingSenderId: "877503307659"
-// };
-
-// firebase.initializeApp(config);
-
-// //get elements
-// const preObject = document.getElementById('object');
-
-// //create references
-// const dbRefObject = firebase.database().ref().child('object');
-
-// //sync object changes
-// //console.log("abc");
-// dbRefObject.on('value', snap => console.log(snap.val()));
-
-var currentPage = 0
-var currentFilter = 0
 var currentUser=""
-// after log in, log in button should be hidden.
-// and log in is replaced by my account
-function account(evt) {
-    if (currentUser == "") {
-        var loginbar = document.getElementById("loginbar")
-        loginbar.style.display = "block"
-    } else {
-        
-    }
-}
 
 function login(evt) {
     username = document.getElementById("userid").value;
@@ -107,7 +56,8 @@ function login(evt) {
                     account.href="#userprofile"
                     // hide register button
                     document.getElementById("registerButton").style.display = "none";
-                    // document.cookie = "username=" + username;
+                    // after logged in, u can make posts.
+                    document.getElementById("makeposts").style.display = "block";
                 }
             }
         });
@@ -218,23 +168,7 @@ function openSubNav(evt, tabName) {
     evt.currentTarget.className += " active";
 }
 
-/* =======================user profile======================= */
-/* sry I'm getting  'Uncaught ReferenceError: $ is not defined' therefore I commented out this part for now
-$(document).ready(function () {
 
-    $(".edit").hide();
-
-    $(".edit_profile").click(function() {
-    	$(".user").hide();
-    	$(".edit").show();
-    });
-
-    $(".save_profile").click(function() {
-    	$(".user").show();
-    	$(".edit").hide();
-    });
-
-});*/
 
 function register() {
     var firstName = document.getElementById("rFirstName").value;
@@ -291,6 +225,13 @@ function register() {
                   if (response['success'] != 'success') {
                     alert("Username already exist.");
                   } else {
+                    $('#rFirstName').val("");
+                    $('#rLastName').val("");
+                    $('#rAddress').val("");
+                    $('#rEmail').val("");
+                    $('#rUsername').val("");
+                    $('#rPassword').val("");
+                    $('#rCPassword').val("");
                     alert("Registered.")
                   }       
               }
@@ -299,13 +240,6 @@ function register() {
     }
 }
 
-function myacc() {
-    
-}
-
-function upload_img(images) {
-
-}
 
 function makePost() {
     var submitButton = document.getElementById('post');
@@ -341,7 +275,7 @@ function makePost() {
                                 type: "POST",
                                 data: {
                                     title: title,
-                                    username: "placeholder, waiting for cookie",
+                                    username: currentUser,
                                     content: content,
                                     images: img_url,
                                     filter1: "filter1",
@@ -350,9 +284,12 @@ function makePost() {
                                 dataType: "json",
                                 success: function(response) {
                                     if (response['success'] != 'success') {
-                                    alert("failed to post");
+                                        alert("failed to post");
                                     } else {
-                                    alert("posted")
+                                        $("#postTitle").val("");
+                                        $("#postContent").val("");
+                                        $("#postImgUpload").val(null);
+                                        alert("posted")
                                     }       
                                 }
                             });
@@ -369,7 +306,7 @@ function makePost() {
                 type: "POST",
                 data: {
                     title: title,
-                    username: "placeholder, waiting for cookie",
+                    username: currentUser,
                     content: content,
                     images: null,
                     filter1: "filter1",

@@ -243,21 +243,23 @@
 				</div>
 
 
-				<h1>Title:</h1>
-				<section class="makePosts">
-						<div class="stretch">
-							<input type="text" id="postTitle"/>
-						</div>
-				</section>
-				
-				<h1>Content: </h1>
-				<section class="makePosts">
-						<textarea class="stretch" rows="20" id="postContent"></textarea>						
-				</section>
-				<div>
-					<label for="postImgUpload" style="float:left">Insert IMG</label>
-					<input type="file" id="postImgUpload" style="float:left" accept=".jpg, .jpeg, .png" multiple>
-					<button id="post" style="float:right" onclick="makePost()">Post</button>
+				<div id="makeposts" style="display: none">
+					<h1>Title:</h1>
+					<section class="makePosts">
+							<div class="stretch">
+								<input type="text" id="postTitle"/>
+							</div>
+					</section>
+					
+					<h1>Content: </h1>
+					<section class="makePosts">
+							<textarea class="stretch" rows="20" id="postContent"></textarea>						
+					</section>
+					<div>
+						<label for="postImgUpload" style="float:left">Insert IMG</label>
+						<input type="file" id="postImgUpload" style="float:left" accept=".jpg, .jpeg, .png" multiple>
+						<button id="post" style="float:right" onclick="makePost()">Post</button>
+					</div>
 				</div>
 
 				
