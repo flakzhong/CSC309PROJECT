@@ -156,7 +156,8 @@ function writeNewPost(title, username, content, images, filter1, filter2) {
     content: content,
     images: images,
     filter1: filter1,
-    filter2: filter2
+    filter2: filter2,
+    currentTime: Date()
   };
 
   // Get a key for a new Post.
