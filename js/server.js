@@ -30,13 +30,15 @@ const cookieParser = require('cookie-parser');
 var app = express();
 
 function myLogger(req, res, next) {
+  console.log('------------------------------------');
   // console.log("Raw Cookies: ",req.headers.cookie)
   // console.log("Cookie Parser: ",req.cookies)
-  // console.log("Signed Cookies: ",req.signedCookies)
+  console.log("Signed Cookies: ",req.signedCookies)
   if (req.body) {
     console.log('LOG:',req.method,req.url,req.body)
   }
    res.append('Set-Cookie', 'lastPage='+req.url);
+   console.log(sessions);
   next()
 }
 
@@ -291,7 +293,7 @@ function generate_cookie_name(length) {
 
 // cookie_name can be get from req.signedCookies.name
 function bind_username_to_cookie(username, cookie_name) {
-  if (sessions[cookie_name] == undefined) {
+  if (cookie_name != undefined && sessions[cookie_name] == undefined) {
     sessions[cookie_name] = username;
   }
 }
@@ -364,9 +366,11 @@ app.get('/api/login', function(req, res) {
 
 //=============================== Web page ===============================
 app.get('/', function(req, res) {
+  if (req.signedCookies.name == undefined || !(req.signedCookies.name in sessions)) {
     res.cookie('securecookie', 51, {maxAge: 100000, secure: true});
-    res.cookie('name', 'Tom', { signed: true });
-    res.sendFile(path.join(__dirname + '/../index.html'));
+    res.cookie('name', generate_cookie_name(20), { signed: true });
+  }
+  res.sendFile(path.join(__dirname + '/../index.html'));
 });
 
 app.get('/css/pet_forum.css', function(req, res) {
