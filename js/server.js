@@ -28,46 +28,47 @@ var path = require('path');
 const cookieParser = require('cookie-parser');
 var app = express();
 
-var cloudinary = require('cloudinary');
-cloudinary.config({ 
-  cloud_name: 'dfpktpjp8', 
-  api_key: '628676291839431', 
-  api_secret: 'dZjwflkh9gZdNisiK_MWzhr8y4s' 
-});
+// var cloudinary = require('cloudinary');
+// cloudinary.config({ 
+//   cloud_name: 'dfpktpjp8', 
+//   api_key: '628676291839431', 
+//   api_secret: 'dZjwflkh9gZdNisiK_MWzhr8y4s' 
+// });
 
-var formidable = require('formidable');
-var fs = require('fs');
+// var formidable = require('formidable');
+// var fs = require('fs');
 
-app.post('/fileupload', (req, res) => {
-  var form = new formidable.IncomingForm();
-  //form.parse(req, function (err, fields, files) {
-  //   res.write('File uploaded');
-  //   res.end();
-  // });  
+// app.post('/fileupload', (req, res) => {
+//   var form = new formidable.IncomingForm();
+//   //form.parse(req, function (err, fields, files) {
+//   //   res.write('File uploaded');
+//   //   res.end();
+//   // });  
 
-  form.parse(req, function (err, fields, files) {
-    var oldpath = files.filetoupload.path;
-    var newpath = '../uploads/' + files.filetoupload.name;
-    fs.rename(oldpath, newpath, function (err) {
-      if (err) throw err;
-      //res.write('File uploaded and moved!');
-      res.redirect("/#forum");
-      //res.send('File received!\n');
-    });
+//   form.parse(req, function (err, fields, files) {
+//     var oldpath = files.filetoupload.path;
+//     var newpath = '../uploads/' + files.filetoupload.name;
+//     fs.rename(oldpath, newpath, function (err) {
+//       if (err) throw err;
+//       //res.write('File uploaded and moved!');
+//       res.redirect("/#forum");
+//       //res.send('File received!\n');
+//     });
 
-    cloudinary.v2.uploader.upload(newpath, function(error, result) {
-      console.log(error);
-      console.log(result); 
-    });
-  });
+//     cloudinary.v2.uploader.upload(newpath, function(error, result) {
+//       console.log(error);
+//       console.log(result); 
+//     });
+//   });
 
-});
+// });
 
 
 // cloudinary.v2.uploader.upload("../images/back.png", function(error, result) {
 //   console.log(error);
 //   console.log(result); 
 // });
+
 
 function myLogger(req, res, next) {
   // console.log("Raw Cookies: ",req.headers.cookie)
@@ -88,27 +89,62 @@ app.use(cookieParser("Pets!"));
 app.use(myLogger)
 
 
-// ====================== handling api/posts, R/W into DB ======================
-app.get('/page', function(req, res) {
+app.get('/api/page', function(req, res) {
   // Client requests posts
 
-  console.log(req.query.first);
-  console.log(req.query.second);
+  var filter1 = req.query.first;
+  var filter2 = req.query.second;
+
+  var ref = firebase.database().ref("posts");
+  var f1;
+  if (filter1 == "All") {    
+    f1 = ref;
+  } else {
+    f1 = ref.orderByChild("filter1").equalTo(filter1);
+  }
+
+  var f2;
+  if (filter2 == "All") {    
+    f2 = f1.on('child_added', function(snapshot) { 
+      var post = snapshot.val();
+    });
+  } else {
+    f2 = f1.on('child_added', function(snapshot) { 
+      var post = snapshot.val();
+      if (post.filter2 == filter2) {
+      }
+    });
+  }
 
   res.send('Page filter request received!\n');
 });
 
+// ====================== handling api/posts, R/W into DB ======================
 app.get('/api/posts', function(req, res) {
   // Client requests posts
+  var result = [];
 
-  res.send('Get request received!\n');
+  var ref = firebase.database().ref("posts");
+  ref.on('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+      result.push(childSnapshot.val());
+    });
+
+    res.send({'status':'Get request received!', data : result});
+  });
+
 });
 
 app.get('/api/posts/:id', function(req, res) {
   // Client requests a certain post
   var post_id = req.params.id;
 
-  res.send('Get request for post: ' + post_id + ' received!\n');
+  var ref = firebase.database().ref("posts");
+  ref.child(post_id).once('value').then(function(snapshot) {
+    var post = snapshot.val();
+    res.send({'status' : 'Get request for post: ' + post_id + ' received!', 'data' : post});
+  })
+
 });
 
 app.post('/api/posts', function(req, res) {
@@ -120,21 +156,21 @@ app.post('/api/posts', function(req, res) {
   var filter1 = req.body.filter1;
   var filter2 = req.body.filter2;
   writeNewPost(title, username, content, images, filter1, filter2);
-  console.log(title + username + content);
 
   res.send({'success':'success'});
 });
 
 app.put('/api/posts/:id', function(req, res) {
   // Client attempts to update a post
+  // can only modify 'content'
   var post_id = req.params.id;
-
-  var title = req.body.title; 
-  var username = req.body.username;
   var content = req.body.content; 
-  var file = req.body.file; 
 
-  console.log(post_id);
+  var ref = firebase.database().ref("posts");
+  ref.child(post_id).once('value').then(function(snapshot) {
+    snapshot.ref.update({ 'content': content})
+  })
+  
   res.send('Update request received!\n');
 });
 
@@ -144,7 +180,9 @@ app.delete('/api/posts/:id', function(req, res) {
   var post_id = req.params.id;
   var username = req.body.username;
 
-  console.log(post_id);
+  var ref = firebase.database().ref("posts");
+  ref.child(post_id).remove();
+
   res.send('Delete request received!\n');
 });
 
@@ -156,8 +194,7 @@ function writeNewPost(title, username, content, images, filter1, filter2) {
     content: content,
     images: images,
     filter1: filter1,
-    filter2: filter2,
-    currentTime: Date()
+    filter2: filter2
   };
 
   // Get a key for a new Post.
@@ -289,7 +326,6 @@ app.post('/api/login', function(req, res) {
 app.get('/api/login', function(req, res) {
   // get username and password
   var username = get_username_by_cookie(req.signedCookies.name);
-  console.log(sessions);
 
   if (!username) {
     res.send({'success':"failed"});
