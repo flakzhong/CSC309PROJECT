@@ -1,4 +1,4 @@
-var URL = "https://7ced8bcb.ngrok.io"
+var URL = "https://cscdefault01.ngrok.io"
 
 
 $(function(){
@@ -22,6 +22,8 @@ $(function(){
                 document.getElementById("registerButton").style.display = "none";
                 // u can make posts after logging in.
                 document.getElementById("makeposts").style.display = "block";
+                //show logout button
+                document.getElementById("logoutb").style.display = "block";
             }
         }
     });
@@ -60,13 +62,29 @@ function login(evt) {
                     document.getElementById("registerButton").style.display = "none";
                     // after logged in, u can make posts.
                     document.getElementById("makeposts").style.display = "block";
+                    //show logout button
+                    document.getElementById("logoutb").style.display = "block";
                 }
             }
         });
     });
-
-
 }
+//===logout===
+function logout(evt) {
+    $(function(){
+        $.ajax({
+            url: URL + "/api/logout",
+            type: "POST",
+            data: {},
+            dataType: "json",
+            success: function(response) {
+                location.reload();         
+            }
+        });
+    });
+}
+
+
 
 function put_account_info(user_info) {
     $('#editFName').val(user_info.firstName);

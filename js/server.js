@@ -360,7 +360,11 @@ app.get('/api/login', function(req, res) {
 
     });    
   }
-
+});
+//=== logout ===
+app.post('/api/logout', function(req, res) {
+  remove_username_from_sessions(req.signedCookies.name);
+  res.send({'success':"failed"});
 });
 
 //=============================== Web page ===============================
