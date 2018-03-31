@@ -115,7 +115,6 @@ app.get('/api/posts/page', function(req, res) {
           result.push(post);
         }
       });
-
       console.log(result);
       res.send({posts: result});
     });
@@ -382,6 +381,10 @@ app.get('/css/pet_forum.css', function(req, res) {
 
 app.get('/js/script.js', function(req, res) {
     res.sendFile(path.join(__dirname + '/../js/script.js'));
+});
+
+app.get('/js/card.js', function(req, res) {
+  res.sendFile(path.join(__dirname + '/../js/card.js'));
 });
 
 //=============================== Files ===============================

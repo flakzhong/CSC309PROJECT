@@ -22,64 +22,7 @@ class Webbody extends React.Component {
 }
 
 
-class LoginBar extends React.Component {
-    constructor(props) {
-        super(props)
-        this.put_account_info = this.put_account_info.bind(this)
-        this.login=this.login.bind(this)
-    }
 
-    render() {
-        if (this.props.lgin) {
-            return (
-                <div>
-                    Welcome, {this.props.usrn}!
-                </div>
-            )
-        } else {
-            return (
-                <div className="loginbar" id="loginbar">
-                    User name: <input type="text" id="userid" placeholder="User name" />
-                    Password: <input type="password" id="userpass" placeholder="Password" />
-                    <button id="loginbutton" onClick={this.login}>Submit</button>
-                </div>
-            )
-        }
-    }
-
-    put_account_info(user_info) {
-        $('div.info-group#myaccFName').text("First name: "+user_info.firstName);
-        $('div.info-group#myaccLName').text("Last name: "+user_info.lastName);
-        $('div.info-group#myaccAddress').text("Address: "+user_info.address);
-        $('div.info-group#myaccEmail').text("Email: "+user_info.email);
-        $('div.info-group#myaccUsername').text("Username: "+user_info.username);
-    }
-
-    login() {
-        var username = document.getElementById("userid").value;
-        var password = document.getElementById("userpass").value;
-        var success = 0;
-        console.log("trying to login")
-        $(function(){
-            $.ajax({
-                url: "https://7d46c159.ngrok.io/api/login",
-                type: "POST",
-                data: {'username': username,
-                    'password': password},
-                dataType: "json",
-                success: function(response) {
-                    console.log("succeed")
-                    if(response['success'] == 'failed') {
-                        alert("Failed to login. Please check your username and password.");
-                    } else {
-                        put_account_info(response.payload);
-                        this.props.updateSession(true, username)
-                    }
-                }
-            });
-        });
-    }
-}
 
 
 class ForumBody extends React.Component {

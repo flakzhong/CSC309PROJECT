@@ -1,4 +1,4 @@
-var URL = "https://cscdefault01.ngrok.io"
+var URL = "https://07333461.ngrok.io"
 
 
 $(function(){
@@ -20,10 +20,6 @@ $(function(){
                 account.href="#userprofile"
                 // hide register button
                 document.getElementById("registerButton").style.display = "none";
-                // u can make posts after logging in.
-                document.getElementById("makeposts").style.display = "block";
-                //show logout button
-                document.getElementById("logoutb").style.display = "block";
             }
         }
     });
