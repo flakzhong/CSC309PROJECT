@@ -1,13 +1,14 @@
+
 // Initialize Firebase
 var firebase = require('firebase');
 
 var config = {
-  apiKey: "AIzaSyBth10-QBKlvZf-hbeRFwusiN1yW6_tXSc",
-  authDomain: "csc309-3251e.firebaseapp.com",
-  databaseURL: "https://csc309-3251e.firebaseio.com",
-  projectId: "csc309-3251e",
-  storageBucket: "csc309-3251e.appspot.com",
-  messagingSenderId: "38046406915"
+  apiKey: "AIzaSyBI4Jb71gkU1LsQYCTRu7gw769Nb7-wQoo",
+  authDomain: "a3default.firebaseapp.com",
+  databaseURL: "https://a3default.firebaseio.com",
+  projectId: "a3default",
+  storageBucket: "",
+  messagingSenderId: "877503307659"
 };
 firebase.initializeApp(config);
 
@@ -200,9 +201,10 @@ app.post('/api/accounts', function(req, res) {
   var address = req.body.address;
   var username = req.body.username;
   var pw = req.body.password;
+  var photo = req.body.photo;
   firebase.database().ref().child('accounts').orderByChild('username').equalTo(username).once('value', function(snapshot) {
     if (snapshot.val() === null) {
-      createNewAccount(firstName, lastName, email, address, username, pw);
+      createNewAccount(firstName, lastName, email, photo, address, username, pw);
       res.send({'success':"success"});
     } else{
       res.send({'success':"failed"});
@@ -221,7 +223,7 @@ app.put('/api/accounts', function(req, res) {
   var username = req.body.username;
   var old_password = req.body.old_password;
   var new_password = req.body.new_password;
-
+  var photo = req.body.photo;
   firebase.database().ref().child('accounts').orderByChild('username').equalTo(username).once('value', function(snapshot) {
     if (snapshot.val() === null) {
       res.send({'success':"failed"});
@@ -232,7 +234,9 @@ app.put('/api/accounts', function(req, res) {
         snapshot.child(username).ref.update({'email': email})
         snapshot.child(username).ref.update({'address': address})
         snapshot.child(username).ref.update({'password': new_password})
-
+        if(photo != null) {
+          snapshot.child(username).ref.update({'photo': photo});
+        }
         res.send({'success':"success"});
       } else {
         res.send({'success':"failed"});
@@ -243,12 +247,13 @@ app.put('/api/accounts', function(req, res) {
 
 });
 
-function createNewAccount(firstName, lastName, email, address, username, pw) {
+function createNewAccount(firstName, lastName, email, photo, address, username, pw) {
   // A post entry.
   var postData = {
     firstName: firstName,
     lastName: lastName,
     email: email,
+    photo: photo,
     address: address,
     username: username,
     password: pw
@@ -318,6 +323,7 @@ app.post('/api/login', function(req, res) {
         user_info['lastName'] = snapshot.child(username + '/' + 'lastName').val();
         user_info['address'] = snapshot.child(username + '/' + 'address').val();
         user_info['email'] = snapshot.child(username + '/' + 'email').val();
+        user_info['photo'] = snapshot.child(username + '/' + 'photo').val();
         user_info['username'] = username;
 
         res.send({'success':"success", "payload" : user_info});
@@ -345,6 +351,7 @@ app.get('/api/login', function(req, res) {
         user_info['lastName'] = snapshot.child(username + '/' + 'lastName').val();
         user_info['address'] = snapshot.child(username + '/' + 'address').val();
         user_info['email'] = snapshot.child(username + '/' + 'email').val();
+        user_info['photo'] = snapshot.child(username + '/' + 'photo').val();
         user_info['username'] = username;
 
         res.send({'success':"success", "payload" : user_info});

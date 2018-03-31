@@ -11,7 +11,7 @@
 		<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 				<script src="js/script.js"></script>
-				<script src="https://unpkg.com/axios/dist/axios.min.js"></script>"
+				<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
 	</head>
@@ -279,29 +279,43 @@
 				<hr>
 				<div class="row">
 					<div class="column30">
-					  <img src="images/panda.jpg" width="100%">
+						<img src="" id="userPhoto" width="100%">
+						<label for="editPhoto" style="float:left">Change Photo</label>
+						<input type="file" id="editPhoto" accept=".jpg, .jpeg, .png">
 					</div>
 
 					<div class="column70 personal-info">
 					<h3>Personal info</h3>
 					<div class="info-group" id="myaccFName">
-						First name: 
+						First name: <input type="text" id="editFName" placeholder="">
 					</div>
 					<hr>
 					<div class="info-group" id="myaccLName">
-						Last name: 
+						Last name: <input type="text" id="editLName" placeholder="">
 					</div>
 					<hr>
 					<div class="info-group" id="myaccAddress">
-						Address: 
+						Address: <input type="text" id="editAddress" placeholder="">
 					</div>
 					<hr>
 					<div class="info-group" id="myaccEmail">
-						Email: 
+						Email: <input type="text" id="editEmail" placeholder="">
 					</div>
 					<hr>
 					<div class="info-group" id="myaccUsername">
 						Username: 
+					</div>
+					<hr>
+					<div class="info-group" id="myaccUsername">
+							Old Password: <input type="password" id="Opassword" placeholder="">
+					</div>
+					<hr>
+					<div class="info-group" id="myaccUsername">
+							New Password: <input type="password" id="newPassword" placeholder="">
+					</div>
+					<hr>
+					<div class="info-group" id="changeProfile">
+							<input type="button" class="btn btn-primary save_profile" value="Change Progile" onclick="editProfile()">
 					</div>
 				</div>
 			</div>

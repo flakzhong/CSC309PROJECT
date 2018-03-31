@@ -1,22 +1,4 @@
-var URL = "https://b3ce8815.ngrok.io"
-
-// This ajax is used for updating account info
-$(function(){
-    console.log("ajax is about to run...")
-    $.ajax({
-      url: URL + "/api/accounts",
-      type: "PUT",
-      data: {'firstName' : 'tiny', 
-            'lastName': 'jacay',
-            'address': "homeless",
-            'email': 'nobody@nowhere.com',
-            'username': "tttttt",
-            'old_password': "tttt",
-            'new_password': "tttttt"},
-      dataType: "json",
-      success: function(response) {}
-    });
-});
+var URL = "https://7ced8bcb.ngrok.io"
 
 
 $(function(){
@@ -60,8 +42,10 @@ function login(evt) {
             dataType: "json",
             success: function(response) {
                 if(response['success'] == 'failed') {
+                    console.log("success")
                     alert("Failed to login. Please check your username and password.");
                 } else {
+                    console.log("success")
                     put_account_info(response.payload);
                     currentUser = username
                     welcome = document.getElementById("hello-info")
@@ -85,11 +69,12 @@ function login(evt) {
 }
 
 function put_account_info(user_info) {
-    $('div.info-group#myaccFName').text("First name: "+user_info.firstName);
-    $('div.info-group#myaccLName').text("Last name: "+user_info.lastName);
-    $('div.info-group#myaccAddress').text("Address: "+user_info.address);
-    $('div.info-group#myaccEmail').text("Email: "+user_info.email);
-    $('div.info-group#myaccUsername').text("Username: "+user_info.username);
+    $('#editFName').val(user_info.firstName);
+    $('#editLName').val(user_info.lastName);
+    $('#editAddress').val(user_info.address);
+    $('#editEmail').val(user_info.email);
+    $('#userPhoto').attr("src", user_info.photo);
+    $('#myaccUsername').text("Username: "+user_info.username);
 }
 
 // global variable to save the navigation bars' status for forum.
@@ -107,6 +92,7 @@ function register() {
     var username = document.getElementById("rUsername").value;
     var pw = document.getElementById("rPassword").value;
     var cpw = document.getElementById("rCPassword").value;
+    var photo = "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522528152/qm8qtuayijxdfj1t4jco.jpg";
     var correct = 1;
     
     if (firstName.length == 0) {
@@ -147,6 +133,7 @@ function register() {
                     'lastName': lastName,
                     'address': address,
                     'email': email,
+                    'photo': photo,
                     'username': username,
                     'password': pw},
               dataType: "json",
@@ -254,3 +241,95 @@ function makePost() {
     }
 
 }
+
+function editProfile() {
+    var firstName = document.getElementById("editFName").value;
+    var lastName = document.getElementById("editLName").value;
+    var address = document.getElementById("editAddress").value;
+    var email = document.getElementById("editEmail").value;
+    var oPw = document.getElementById("Opassword").value;
+    var nPw = document.getElementById("newPassword").value;
+    var correct = 1;
+    if (firstName.length == 0) {
+        alert("Invalid first name.")
+        correct = 0;
+    }
+    if (lastName.length == 0) {
+        alert("Invalid last name.")
+        correct = 0;
+    }
+    if (address.length == 0) {
+        alert("Invalid address")
+        correct = 0;
+    }
+    if (email.length == 0 || email.indexOf("@") == -1 || email.indexOf(".") == -1) {
+        alert("Invalid email address")
+        correct = 0;
+    }
+    if (nPw.length < 5){
+        correct = 0;
+        alert("New password too short.")
+    }
+    
+    if (correct == 1 && document.getElementById("editPhoto").files.length == 0) {
+        // This ajax is used for updating account info
+        $(function(){
+            $.ajax({
+            url: URL + "/api/accounts",
+            type: "PUT",
+            data:   {'firstName' : firstName, 
+                        'lastName': lastName,
+                        'address': address,
+                        'email': email,
+                        'username': currentUser,
+                        'old_password': oPw,
+                        'new_password': nPw},
+            dataType: "json",
+            success: function(response) {
+                if (response["success"] == "success") {
+                    alert("Profile changed");
+                } else {
+                    alert("Failed to change profile. Please make sure that you type the correct old password.")
+                }
+            }
+            });
+        });
+    } else if(correct == 1 && document.getElementById("editPhoto").files.length == 1) {
+        var formData = new FormData();
+        formData.append('file', document.getElementById("editPhoto").files[0]);
+        formData.append('upload_preset', 'tsqi28bt');
+        axios({
+            url: "https://api.cloudinary.com/v1_1/dfpktpjp8/image/upload",
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: formData
+        }).then(function(res) {
+            $(function(){
+                $.ajax({
+                url: URL + "/api/accounts",
+                type: "PUT",
+                data:   {'firstName' : firstName, 
+                            'lastName': lastName,
+                            'address': address,
+                            'email': email,
+                            'username': currentUser,
+                            'photo': res['data']['secure_url'],
+                            'old_password': oPw,
+                            'new_password': nPw},
+                dataType: "json",
+                success: function(response) {
+                    if (response["success"] == "success") {
+                        $('#editPhoto').val(null);
+                        alert("Profile changed");
+                    } else {
+                        alert("Failed to change profile. Please make sure that you type the correct old password.")
+                    }
+                }
+                });
+            });
+        })
+    }
+}
+
