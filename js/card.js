@@ -31,8 +31,12 @@ class ForumBody extends React.Component {
         return React.createElement(
             "div",
             null,
-            React.createElement(FirstFilterList, { updateFilter: this.updateFirstFilter }),
-            React.createElement(SecondFilterList, { updateFilter: this.updateSecondFilter }),
+            React.createElement(
+                "div",
+                { className: "forumtab" },
+                React.createElement(FirstFilterList, { updateFilter: this.updateFirstFilter }),
+                React.createElement(SecondFilterList, { updateFilter: this.updateSecondFilter })
+            ),
             React.createElement(PostList, { posts: this.state.posts, postsperpage: this.state.postsperpage }),
             React.createElement(PostEditor, null)
         );
@@ -47,7 +51,7 @@ class ForumBody extends React.Component {
     }
 
     updateSecondFilter(choice) {
-        var currfilter = document.getElementById("lower" + this.state.firstfilter + "Filter");
+        var currfilter = document.getElementById("lower" + this.state.secondfilter + "Filter");
         currfilter.className = currfilter.className.replace(" active", "");
         var targetfilter = document.getElementById("lower" + choice + "Filter");
         targetfilter.className += " active";
@@ -68,7 +72,7 @@ class FirstFilterList extends React.Component {
                 null,
                 React.createElement(
                     "button",
-                    { id: "upperAllFilter", onClick: () => {
+                    { id: "upperAllFilter", className: " active", onClick: () => {
                             this.props.updateFilter("All");
                         } },
                     "All"
@@ -124,7 +128,7 @@ class SecondFilterList extends React.Component {
                 null,
                 React.createElement(
                     "button",
-                    { id: "lowerAllFilter", onClick: () => {
+                    { id: "lowerAllFilter", className: " active", onClick: () => {
                             this.props.updateFilter("All");
                         } },
                     "All"

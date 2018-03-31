@@ -33,8 +33,10 @@ class ForumBody extends React.Component {
 	this.updatePosts();
         return (
             <div>
-                <FirstFilterList updateFilter={this.updateFirstFilter}/>
-                <SecondFilterList updateFilter={this.updateSecondFilter}/>
+                <div className="forumtab">
+                    <FirstFilterList updateFilter={this.updateFirstFilter}/>
+                    <SecondFilterList updateFilter={this.updateSecondFilter}/>
+                </div>
                 <PostList posts={this.state.posts} postsperpage={this.state.postsperpage}/>
                 <PostEditor/>
             </div>
@@ -50,7 +52,7 @@ class ForumBody extends React.Component {
     }
 
     updateSecondFilter(choice) {
-        var currfilter = document.getElementById("lower" + this.state.firstfilter + "Filter")
+        var currfilter = document.getElementById("lower" + this.state.secondfilter + "Filter")
         currfilter.className = currfilter.className.replace(" active","")
         var targetfilter = document.getElementById("lower" + choice + "Filter")
         targetfilter.className += " active"
@@ -64,12 +66,12 @@ class FirstFilterList extends React.Component {
 	}
 	render() {
 		return(
-			<ul>
-			    <li><button id="upperAllFilter" onClick={() => {this.props.updateFilter("All")}}>All</button></li>
-			    <li><button id="upperAdoptionFilter" onClick={() => {this.props.updateFilter("Adoption")}}>Adoption</button></li>
-			    <li><button id="upperLostFilter" onClick={() => {this.props.updateFilter("Lost")}}>Lost</button></li>
-			    <li><button id="upperOthersFilter" onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
-			</ul>
+            <ul>
+                <li><button id="upperAllFilter" className=" active" onClick={() => {this.props.updateFilter("All")}}>All</button></li>
+                <li><button id="upperAdoptionFilter" onClick={() => {this.props.updateFilter("Adoption")}}>Adoption</button></li>
+                <li><button id="upperLostFilter" onClick={() => {this.props.updateFilter("Lost")}}>Lost</button></li>
+                <li><button id="upperOthersFilter" onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
+            </ul>
 		)
 	}
 }
@@ -81,7 +83,7 @@ class SecondFilterList extends React.Component {
 	render() {
 		return(
 			<ul>
-			    <li><button id="lowerAllFilter" onClick={() => {this.props.updateFilter("All")}}>All</button></li>
+			    <li><button id="lowerAllFilter" className=" active" onClick={() => {this.props.updateFilter("All")}}>All</button></li>
 			    <li><button id="lowerDogFilter" onClick={() => {this.props.updateFilter("Dog")}}>Dog</button></li>
 			    <li><button id="lowerCatFilter" onClick={() => {this.props.updateFilter("Cat")}}>Cat</button></li>
 			    <li><button id="lowerOthersFilter" onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
