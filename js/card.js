@@ -13,7 +13,7 @@ class ForumBody extends React.Component {
     }
 
     updatePosts() {
-        fetch("https://2978d949.ngrok.io/api/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter).then(response => {
+        fetch("http://a285392a.ngrok.io/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter).then(response => {
             console.log(response.status, response.statusCode);
             if (response.ok) {
                 return response.json();
@@ -317,28 +317,30 @@ class PostEditor extends React.Component {
                 React.createElement("input", { type: "file", id: "postImgUpload", style: { float: "left" }, accept: ".jpg, .jpeg, .png", multiple: true }),
                 React.createElement(
                     "button",
-                    { id: "post", style: { float: "right" }, onClick: this.makePost },
+                    { id: "post", style: { float: "right" }, onClick: () => {
+                            this.makePost(this.props.filter1, this.props.filter2);
+                        } },
                     "Post"
                 )
             )
         );
     }
 
-    makePost() {
+    makePost(filter1, filter2) {
         var submitButton = document.getElementById('post');
         var title = document.getElementById("postTitle").value;
         var content = document.getElementById("postContent").value;
         if (title.length < 5) {
             alert("Title too short.");
         }
-    
+
         if (content.length < 5) {
-            alert("Content too short.")
+            alert("Content too short.");
         }
         var images = document.getElementById("postImgUpload").files;
         if (images.length > 0) {
             var img_url = [];
-            for(var i = 0; i < images.length; i++) {
+            for (var i = 0; i < images.length; i++) {
                 var formData = new FormData();
                 formData.append('file', images[i]);
                 formData.append('upload_preset', 'tsqi28bt');
@@ -349,41 +351,41 @@ class PostEditor extends React.Component {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     data: formData
-                }).then(function(res) {
+                }).then(function (res) {
                     img_url.push(res['data']['secure_url']);
-                        if (img_url.length == images.length) {
-                            $(function(){
-                                $.ajax({
-                                    url: URL + "/api/posts",
-                                    type: "POST",
-                                    data: {
-                                        title: title,
-                                        username: currentUser,
-                                        content: content,
-                                        images: img_url,
-                                        filter1: this.props.filter1,
-                                        filter2: this.props.filter2
-                                    },
-                                    dataType: "json",
-                                    success: function(response) {
-                                        if (response['success'] != 'success') {
-                                            alert("failed to post");
-                                        } else {
-                                            $("#postTitle").val("");
-                                            $("#postContent").val("");
-                                            $("#postImgUpload").val(null);
-                                            alert("posted")
-                                        }       
+                    if (img_url.length == images.length) {
+                        $(function () {
+                            $.ajax({
+                                url: URL + "/api/posts",
+                                type: "POST",
+                                data: {
+                                    title: title,
+                                    username: currentUser,
+                                    content: content,
+                                    images: img_url,
+                                    filter1: filter1,
+                                    filter2: filter2
+                                },
+                                dataType: "json",
+                                success: function (response) {
+                                    if (response['success'] != 'success') {
+                                        alert("failed to post");
+                                    } else {
+                                        $("#postTitle").val("");
+                                        $("#postContent").val("");
+                                        $("#postImgUpload").val(null);
+                                        alert("posted");
                                     }
-                                });
+                                }
                             });
-                        }
-                }).catch(function(err) {
+                        });
+                    }
+                }).catch(function (err) {
                     console.log(err);
                 });
             }
         } else {
-            $(function(){
+            $(function () {
                 $.ajax({
                     url: URL + "/api/posts",
                     type: "POST",
@@ -392,21 +394,20 @@ class PostEditor extends React.Component {
                         username: currentUser,
                         content: content,
                         images: null,
-                        filter1: this.props.filter1,
-                        filter2: this.props.filter2
+                        filter1: filter1,
+                        filter2: filter2
                     },
                     dataType: "json",
-                    success: function(response) {
+                    success: function (response) {
                         if (response['success'] != 'success') {
-                        alert("failed to post");
+                            alert("failed to post");
                         } else {
-                        alert("posted")
-                        }       
+                            alert("posted");
+                        }
                     }
                 });
             });
         }
-            
     }
 }
 

@@ -198,13 +198,13 @@ class PostEditor extends React.Component {
             <div>
                 <label htmlFor="postImgUpload" style={{float:"left"}}>Insert IMG</label>
                 <input type="file" id="postImgUpload" style={{float:"left"}} accept=".jpg, .jpeg, .png" multiple/>
-                <button id="post" style={{float:"right"}} onClick={this.makePost}>Post</button>
+                <button id="post" style={{float:"right"}} onClick={() => {this.makePost(this.props.filter1, this.props.filter2)}}>Post</button>
             </div>
         </div>
         )
     }
 
-    makePost() {
+    makePost(filter1, filter2) {
         var submitButton = document.getElementById('post');
         var title = document.getElementById("postTitle").value;
         var content = document.getElementById("postContent").value;
@@ -241,8 +241,8 @@ class PostEditor extends React.Component {
                                         username: currentUser,
                                         content: content,
                                         images: img_url,
-                                        filter1: this.props.filter1,
-                                        filter2: this.props.filter2
+                                        filter1: filter1,
+                                        filter2: filter2
                                     },
                                     dataType: "json",
                                     success: function(response) {
@@ -272,8 +272,8 @@ class PostEditor extends React.Component {
                         username: currentUser,
                         content: content,
                         images: null,
-                        filter1: this.props.filter1,
-                        filter2: this.props.filter2
+                        filter1: filter1,
+                        filter2: filter2
                     },
                     dataType: "json",
                     success: function(response) {
