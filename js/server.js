@@ -37,8 +37,7 @@ function myLogger(req, res, next) {
   if (req.body) {
     console.log('LOG:',req.method,req.url,req.body)
   }
-   res.append('Set-Cookie', 'lastPage='+req.url);
-   console.log(sessions);
+  res.append('Set-Cookie', 'lastPage='+req.url);
   next()
 }
 
