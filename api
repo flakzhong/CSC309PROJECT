@@ -1,0 +1,36 @@
+需要的API
+/page
+    Elements:
+        First: the value of the first filter ["All","Adoption","Lost","Other"]
+        Second: the value of the second filter ["All","Cat","Dog","Other"]
+    Response:
+        Json: {posts:[
+            {author:"",
+            title:""},
+            {author:"",
+            title:""},
+            ...
+        ]}
+
+/post
+    Elements:
+        id: the id of the post
+    Response:
+        Json: {title:"",
+            author:"",
+            content:"",
+            image:[image urls],
+            reply:[reply ids]}
+
+/reply      GET
+    Elements:
+        id: the id of the reply
+    Response:
+        Json: {author:"", content:""}
+
+/reply      POST
+    Elements:
+        id: the id of the post the reply belongs to
+    Body:
+        Json: {author:"", content:""}
+
