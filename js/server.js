@@ -74,8 +74,8 @@ app.get('/api/posts/:id', function(req, res) {
 
 // get a user's photo
 app.get('api/photo', function (req, res) {
-  firebase.database().ref().child('accounts').orderByChild('username').equalTo(req.body.username).once('value', function(snapshot) {
-    var photo = snapshot.child(req.body.username).val();
+  firebase.database().ref().child('accounts').orderByChild('username').equalTo(req.query.username).once('value', function(snapshot) {
+    var photo = snapshot.child(req.query.username).val();
     console.log(photo);
     res.send({'photo':photo});
   });
