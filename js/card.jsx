@@ -1,4 +1,4 @@
-URL = "https://8372e2bc.ngrok.io"
+URL = "https://bdd03ace.ngrok.io"
 
 class ForumBody extends React.Component {
     constructor(props) {
@@ -7,16 +7,12 @@ class ForumBody extends React.Component {
             firstfilter:"All",
             secondfilter:"All",
             posts:[],
-            postsperpage:10
         }
         this.updatePosts = this.updatePosts.bind(this);
         this.updateFirstFilter = this.updateFirstFilter.bind(this);
         this.updateSecondFilter = this.updateSecondFilter.bind(this);
     }
 
-    updateByResponse(response) {
-        this.setState({posts: response["posts"]})
-    }
 
     updatePosts(filter1, filter2) {
         var ajaxURL = URL + "/api/page" + "?first=" + filter1 + "&second=" + filter2;
@@ -25,13 +21,12 @@ class ForumBody extends React.Component {
                 return response.json();
             }
         }).then(json => {
-            console.log(json.posts);
             this.setState({posts: json.posts})
         })
     }
 
     componentWillMount() {
-        this.updatePosts()
+        this.updatePosts("All","All")
     }
 
     render() {
@@ -42,7 +37,7 @@ class ForumBody extends React.Component {
                     <hr/>
                     <SecondFilterList updateFilter={this.updateSecondFilter}/>
                 </div>
-                <PostList posts={this.state.posts} postsperpage={this.state.postsperpage}/>
+                <PostList postlist={this.state.posts}/>
                 <PostEditor filter1={this.state.firstfilter} filter2={this.state.secondfilter}/>
             </div>
         );
@@ -108,64 +103,78 @@ class PostList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            posts:this.props.posts,
-            postsperpage:this.props.postsperpage,
             currpageposts:[],
-            pagenum:1,
-            maxpnum: Math.ceil(this.props.posts.length / this.props.postsperpage)
+            pagenum:1
         }
         this.nextpage = this.nextpage.bind(this)
         this.prevpage = this.prevpage.bind(this)
+        this.updatecurrpage = this.updatecurrpage.bind(this)
     }
 
-    updatecurrpage() {
-        temp=[]
-        starti = (this.state.pagenum - 1) * 10
-        endi = (this.state.pagenum) * 10
-        for (i = starti; i < endi || i < this.state.posts.length; i++) {
-            temp.push(this.state.posts[i])
+    updatecurrpage(pagenum) {
+        var temp=[]
+        var starti = (pagenum - 1) * 10
+        var endi = (pagenum) * 10
+        for (var i = starti; i < endi && i < this.props.postlist.length; i++) {
+            temp.push(this.props.postlist[i])
         }
         this.setState({currpageposts:temp})
     }
 
     nextpage(e) {
-	console.log("nextpage")
-	console.log("trying to set page to " + (this.state.pagenum + 1))
-        if (this.state.pagenum + 1 <= this.state.maxpnum) {
+        var maxpagenum = Math.ceil(this.props.postlist.length / 10)
+        console.log("trying to set page to " + (this.state.pagenum + 1))
+        if (this.state.pagenum + 1 <= maxpagenum) {
+            this.updatecurrpage(this.state.pagenum + 1)
             this.setState({pagenum: this.state.pagenum + 1})
         }
-        this.updatecurrpage()
+        
     }
 
     prevpage(e) {
-	console.log("prevpage")
-	console.log("trying to set page to " + (this.state.pagenum - 1))
+        console.log("prevpage")
+        console.log("trying to set page to " + (this.state.pagenum - 1))
         if (this.state.pagenum - 1 >= 1) {
+            this.updatecurrpage(this.state.pagenum - 1)
             this.setState({pagenum: this.state.pagenum - 1})
         }
-        this.updatecurrpage()
     }
     
     render() {
+        var maxpagenum = Math.ceil(this.props.postlist.length / 10)
         return (
             <div className="block">
-                <ul>
-                    {this.state.currpageposts.map(item => (
-                        <Post post={item}></Post>
-                    ))}
-                </ul>
-                <PageSelector max={this.state.maxpnum} curr={this.state.pagenum} next={this.nextpage} prev={this.prevpage}/>
+                <PostPage post={this.state.currpageposts}/>
+                <PageSelector max={maxpagenum} curr={this.state.pagenum} next={this.nextpage} prev={this.prevpage}/>
             </div>
         )
     }
 }
 
+class PostPage extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+        console.log(this.props.post)
+        return (
+            <ul>
+                {this.props.post.map(item => (
+                    <Post post={item}></Post>
+                ))}
+            </ul>
+        )
+    }
+}
 
 function Post(props) {
     return (
-        <li>
-            <h3> {props.post["title"]}</h3>  {props.post["auth"]}
-        </li>
+        <div>
+            {props.post.title}  {props.post.username}
+            <hr/>
+        </div>
+
     )
 }
 

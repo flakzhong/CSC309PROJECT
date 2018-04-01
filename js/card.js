@@ -1,4 +1,4 @@
-URL = "https://0bab2181.ngrok.io";
+URL = "https://bdd03ace.ngrok.io";
 
 class ForumBody extends React.Component {
     constructor(props) {
@@ -6,16 +6,11 @@ class ForumBody extends React.Component {
         this.state = {
             firstfilter: "All",
             secondfilter: "All",
-            posts: [],
-            postsperpage: 10
+            posts: []
         };
         this.updatePosts = this.updatePosts.bind(this);
         this.updateFirstFilter = this.updateFirstFilter.bind(this);
         this.updateSecondFilter = this.updateSecondFilter.bind(this);
-    }
-
-    updateByResponse(response) {
-        this.setState({ posts: response["posts"] });
     }
 
     updatePosts(filter1, filter2) {
@@ -25,13 +20,12 @@ class ForumBody extends React.Component {
                 return response.json();
             }
         }).then(json => {
-            console.log(json.posts);
             this.setState({ posts: json.posts });
         });
     }
 
     componentWillMount() {
-        this.updatePosts();
+        this.updatePosts("All", "All");
     }
 
     render() {
@@ -45,7 +39,7 @@ class ForumBody extends React.Component {
                 React.createElement("hr", null),
                 React.createElement(SecondFilterList, { updateFilter: this.updateSecondFilter })
             ),
-            React.createElement(PostList, { posts: this.state.posts, postsperpage: this.state.postsperpage }),
+            React.createElement(PostList, { postlist: this.state.posts }),
             React.createElement(PostEditor, { filter1: this.state.firstfilter, filter2: this.state.secondfilter })
         );
     }
@@ -193,70 +187,76 @@ class PostList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            posts: this.props.posts,
-            postsperpage: this.props.postsperpage,
             currpageposts: [],
-            pagenum: 1,
-            maxpnum: Math.ceil(this.props.posts.length / this.props.postsperpage)
+            pagenum: 1
         };
         this.nextpage = this.nextpage.bind(this);
         this.prevpage = this.prevpage.bind(this);
+        this.updatecurrpage = this.updatecurrpage.bind(this);
     }
 
-    updatecurrpage() {
-        temp = [];
-        starti = (this.state.pagenum - 1) * 10;
-        endi = this.state.pagenum * 10;
-        for (i = starti; i < endi || i < this.state.posts.length; i++) {
-            temp.push(this.state.posts[i]);
+    updatecurrpage(pagenum) {
+        var temp = [];
+        var starti = (pagenum - 1) * 10;
+        var endi = pagenum * 10;
+        for (var i = starti; i < endi && i < this.props.postlist.length; i++) {
+            temp.push(this.props.postlist[i]);
         }
         this.setState({ currpageposts: temp });
     }
 
     nextpage(e) {
-        console.log("nextpage");
+        var maxpagenum = Math.ceil(this.props.postlist.length / 10);
         console.log("trying to set page to " + (this.state.pagenum + 1));
-        if (this.state.pagenum + 1 <= this.state.maxpnum) {
+        if (this.state.pagenum + 1 <= maxpagenum) {
+            this.updatecurrpage(this.state.pagenum + 1);
             this.setState({ pagenum: this.state.pagenum + 1 });
         }
-        this.updatecurrpage();
     }
 
     prevpage(e) {
         console.log("prevpage");
         console.log("trying to set page to " + (this.state.pagenum - 1));
         if (this.state.pagenum - 1 >= 1) {
+            this.updatecurrpage(this.state.pagenum - 1);
             this.setState({ pagenum: this.state.pagenum - 1 });
         }
-        this.updatecurrpage();
     }
 
     render() {
+        var maxpagenum = Math.ceil(this.props.postlist.length / 10);
         return React.createElement(
             "div",
             { className: "block" },
-            React.createElement(
-                "ul",
-                null,
-                this.state.currpageposts.map(item => React.createElement(Post, { post: item }))
-            ),
-            React.createElement(PageSelector, { max: this.state.maxpnum, curr: this.state.pagenum, next: this.nextpage, prev: this.prevpage })
+            React.createElement(PostPage, { post: this.state.currpageposts }),
+            React.createElement(PageSelector, { max: maxpagenum, curr: this.state.pagenum, next: this.nextpage, prev: this.prevpage })
+        );
+    }
+}
+
+class PostPage extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        console.log(this.props.post);
+        return React.createElement(
+            "ul",
+            null,
+            this.props.post.map(item => React.createElement(Post, { post: item }))
         );
     }
 }
 
 function Post(props) {
     return React.createElement(
-        "li",
+        "div",
         null,
-        React.createElement(
-            "h3",
-            null,
-            " ",
-            props.post["title"]
-        ),
+        props.post.title,
         "  ",
-        props.post["auth"]
+        props.post.username,
+        React.createElement("hr", null)
     );
 }
 
