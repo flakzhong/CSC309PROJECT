@@ -276,7 +276,7 @@ app.post('/api/reply', function(req, res) {
 });
 // get all replies for a post
 app.get('/api/reply', function(req, res) {
-  var postId = req.body.postId;
+  var postId = req.query.postId;
   firebase.database().ref().child('posts/' + postId + '/reply').once('value', function(snapshot) {
     res.send({'reply':snapshot.val()});
   });

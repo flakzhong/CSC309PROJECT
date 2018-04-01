@@ -1,5 +1,10 @@
 URL = "https://cscdefault01.ngrok.io"
 
+var dateparser = function(date) {
+    date = date.split(" ")
+    return (date[1] + " - " + date[2])
+}
+
 class ForumBody extends React.Component {
     constructor(props) {
         super(props);
@@ -179,13 +184,30 @@ class Post extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            folded:true
+            folded:true,
+            replies:[]
         }
         this.flipPostState = this.flipPostState.bind(this)
+        this.updateReplies = this.updateReplies.bind(this)
+    }
+
+    componentWillMount() {
+        this.updateReplies()
     }
 
     flipPostState(e) {
         this.setState({folded:!this.state.folded})
+    }
+
+    updateReplies() {
+        var ajaxURL = URL + "/api/reply?postId=" + this.props.post.postId;
+        fetch(ajaxURL).then(response => {
+            if(response.ok) {
+                return response.json();
+            }
+        }).then(json => {
+            this.setState({replies: json.reply})
+        })
     }
 
 
@@ -196,13 +218,10 @@ class Post extends React.Component {
                     <div className="posttitle">
                         <h3>{this.props.post.title}</h3>
                     </div>
-                    <div className="postauthor">
-                        {this.props.post.username}
+                    <div className="postauthor" style={{textAlign:"right", paddingRight:30, color:"#93969b"}}>
+                        <i>by {this.props.post.username + "   " + dateparser(this.props.post.currentTime)}</i>
                     </div>
-                    <div className="posttime">
-                        {this.props.post.currentTime}
-                    </div>
-                    <button className="foldpost" onClick={this.flipPostState}>Unfold</button>
+                        <img onClick={this.flipPostState} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/down.png" width="20px"/>
                     <hr/>
                 </div>
             )
@@ -213,19 +232,21 @@ class Post extends React.Component {
                         <h3>{this.props.post.title}</h3>
                     </div>
                     <br/>
-                    <div className="postauthor">
-                        {this.props.post.username}
+                    <div className="postcontent">
+                        {this.props.post.content}
                     </div>
-                    <br/> 
-                    {this.props.post.content}
                     <br/>
                     <PostImageViewer images={this.props.post.images}/>
+                    <br/>                    
+                    <div className="postauthor" style={{textAlign:"right", paddingRight:30}}>
+                        <i>by {this.props.post.username + "   " + dateparser(this.props.post.currentTime)}</i>
+                    </div>
                     <br/>
-                    <PostReplies replies={this.props.post.reply}/>
+                    <PostReplies replies={this.state.replies}/>
                     <br/>
-                    <Reply postId={this.props.post.postId}/>
+                    <Reply postId={this.props.post.postId} forceupdater={this.updateReplies}/>
                     <br/>
-                    <button className="foldpost" onClick={this.flipPostState}>Fold</button>
+                    <img onClick={this.flipPostState} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/up.png" width="20px"/>
                     <hr/>
                 </div>
             )
@@ -255,7 +276,9 @@ class PostReplies extends React.Component {
 function PostReply(props) {
     return (
         <li>
-            {props.content.content}       {props.content.username}
+            <div className="postreply" style={{borderLeft:"2px", textAlign:"left", paddingLeft:"60px"}}>
+                {props.content.content}       {props.content.username}
+            </div>
         </li>
     )   
 }
@@ -270,6 +293,8 @@ class Reply extends React.Component {
         var content = document.getElementById("postReply" + this.props.postId).value
         var correct = 1;
         var id = this.props.postId
+        var pRId = "#postReply" + this.props.postId;
+        var updater = this.props.forceupdater
         if (content.length < 5) {
             correct = 0;
             alert("Reply too short");
@@ -286,6 +311,8 @@ class Reply extends React.Component {
                 success: function(response) {
                     if (response["success"] == "success") {
                         alert("Replied");
+                        $(pRId).val("");
+                        updater()
                     } else {
                         alert("Failed to reply. Please try again")
                     }
@@ -314,8 +341,6 @@ class PostImageViewer extends React.Component {
         super(props);
     }
     render() {
-        console.log(this.props.images == "");
-        console.log(this.props.images)
         if (this.props.images != "") {
             return (
                 <ul>
@@ -444,7 +469,7 @@ class PostEditor extends React.Component {
                                                 $("#postContent").val("");
                                                 $("#postImgUpload").val(null);
                                                 alert("posted");
-                                                updater()
+                                                updater(filter1, filter2)
                                             }       
                                         }
                                     });
@@ -485,3 +510,4 @@ class PostEditor extends React.Component {
 
 
 ReactDOM.render(<ForumBody />, document.getElementById("forum"));
+
