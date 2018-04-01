@@ -189,7 +189,7 @@ class PostEditor extends React.Component {
     }
 
     render() {
-        if (currentUser == "") {
+        if (currentUser == "" || this.props.filter1 == "All" || this.props.filter2 == "All") {
             return null
         } else {
             return (
