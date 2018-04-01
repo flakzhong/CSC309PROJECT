@@ -1,4 +1,4 @@
-URL = "https://cscdefault01.ngrok.io";
+URL = "https://52c637e2.ngrok.io";
 
 var dateparser = function (date) {
     date = date.split(" ");
@@ -284,6 +284,9 @@ class Post extends React.Component {
         if (this.state.id != this.props.post.postId) {
             console.log("trying to update replies");
             this.updateReplies();
+            if (!this.state.folded) {
+                this.setState({ folded: true });
+            }
         }
     }
 
