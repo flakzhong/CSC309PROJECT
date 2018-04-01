@@ -231,8 +231,6 @@ function writeNewPost(title, username, content, images, filter1, filter2) {
     username: username,
     content: content,
     images: images,
-    // place holder
-    reply: [{"username":"", "postId":"", "content":""}],
     filter1: filter1,
     filter2: filter2,
     currentTime: Date()
@@ -254,15 +252,15 @@ app.post('/api/reply', function(req, res) {
   var postId = req.body.postId;
   var username = req.body.username;
   var content = req.body.content; 
-  firebase.database().ref().child('posts/' + postId).orderByChild(postId).equalTo(postId).once('value', function(snapshot) {
-    var temp = snapshot.child(postId + '/' + reply).val();
+  firebase.database().ref().child('posts/' + postId + '/reply').once('value', function(snapshot) {
+    var temp = snapshot.val();
     if (temp == null) {
       temp = [];
       temp.push({"username":username, "content":content});
     } else {
       temp.unshift({"username":username, "content":content});
     }
-    snapshot.child(postId).ref.update({'reply': temp});
+    snapshot.ref.update(temp);
     res.send({'success':"success"});
   });
 
