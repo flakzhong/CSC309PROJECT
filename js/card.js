@@ -530,7 +530,7 @@ class PageSelector extends React.Component {
                 React.createElement(
                     "ul",
                     null,
-                    React.createElement("img", { style: { display: "inline" }, src: "http://res.cloudinary.com/dfpktpjp8/image/upload/v1522617226/empty.png", width: "30px" }),
+                    React.createElement("img", { style: { display: "inline" }, src: "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522617226/empty.png", width: "30px" }),
                     React.createElement(
                         "div",
                         { style: { display: "inline", padding: "5px", fontSize: "30px" } },
@@ -538,7 +538,7 @@ class PageSelector extends React.Component {
                         "/",
                         this.props.max
                     ),
-                    React.createElement("img", { style: { display: "inline" }, src: "http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/right.png", width: "30px", onClick: this.props.next })
+                    React.createElement("img", { style: { display: "inline" }, src: "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/right.png", width: "30px", onClick: this.props.next })
                 )
             );
         } else if (this.props.curr == 1 && this.props.max == 1) {
@@ -564,7 +564,7 @@ class PageSelector extends React.Component {
                 React.createElement(
                     "ul",
                     null,
-                    React.createElement("img", { style: { display: "inline" }, src: "http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/left.png", width: "30px", onClick: this.props.prev }),
+                    React.createElement("img", { style: { display: "inline" }, src: "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/left.png", width: "30px", onClick: this.props.prev }),
                     React.createElement(
                         "div",
                         { style: { display: "inline", padding: "5px", fontSize: "30px" } },
@@ -572,7 +572,7 @@ class PageSelector extends React.Component {
                         "/",
                         this.props.max
                     ),
-                    React.createElement("img", { style: { display: "inline" }, src: "http://res.cloudinary.com/dfpktpjp8/image/upload/v1522617226/empty.png", width: "30px" })
+                    React.createElement("img", { style: { display: "inline" }, src: "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522617226/empty.png", width: "30px" })
                 )
             );
         }
@@ -582,7 +582,7 @@ class PageSelector extends React.Component {
             React.createElement(
                 "ul",
                 null,
-                React.createElement("img", { style: { display: "inline" }, src: "http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/left.png", width: "30px", onClick: this.props.prev }),
+                React.createElement("img", { style: { display: "inline" }, src: "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/left.png", width: "30px", onClick: this.props.prev }),
                 React.createElement(
                     "div",
                     { style: { display: "inline", padding: "5px", fontSize: "30px" } },
@@ -590,7 +590,7 @@ class PageSelector extends React.Component {
                     "/",
                     this.props.max
                 ),
-                React.createElement("img", { style: { display: "inline" }, src: "http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/right.png", width: "30px", onClick: this.props.next })
+                React.createElement("img", { style: { display: "inline" }, src: "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/right.png", width: "30px", onClick: this.props.next })
             )
         );
     }

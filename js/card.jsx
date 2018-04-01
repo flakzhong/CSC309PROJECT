@@ -400,9 +400,9 @@ class PageSelector extends React.Component {
             return(
                 <div className="block">
                     <ul>
-                        <img style={{display:"inline"}} src="http://res.cloudinary.com/dfpktpjp8/image/upload/v1522617226/empty.png" width="30px"/>
+                        <img style={{display:"inline"}} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522617226/empty.png" width="30px"/>
                         <div style={{display:"inline", padding:"5px", fontSize:"30px"}}>{this.props.curr}/{this.props.max}</div>
-                        <img style={{display:"inline"}} src="http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/right.png" width="30px" onClick={this.props.next}/>
+                        <img style={{display:"inline"}} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/right.png" width="30px" onClick={this.props.next}/>
                     </ul>
                 </div>
             )
@@ -418,9 +418,9 @@ class PageSelector extends React.Component {
             return(
                 <div className="block">
                     <ul>
-                        <img style={{display:"inline"}} src="http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/left.png" width="30px" onClick={this.props.prev}/>
+                        <img style={{display:"inline"}} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/left.png" width="30px" onClick={this.props.prev}/>
                         <div style={{display:"inline", padding:"5px", fontSize:"30px"}}>{this.props.curr}/{this.props.max}</div>
-                        <img style={{display:"inline"}} src="http://res.cloudinary.com/dfpktpjp8/image/upload/v1522617226/empty.png" width="30px"/>
+                        <img style={{display:"inline"}} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522617226/empty.png" width="30px"/>
                     </ul>
                 </div>
             )
@@ -428,9 +428,9 @@ class PageSelector extends React.Component {
         return(
             <div className="block">
                 <ul>
-                    <img style={{display:"inline"}} src="http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/left.png" width="30px" onClick={this.props.prev}/>
+                    <img style={{display:"inline"}} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/left.png" width="30px" onClick={this.props.prev}/>
                     <div style={{display:"inline", padding:"5px", fontSize:"30px"}}>{this.props.curr}/{this.props.max}</div>
-                    <img style={{display:"inline"}} src="http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/right.png" width="30px" onClick={this.props.next}/>
+                    <img style={{display:"inline"}} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/right.png" width="30px" onClick={this.props.next}/>
                 </ul>
             </div>
         )
