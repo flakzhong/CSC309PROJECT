@@ -56,10 +56,6 @@ function login(evt) {
                     account.href="#userprofile"
                     // hide register button
                     document.getElementById("registerButton").style.display = "none";
-                    // after logged in, u can make posts.
-                    document.getElementById("makeposts").style.display = "block";
-                    //show logout button
-                    document.getElementById("logoutb").style.display = "block";
                 }
             }
         });

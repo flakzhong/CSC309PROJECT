@@ -98,14 +98,18 @@ app.get('/api/page', function(req, res) {
         result.push(post);
       });
       console.log(result);
-      res.send({posts: result});
+      try {
+        res.send({"posts": result});
+      } catch(err) {
+        
+      }
     });
-  } else if(filter2 == "All"){
+  } else if(filter2 == "All" && filter1 != "All"){
     f2 = f1.on('value', function(snapshot) {
       snapshot.forEach(function(childSnapshot) {
         if (childSnapshot.val().filter1 == filter1) {
           var post = {
-            "username" : childSnapshot.val().author,
+            "username" : childSnapshot.val().username,
             "title" : childSnapshot.val().title,
             "currentTime" : childSnapshot.val().currentTime
           };
@@ -113,14 +117,18 @@ app.get('/api/page', function(req, res) {
         }
       });
       console.log(result);
-      res.send({posts: result});
+      try {
+        res.send({"posts": result});
+      } catch(err) {
+        
+      }
     });
-  } else {
+  } else if(filter1 == "All" && filter2 != "All") {
     f2 = f1.on('value', function(snapshot) {
       snapshot.forEach(function(childSnapshot) {
         if (childSnapshot.val().filter2 == filter2) {
           var post = {
-            "username" : childSnapshot.val().author,
+            "username" : childSnapshot.val().username,
             "title" : childSnapshot.val().title,
             "currentTime" : childSnapshot.val().currentTime
           };
@@ -128,7 +136,32 @@ app.get('/api/page', function(req, res) {
         }
       });
       console.log(result);
-      res.send({posts: result});
+      try {
+        res.send({"posts": result});
+      } catch(err) {
+
+      }
+      
+    });
+  } else {
+    f2 = f1.on('value', function(snapshot) {
+      snapshot.forEach(function(childSnapshot) {
+        if (childSnapshot.val().filter2 == filter2 && childSnapshot.val().filter1 == filter1) {
+          var post = {
+            "username" : childSnapshot.val().username,
+            "title" : childSnapshot.val().title,
+            "currentTime" : childSnapshot.val().currentTime
+          };
+          result.push(post);
+        }
+      });
+      console.log(result);
+      try {
+        res.send({"posts": result});
+      } catch(err) {
+
+      }
+      
     });
   }
 
@@ -191,6 +224,8 @@ function writeNewPost(title, username, content, images, filter1, filter2) {
   // Write the new post's data simultaneously in the posts list and the user's post list.
   var updates = {};
   updates['/posts/' + newPostKey] = postData;
+  console.log("new post data");
+  console.log(postData);
 
   return firebase.database().ref().update(updates);
 }
