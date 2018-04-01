@@ -72,6 +72,15 @@ app.get('/api/posts/:id', function(req, res) {
 
 });
 
+// get a user's photo
+app.get('api/photo', function (req, res) {
+  firebase.database().ref().child('accounts').orderByChild('username').equalTo(req.body.username).once('value', function(snapshot) {
+    var photo = snapshot.child(req.body.username).val();
+    console.log(photo);
+    res.send({'photo':photo});
+  });
+});
+
 app.get('/api/page', function(req, res) {
   // Client requests posts
 
@@ -264,6 +273,13 @@ app.post('/api/reply', function(req, res) {
     res.send({'success':"success"});
   });
 
+});
+// get all replies for a post
+app.get('/api/reply', function(req, res) {
+  var postId = req.body.postId;
+  firebase.database().ref().child('posts/' + postId + '/reply').once('value', function(snapshot) {
+    res.send({'reply':snapshot.val()});
+  });
 });
 
 // ====================== handling api/accounts, R/W into DB ======================
