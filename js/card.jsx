@@ -1,5 +1,10 @@
 URL = "https://cscdefault01.ngrok.io"
 
+var dateparser = function(date) {
+    date = date.split(" ")
+    return (date[1] + " - " + date[2])
+}
+
 class ForumBody extends React.Component {
     constructor(props) {
         super(props);
@@ -15,6 +20,7 @@ class ForumBody extends React.Component {
 
 
     updatePosts(filter1, filter2) {
+        console.log("trying to update" + filter1 + filter2)
         var ajaxURL = URL + "/api/page" + "?first=" + filter1 + "&second=" + filter2;
         fetch(ajaxURL).then(response => {
             if(response.ok) {
@@ -196,13 +202,10 @@ class Post extends React.Component {
                     <div className="posttitle">
                         <h3>{this.props.post.title}</h3>
                     </div>
-                    <div className="postauthor">
-                        {this.props.post.username}
+                    <div className="postauthor" style={{textAlign:"right", paddingRight:30, color:"#93969b"}}>
+                        <i>by {this.props.post.username + "   " + dateparser(this.props.post.currentTime)}</i>
                     </div>
-                    <div className="posttime">
-                        {this.props.post.currentTime}
-                    </div>
-                    <button className="foldpost" onClick={this.flipPostState}>Unfold</button>
+                        <img onClick={this.flipPostState} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/down.png" width="20px"/>
                     <hr/>
                 </div>
             )
@@ -213,19 +216,21 @@ class Post extends React.Component {
                         <h3>{this.props.post.title}</h3>
                     </div>
                     <br/>
-                    <div className="postauthor">
-                        {this.props.post.username}
+                    <div className="postcontent">
+                        {this.props.post.content}
                     </div>
-                    <br/> 
-                    {this.props.post.content}
                     <br/>
                     <PostImageViewer images={this.props.post.images}/>
+                    <br/>                    
+                    <div className="postauthor" style={{textAlign:"right", paddingRight:30}}>
+                        <i>by {this.props.post.username + "   " + dateparser(this.props.post.currentTime)}</i>
+                    </div>
                     <br/>
                     <PostReplies replies={this.props.post.reply}/>
                     <br/>
                     <Reply postId={this.props.post.postId}/>
                     <br/>
-                    <button className="foldpost" onClick={this.flipPostState}>Fold</button>
+                    <img onClick={this.flipPostState} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/up.png" width="20px"/>
                     <hr/>
                 </div>
             )
@@ -255,7 +260,9 @@ class PostReplies extends React.Component {
 function PostReply(props) {
     return (
         <li>
-            {props.content.content}       {props.content.username}
+            <div className="postreply" style={{borderLeft:"2px", textAlign:"left", paddingLeft:"60px"}}>
+                {props.content.content}       {props.content.username}
+            </div>
         </li>
     )   
 }
@@ -314,8 +321,6 @@ class PostImageViewer extends React.Component {
         super(props);
     }
     render() {
-        console.log(this.props.images == "");
-        console.log(this.props.images)
         if (this.props.images != "") {
             return (
                 <ul>
@@ -444,7 +449,7 @@ class PostEditor extends React.Component {
                                                 $("#postContent").val("");
                                                 $("#postImgUpload").val(null);
                                                 alert("posted");
-                                                updater()
+                                                updater(filter1, filter2)
                                             }       
                                         }
                                     });

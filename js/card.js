@@ -1,5 +1,10 @@
 URL = "https://cscdefault01.ngrok.io";
 
+var dateparser = function (date) {
+    date = date.split(" ");
+    return date[1] + " - " + date[2];
+};
+
 class ForumBody extends React.Component {
     constructor(props) {
         super(props);
@@ -14,6 +19,7 @@ class ForumBody extends React.Component {
     }
 
     updatePosts(filter1, filter2) {
+        console.log("trying to update" + filter1 + filter2);
         var ajaxURL = URL + "/api/page" + "?first=" + filter1 + "&second=" + filter2;
         fetch(ajaxURL).then(response => {
             if (response.ok) {
@@ -273,46 +279,67 @@ class Post extends React.Component {
         if (this.state.folded) {
             return React.createElement(
                 "div",
-                null,
+                { className: "postfolded" },
                 React.createElement(
-                    "h3",
-                    null,
-                    this.props.post.title
+                    "div",
+                    { className: "posttitle" },
+                    React.createElement(
+                        "h3",
+                        null,
+                        this.props.post.title
+                    )
                 ),
-                React.createElement("br", null),
-                this.props.post.username,
                 React.createElement(
-                    "button",
-                    { onClick: this.flipPostState },
-                    "Unfold"
+                    "div",
+                    { className: "postauthor", style: { textAlign: "right", paddingRight: 30, color: "#93969b" } },
+                    React.createElement(
+                        "i",
+                        null,
+                        "by ",
+                        this.props.post.username + "   " + dateparser(this.props.post.currentTime)
+                    )
                 ),
+                React.createElement("img", { onClick: this.flipPostState, src: "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/down.png", width: "20px" }),
                 React.createElement("hr", null)
             );
         } else {
             return React.createElement(
                 "div",
-                null,
+                { className: "postunfolded" },
                 React.createElement(
-                    "h3",
-                    null,
-                    this.props.post.title
+                    "div",
+                    { className: "posttitle" },
+                    React.createElement(
+                        "h3",
+                        null,
+                        this.props.post.title
+                    )
                 ),
-                " ",
-                this.props.post.username,
                 React.createElement("br", null),
-                this.props.post.content,
+                React.createElement(
+                    "div",
+                    { className: "postcontent" },
+                    this.props.post.content
+                ),
                 React.createElement("br", null),
                 React.createElement(PostImageViewer, { images: this.props.post.images }),
+                React.createElement("br", null),
+                React.createElement(
+                    "div",
+                    { className: "postauthor", style: { textAlign: "right", paddingRight: 30 } },
+                    React.createElement(
+                        "i",
+                        null,
+                        "by ",
+                        this.props.post.username + "   " + dateparser(this.props.post.currentTime)
+                    )
+                ),
                 React.createElement("br", null),
                 React.createElement(PostReplies, { replies: this.props.post.reply }),
                 React.createElement("br", null),
                 React.createElement(Reply, { postId: this.props.post.postId }),
                 React.createElement("br", null),
-                React.createElement(
-                    "button",
-                    { onClick: this.flipPostState },
-                    "Fold"
-                ),
+                React.createElement("img", { onClick: this.flipPostState, src: "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/up.png", width: "20px" }),
                 React.createElement("hr", null)
             );
         }
@@ -337,17 +364,17 @@ class PostReplies extends React.Component {
 }
 
 function PostReply(props) {
-    if (props.content.username == "") {
-        return null;
-    } else {
-        return React.createElement(
-            "li",
-            null,
+    return React.createElement(
+        "li",
+        null,
+        React.createElement(
+            "div",
+            { className: "postreply", style: { borderLeft: "2px", textAlign: "left", paddingLeft: "60px" } },
             props.content.content,
             "       ",
             props.content.username
-        );
-    }
+        )
+    );
 }
 
 class Reply extends React.Component {
@@ -396,7 +423,7 @@ class Reply extends React.Component {
                 React.createElement(
                     "button",
                     { onClick: this.submitReply },
-                    "Submit Reply"
+                    "Reply"
                 )
             );
         }
@@ -408,8 +435,6 @@ class PostImageViewer extends React.Component {
         super(props);
     }
     render() {
-        console.log(this.props.images == "");
-        console.log(this.props.images);
         if (this.props.images != "") {
             return React.createElement(
                 "ul",
@@ -576,7 +601,7 @@ class PostEditor extends React.Component {
                                             $("#postContent").val("");
                                             $("#postImgUpload").val(null);
                                             alert("posted");
-                                            updater();
+                                            updater(filter1, filter2);
                                         }
                                     }
                                 });
