@@ -293,6 +293,26 @@ app.put('/api/accounts', function(req, res) {
   });
 
 });
+app.delete('/api/accounts', function(req, res) {
+  // Client deletion
+  var username = req.body.username;
+  var pw = req.body.old_password;
+  var ref = firebase.database().ref();
+  var db = firebase.database();
+  ref.child('accounts').orderByChild('username').equalTo(username).once('value', function(snapshot) {
+    if (snapshot.child(username + '/' + 'password').val() == pw) {
+      snapshot.forEach(function (childSnapshot) {
+        console.log(childSnapshot.val());
+        ref.child('accounts/' + childSnapshot.key).remove();
+      })
+      res.send({'success':"success"});
+    } else{
+      res.send({'success':"failed"});
+    }
+
+  });
+
+});
 
 function createNewAccount(firstName, lastName, email, photo, address, username, pw) {
   // A post entry.

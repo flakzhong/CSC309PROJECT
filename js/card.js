@@ -1,4 +1,4 @@
-URL = "https://8372e2bc.ngrok.io";
+URL = "https://0bab2181.ngrok.io";
 
 class ForumBody extends React.Component {
     constructor(props) {

@@ -1,4 +1,4 @@
-var URL = "https://8372e2bc.ngrok.io"
+var URL = "https://0bab2181.ngrok.io"
 
 
 $(function(){
@@ -341,5 +341,26 @@ function editProfile() {
             });
         })
     }
+}
+
+function deleteProfile() {
+    var oPw = document.getElementById("Opassword").value;
+    $(function(){
+        $.ajax({
+        url: URL + "/api/accounts",
+        type: "DELETE",
+        data:   {'username': currentUser,
+                'old_password': oPw},
+        dataType: "json",
+        success: function(response) {
+            if (response["success"] == "success") {
+                alert("Profile deleted");
+            } else {
+                alert("Failed to delete profile. Please make sure that you type the correct old password.")
+            }
+        }
+        });
+    });
+
 }
 
