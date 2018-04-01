@@ -349,9 +349,13 @@ class Reply extends React.Component {
             return null
         } else {
             return (
-                <div>
-                    <input type="text" id={"postReply" + this.props.postId}/>
-                    <button onClick={this.submitReply}>Reply</button>
+                <div style={{width:"100%", padding:"50px"}}>
+                    <div>
+                        <textarea id={"postReply" + this.props.postId} rows="6"></textarea>
+                    </div>
+                    <div style={{float:"right"}}>
+                        <button className="submitButton" style={{width:"100%"}} onClick={this.submitReply}>Reply</button>
+                    </div>
                 </div>
             )  
         } 
@@ -459,7 +463,7 @@ class PostEditor extends React.Component {
                     <div>
                         <label htmlFor="postImgUpload" style={{float:"left"}}>Insert IMG</label>
                         <input type="file" id="postImgUpload" style={{float:"left"}} accept=".jpg, .jpeg, .png" multiple/>
-                        <button id="post" style={{width:"100%"}} onClick={() => {this.makePost(this.props.filter1, this.props.filter2)}}>Post</button>
+                        <button className="submitButton" style={{width:"100%"}} onClick={() => {this.makePost(this.props.filter1, this.props.filter2)}}>Post</button>
                     </div>
                 </div>
             )

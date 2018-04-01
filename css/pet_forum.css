@@ -200,7 +200,7 @@ h1 { margin: 2rem 0 0; }
 .makePosts .stretch { flex: 1; }
 .makePosts div input { padding: .5em 1em; width: 100%; }
 
-#post{
+.submitButton{
     background-color: grey; 
     border: none;
     color: white;
@@ -218,7 +218,7 @@ h1 { margin: 2rem 0 0; }
     content:url("https://res.cloudinary.com/dfpktpjp8/image/upload/v1522618749/down-blue.png")
 }
 
-#post:hover {
+.submitButton:hover {
     background-color: #f1c01c;
 }
 

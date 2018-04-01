@@ -472,12 +472,20 @@ class Reply extends React.Component {
         } else {
             return React.createElement(
                 "div",
-                null,
-                React.createElement("input", { type: "text", id: "postReply" + this.props.postId }),
+                { style: { width: "100%", padding: "50px" } },
                 React.createElement(
-                    "button",
-                    { onClick: this.submitReply },
-                    "Reply"
+                    "div",
+                    null,
+                    React.createElement("textarea", { id: "postReply" + this.props.postId, rows: "6" })
+                ),
+                React.createElement(
+                    "div",
+                    { style: { float: "right" } },
+                    React.createElement(
+                        "button",
+                        { className: "submitButton", style: { width: "100%" }, onClick: this.submitReply },
+                        "Reply"
+                    )
                 )
             );
         }
@@ -636,7 +644,7 @@ class PostEditor extends React.Component {
                     React.createElement("input", { type: "file", id: "postImgUpload", style: { float: "left" }, accept: ".jpg, .jpeg, .png", multiple: true }),
                     React.createElement(
                         "button",
-                        { id: "post", style: { width: "100%" }, onClick: () => {
+                        { className: "submitButton", style: { width: "100%" }, onClick: () => {
                                 this.makePost(this.props.filter1, this.props.filter2);
                             } },
                         "Post"
