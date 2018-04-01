@@ -110,7 +110,7 @@ app.get('/api/page', function(req, res) {
       snapshot.forEach(function(childSnapshot) {
         if (childSnapshot.val().filter1 == filter1) {
           var post = {
-            "posdId": childSnapshot.key,
+            "postId": childSnapshot.key,
             "username" : childSnapshot.val().username,
             "title" : childSnapshot.val().title,
             "content" : childSnapshot.val().content,
@@ -134,7 +134,7 @@ app.get('/api/page', function(req, res) {
       snapshot.forEach(function(childSnapshot) {
         if (childSnapshot.val().filter2 == filter2) {
           var post = {
-            "posdId": childSnapshot.key,
+            "postId": childSnapshot.key,
             "username" : childSnapshot.val().username,
             "title" : childSnapshot.val().title,
             "content" : childSnapshot.val().content,
@@ -161,7 +161,7 @@ app.get('/api/page', function(req, res) {
       snapshot.forEach(function(childSnapshot) {
         if (childSnapshot.val().filter2 == filter2 && childSnapshot.val().filter1 == filter1) {
           var post = {
-            "posdId": childSnapshot.key,
+            "postId": childSnapshot.key,
             "username" : childSnapshot.val().username,
             "title" : childSnapshot.val().title,
             "content" : childSnapshot.val().content,
