@@ -76,7 +76,7 @@ app.get('/api/posts/:id', function(req, res) {
 
 });
 
-app.get('/api/posts/page', function(req, res) {
+app.get('/api/page', function(req, res) {
   // Client requests posts
 
   var filter1 = req.query.first;
