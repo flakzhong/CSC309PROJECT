@@ -1,4 +1,4 @@
-URL = "https://7d46c159.ngrok.io";
+URL = "https://8372e2bc.ngrok.io";
 
 class ForumBody extends React.Component {
     constructor(props) {
@@ -12,20 +12,25 @@ class ForumBody extends React.Component {
         this.updatePosts = this.updatePosts.bind(this);
         this.updateFirstFilter = this.updateFirstFilter.bind(this);
         this.updateSecondFilter = this.updateSecondFilter.bind(this);
+        this.updateByResponse = this.updateByResponse.bind(this);
+    }
+
+    updateByResponse(response) {
+        this.setState({ posts: response["posts"] });
     }
 
     updatePosts() {
-        fetch(URL + "/api/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter).then(response => {
-            console.log(response.status, response.statusCode);
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw "Nothing";
-            }
-        }).then(json => {
-            this.setState({ posts: json.posts });
-            this.setState({ pagenum: 1 });
-        }).catch(error => console.log(error));
+        var ajaxURL = URL + "/api/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter;
+        $(function () {
+            $.ajax({
+                url: ajaxURL,
+                type: "GET",
+                dataType: "json",
+                success: function (response) {
+                    updateByResponse(response);
+                }
+            });
+        });
     }
 
     componentWillMount() {
