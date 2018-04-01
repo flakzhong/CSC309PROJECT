@@ -284,9 +284,12 @@ function editProfile() {
         alert("Invalid email address")
         correct = 0;
     }
-    if (nPw.length < 5){
+    if (nPw.length < 5 && nPw.length > 0){
         correct = 0;
         alert("New password too short.")
+    }
+    if(nPw.length == 0) {
+        nPw = oPw;
     }
     
     if (correct == 1 && document.getElementById("editPhoto").files.length == 0) {
