@@ -192,18 +192,30 @@ class Post extends React.Component {
     render() {
         if (this.state.folded) {
             return (
-                <div>
-                    <h3>{this.props.post.title}</h3>
-                    <br/> 
-                    {this.props.post.username}
-                    <button onClick={this.flipPostState}>Unfold</button>
+                <div className="postfolded">
+                    <div className="posttitle">
+                        <h3>{this.props.post.title}</h3>
+                    </div>
+                    <div className="postauthor">
+                        {this.props.post.username}
+                    </div>
+                    <div className="posttime">
+                        {this.props.post.currentTime}
+                    </div>
+                    <button className="foldpost" onClick={this.flipPostState}>Unfold</button>
                     <hr/>
                 </div>
             )
         } else {
             return (
-                <div>
-                    <h3>{this.props.post.title}</h3> {this.props.post.username}
+                <div className="postunfolded">
+                    <div className="posttitle">
+                        <h3>{this.props.post.title}</h3>
+                    </div>
+                    <br/>
+                    <div className="postauthor">
+                        {this.props.post.username}
+                    </div>
                     <br/> 
                     {this.props.post.content}
                     <br/>
@@ -213,7 +225,7 @@ class Post extends React.Component {
                     <br/>
                     <Reply postId={this.props.post.postId}/>
                     <br/>
-                    <button onClick={this.flipPostState}>Fold</button>
+                    <button className="foldpost" onClick={this.flipPostState}>Fold</button>
                     <hr/>
                 </div>
             )
@@ -241,16 +253,11 @@ class PostReplies extends React.Component {
 }
 
 function PostReply(props) {
-    if (props.content.username == "") {
-        return null
-    } else {
-        return (
+    return (
         <li>
             {props.content.content}       {props.content.username}
         </li>
-    )
-    }
-    
+    )   
 }
 
 class Reply extends React.Component {
@@ -295,7 +302,7 @@ class Reply extends React.Component {
             return (
                 <div>
                     <input type="text" id={"postReply" + this.props.postId}/>
-                    <button onClick={this.submitReply}>Submit Reply</button>
+                    <button onClick={this.submitReply}>Reply</button>
                 </div>
             )  
         } 

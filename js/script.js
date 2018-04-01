@@ -1,9 +1,9 @@
 var URL = "https://cscdefault01.ngrok.io"
 
  
-if (window.location.hash == '') { 
-    window.location.href = 'https://cscdefault01.ngrok.io/#forum'; 
-} 
+// if (window.location.hash == '') { 
+//     window.location.href = 'https://e6ca7cf2.ngrok.io/#forum'; 
+// } 
 
 $(function(){
     $.ajax({
