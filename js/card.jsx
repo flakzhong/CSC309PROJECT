@@ -301,85 +301,89 @@ class PostEditor extends React.Component {
         var submitButton = document.getElementById('post');
         var title = document.getElementById("postTitle").value;
         var content = document.getElementById("postContent").value;
+        var correct = 1;
         if (title.length < 5) {
+            correct = 0;
             alert("Title too short.");
         }
     
         if (content.length < 5) {
+            correct = 0;
             alert("Content too short.")
         }
-        var images = document.getElementById("postImgUpload").files;
-        if (images.length > 0) {
-            var img_url = [];
-            for(var i = 0; i < images.length; i++) {
-                var formData = new FormData();
-                formData.append('file', images[i]);
-                formData.append('upload_preset', 'tsqi28bt');
-                axios({
-                    url: "https://api.cloudinary.com/v1_1/dfpktpjp8/image/upload",
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    data: formData
-                }).then(function(res) {
-                    img_url.push(res['data']['secure_url']);
-                        if (img_url.length == images.length) {
-                            $(function(){
-                                $.ajax({
-                                    url: URL + "/api/posts",
-                                    type: "POST",
-                                    data: {
-                                        title: title,
-                                        username: currentUser,
-                                        content: content,
-                                        images: img_url,
-                                        filter1: filter1,
-                                        filter2: filter2
-                                    },
-                                    dataType: "json",
-                                    success: function(response) {
-                                        if (response['success'] != 'success') {
-                                            alert("failed to post");
-                                        } else {
-                                            $("#postTitle").val("");
-                                            $("#postContent").val("");
-                                            $("#postImgUpload").val(null);
-                                            alert("posted")
-                                        }       
-                                    }
+        if (correct == 1) {
+            var images = document.getElementById("postImgUpload").files;
+            if (images.length > 0) {
+                var img_url = [];
+                for(var i = 0; i < images.length; i++) {
+                    var formData = new FormData();
+                    formData.append('file', images[i]);
+                    formData.append('upload_preset', 'tsqi28bt');
+                    axios({
+                        url: "https://api.cloudinary.com/v1_1/dfpktpjp8/image/upload",
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        data: formData
+                    }).then(function(res) {
+                        img_url.push(res['data']['secure_url']);
+                            if (img_url.length == images.length) {
+                                $(function(){
+                                    $.ajax({
+                                        url: URL + "/api/posts",
+                                        type: "POST",
+                                        data: {
+                                            title: title,
+                                            username: currentUser,
+                                            content: content,
+                                            images: img_url,
+                                            filter1: filter1,
+                                            filter2: filter2
+                                        },
+                                        dataType: "json",
+                                        success: function(response) {
+                                            if (response['success'] != 'success') {
+                                                alert("failed to post");
+                                            } else {
+                                                $("#postTitle").val("");
+                                                $("#postContent").val("");
+                                                $("#postImgUpload").val(null);
+                                                alert("posted")
+                                            }       
+                                        }
+                                    });
                                 });
-                            });
+                            }
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
+                }
+            } else {
+                $(function(){
+                    $.ajax({
+                        url: URL + "/api/posts",
+                        type: "POST",
+                        data: {
+                            title: title,
+                            username: currentUser,
+                            content: content,
+                            images: null,
+                            filter1: filter1,
+                            filter2: filter2
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            if (response['success'] != 'success') {
+                            alert("failed to post");
+                            } else {
+                            alert("posted")
+                            }       
                         }
-                }).catch(function(err) {
-                    console.log(err);
+                    });
                 });
             }
-        } else {
-            $(function(){
-                $.ajax({
-                    url: URL + "/api/posts",
-                    type: "POST",
-                    data: {
-                        title: title,
-                        username: currentUser,
-                        content: content,
-                        images: null,
-                        filter1: filter1,
-                        filter2: filter2
-                    },
-                    dataType: "json",
-                    success: function(response) {
-                        if (response['success'] != 'success') {
-                        alert("failed to post");
-                        } else {
-                        alert("posted")
-                        }       
-                    }
-                });
-            });
         }
-            
     }
 }
 
