@@ -253,8 +253,9 @@ app.post('/api/reply', function(req, res) {
     var temp = snapshot.child(postId + '/' + reply).val();
     if (temp == null) {
       temp = [];
-    } else {
       temp.push(content);
+    } else {
+      temp.unshift(content);
     }
     snapshot.child(postId).ref.update({'reply': temp});
     res.send({'success':"success"});
