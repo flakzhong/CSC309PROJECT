@@ -12,25 +12,22 @@ class ForumBody extends React.Component {
         this.updatePosts = this.updatePosts.bind(this);
         this.updateFirstFilter = this.updateFirstFilter.bind(this);
         this.updateSecondFilter = this.updateSecondFilter.bind(this);
-        this.updateByResponse = this.updateByResponse.bind(this)
     }
 
     updateByResponse(response) {
         this.setState({posts: response["posts"]})
     }
 
-    updatePosts() {
-        var ajaxURL = URL + "/api/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter;
-        $(function(){
-            $.ajax({
-                url: ajaxURL,
-                type: "GET",
-                dataType: "json",
-                success: function(response) {
-                    updateByResponse(response);
-                }
-            });
-        });
+    updatePosts(filter1, filter2) {
+        var ajaxURL = URL + "/api/page" + "?first=" + filter1 + "&second=" + filter2;
+        fetch(ajaxURL).then(response => {
+            if(response.ok) {
+                return response.json();
+            }
+        }).then(json => {
+            console.log(json.posts);
+            this.setState({posts: json.posts})
+        })
     }
 
     componentWillMount() {
@@ -57,7 +54,7 @@ class ForumBody extends React.Component {
         var targetfilter = document.getElementById("upper" + choice + "Filter")
         targetfilter.className += " active"
         this.setState({firstfilter: choice})
-        this.updatePosts()
+        this.updatePosts(choice, this.state.secondfilter)
     }
 
     updateSecondFilter(choice) {
@@ -66,7 +63,7 @@ class ForumBody extends React.Component {
         var targetfilter = document.getElementById("lower" + choice + "Filter")
         targetfilter.className += " active"
         this.setState({secondfilter: choice})
-        this.updatePosts()
+        this.updatePosts(this.state.firstfilter, choice)
     }
 }
 
