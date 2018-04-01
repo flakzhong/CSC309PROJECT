@@ -185,7 +185,8 @@ class Post extends React.Component {
         super(props)
         this.state = {
             folded:true,
-            replies:[]
+            replies:[],
+            photo:""
         }
         this.flipPostState = this.flipPostState.bind(this)
         this.updateReplies = this.updateReplies.bind(this)
@@ -193,6 +194,18 @@ class Post extends React.Component {
 
     componentWillMount() {
         this.updateReplies()
+        this.getphoto()
+    }
+
+    getphoto(){
+        var ajaxURL = URL + "/api/photo?username=" + this.props.post.username;
+        fetch(ajaxURL).then(response => {
+            if(response.ok) {
+                return response.json();
+            }
+        }).then(json => {
+            this.setState({photo: json.photo})
+        })
     }
 
     flipPostState(e) {
@@ -240,6 +253,7 @@ class Post extends React.Component {
                     <br/>                    
                     <div className="postauthor" style={{textAlign:"right", paddingRight:30}}>
                         <i>by {this.props.post.username + "   " + dateparser(this.props.post.currentTime)}</i>
+                        <img src={this.state.photo} width="100px"/>
                     </div>
                     <br/>
                     <PostReplies replies={this.state.replies}/>
@@ -510,4 +524,3 @@ class PostEditor extends React.Component {
 
 
 ReactDOM.render(<ForumBody />, document.getElementById("forum"));
-
