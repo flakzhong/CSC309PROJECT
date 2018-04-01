@@ -37,7 +37,7 @@ class ForumBody extends React.Component {
                     <hr/>
                     <SecondFilterList updateFilter={this.updateSecondFilter}/>
                 </div>
-                <PostList postlist={this.state.posts}/>
+                <PostList postlist={this.state.posts} filter1={this.state.firstfilter} filter2={this.state.secondfilter}/>
                 <PostEditor filter1={this.state.firstfilter} filter2={this.state.secondfilter}/>
             </div>
         );
@@ -104,11 +104,22 @@ class PostList extends React.Component {
         super(props);
         this.state = {
             currpageposts:[],
-            pagenum:1
+            pagenum:1,
+            filter1:"",
+            filter2:""
         }
         this.nextpage = this.nextpage.bind(this)
         this.prevpage = this.prevpage.bind(this)
         this.updatecurrpage = this.updatecurrpage.bind(this)
+    }
+
+    componentDidUpdate() {
+        if (this.props.filter1 != this.state.filter1 || this.props.filter2 != this.state.filter2) {
+            this.updatecurrpage(1)
+            this.setState({pagenum:1})
+            this.setState({filter1:this.props.filter1})
+            this.setState({filter2:this.props.filter2})
+        }
     }
 
     updatecurrpage(pagenum) {
@@ -123,7 +134,6 @@ class PostList extends React.Component {
 
     nextpage(e) {
         var maxpagenum = Math.ceil(this.props.postlist.length / 10)
-        console.log("trying to set page to " + (this.state.pagenum + 1))
         if (this.state.pagenum + 1 <= maxpagenum) {
             this.updatecurrpage(this.state.pagenum + 1)
             this.setState({pagenum: this.state.pagenum + 1})
@@ -132,8 +142,6 @@ class PostList extends React.Component {
     }
 
     prevpage(e) {
-        console.log("prevpage")
-        console.log("trying to set page to " + (this.state.pagenum - 1))
         if (this.state.pagenum - 1 >= 1) {
             this.updatecurrpage(this.state.pagenum - 1)
             this.setState({pagenum: this.state.pagenum - 1})
@@ -141,7 +149,7 @@ class PostList extends React.Component {
     }
     
     render() {
-        var maxpagenum = Math.ceil(this.props.postlist.length / 10)
+        var maxpagenum = Math.max(Math.ceil(this.props.postlist.length / 10), 1)
         return (
             <div className="block">
                 <PostPage post={this.state.currpageposts}/>
@@ -157,7 +165,6 @@ class PostPage extends React.Component {
     }
 
     render() {
-        console.log(this.props.post)
         return (
             <ul>
                 {this.props.post.map(item => (
