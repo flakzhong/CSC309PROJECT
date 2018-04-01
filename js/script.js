@@ -1,9 +1,9 @@
 var URL = "https://cscdefault01.ngrok.io"
 
  
-// if (window.location.hash == '') { 
-//     window.location.href = 'https://e6ca7cf2.ngrok.io/#forum'; 
-// } 
+ if (window.location.hash == '') { 
+     window.location.href = 'https://e6ca7cf2.ngrok.io/#forum'; 
+ } 
 
 $(function(){
     $.ajax({
@@ -14,9 +14,9 @@ $(function(){
             if(response['success'] == 'success') {
                 put_account_info(response.payload);
                 currentUser = response.payload.username
-                welcome = document.getElementById("hello-info")
-                welcome.style.display = "block"
-                welcome.innerHTML = "Welcome, " + response.payload.username;
+                //welcome = document.getElementById("hello-info")
+                //welcome.style.display = "block"
+                //welcome.innerHTML = "Welcome, " + response.payload.username;
                 loginbar = document.getElementById("loginbar")
                 loginbar.style.display = "none"
                 account = document.getElementById("myacc")
@@ -49,12 +49,15 @@ function login(evt) {
                     console.log("success")
                     alert("Failed to login. Please check your username and password.");
                 } else {
+                    if (window.location.hash != 'forum') { 
+                        window.location.href = URL + '/#forum'; 
+                    }
                     console.log("success")
                     put_account_info(response.payload);
                     currentUser = username
-                    welcome = document.getElementById("hello-info")
-                    welcome.style.display = "block"
-                    welcome.innerHTML = "Welcome, " + username;
+                    //welcome = document.getElementById("hello-info")
+                    //welcome.style.display = "block"
+                    //welcome.innerHTML = "Welcome, " + username;
                     loginbar = document.getElementById("loginbar")
                     loginbar.style.display = "none"
                     account = document.getElementById("myacc")
@@ -64,6 +67,7 @@ function login(evt) {
                     document.getElementById("registerButton").style.display = "none";              
                     //show log out button
                     document.getElementById("logoutb").style.display = "block";
+                
                 }
             }
         });
