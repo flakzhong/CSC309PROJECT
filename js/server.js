@@ -93,6 +93,8 @@ app.get('/api/page', function(req, res) {
         var post = {
           "username" : childSnapshot.val().username,
           "title" : childSnapshot.val().title,
+          "content" : childSnapshot.val().content,
+          "images" : childSnapshot.val().images,
           "currentTime" : childSnapshot.val().currentTime
         };
         result.push(post);
