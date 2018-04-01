@@ -83,7 +83,7 @@ app.get('/api/page', function(req, res) {
   var filter2 = req.query.second;
 
   var result = [];
-  var ref = firebase.database().ref("posts");
+  var ref = firebase.database().ref("posts").orderByChild("currentTime");
   var f1;
   if (filter1 == "All") {    
     f1 = ref;
@@ -97,7 +97,8 @@ app.get('/api/page', function(req, res) {
       snapshot.forEach(function(childSnapshot) {
         var post = {
           "username" : childSnapshot.val().username,
-          "title" : childSnapshot.val().title
+          "title" : childSnapshot.val().title,
+          "currentTime" : childSnapshot.val().currentTime
         };
         result.push(post);
       });
@@ -110,7 +111,8 @@ app.get('/api/page', function(req, res) {
         if (childSnapshot.val().filter2 == filter2) {
           var post = {
             "username" : childSnapshot.val().author,
-            "title" : childSnapshot.val().title
+            "title" : childSnapshot.val().title,
+            "currentTime" : childSnapshot.val().currentTime
           };
           result.push(post);
         }
