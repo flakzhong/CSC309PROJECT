@@ -1,4 +1,4 @@
-URL = "https://cscdefault01.ngrok.io"
+URL = "https://52c637e2.ngrok.io"
 
 var dateparser = function(date) {
     date = date.split(" ")
@@ -43,6 +43,7 @@ class ForumBody extends React.Component {
                     <SecondFilterList updateFilter={this.updateSecondFilter}/>
                 </div>
                 <PostList postlist={this.state.posts} filter1={this.state.firstfilter} filter2={this.state.secondfilter}/>
+                <hr/>
                 <PostEditor filter1={this.state.firstfilter} filter2={this.state.secondfilter} forceupdater={() => (this.updatePosts(this.state.filter1, this.state.filter2))}/>
             </div>
         );
@@ -251,9 +252,12 @@ class Post extends React.Component {
                     <br/>
                     <PostImageViewer images={this.props.post.images}/>
                     <br/>                    
-                    <div className="postauthor" style={{textAlign:"right", paddingRight:30}}>
-                        <i>by {this.props.post.username + "   " + dateparser(this.props.post.currentTime)}</i>
-                        <img src={this.state.photo} width="100px"/>
+                    <div className="postauthor" style={{textAlign:"right", paddingRight:30, color:"#93969b"}}>
+                        <img src={this.state.photo} width="50px" height="50px"/>
+                        <br/>
+                        <i>by {this.props.post.username}</i>
+                        <br/>
+                        <i>on {dateparser(this.props.post.currentTime)}</i>
                     </div>
                     <br/>
                     <PostReplies replies={this.state.replies}/>
@@ -408,7 +412,7 @@ class PostEditor extends React.Component {
             return null
         } else {
             return (
-                <div className="postEditor block" id="postEditor">
+                <div className="postEditor block" id="postEditor" style={{padding:"10px"}}>
                     <h1>Title:</h1>
                     <section className="makePosts">
                         <div className="stretch">
@@ -422,7 +426,7 @@ class PostEditor extends React.Component {
                     <div>
                         <label htmlFor="postImgUpload" style={{float:"left"}}>Insert IMG</label>
                         <input type="file" id="postImgUpload" style={{float:"left"}} accept=".jpg, .jpeg, .png" multiple/>
-                        <button id="post" style={{float:"right"}} onClick={() => {this.makePost(this.props.filter1, this.props.filter2)}}>Post</button>
+                        <button id="post" style={{width:"100%"}} onClick={() => {this.makePost(this.props.filter1, this.props.filter2)}}>Post</button>
                     </div>
                 </div>
             )

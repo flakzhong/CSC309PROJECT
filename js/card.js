@@ -45,6 +45,7 @@ class ForumBody extends React.Component {
                 React.createElement(SecondFilterList, { updateFilter: this.updateSecondFilter })
             ),
             React.createElement(PostList, { postlist: this.state.posts, filter1: this.state.firstfilter, filter2: this.state.secondfilter }),
+            React.createElement("hr", null),
             React.createElement(PostEditor, { filter1: this.state.firstfilter, filter2: this.state.secondfilter, forceupdater: () => this.updatePosts(this.state.filter1, this.state.filter2) })
         );
     }
@@ -266,7 +267,8 @@ class Post extends React.Component {
         super(props);
         this.state = {
             folded: true,
-            replies: []
+            replies: [],
+            photo: ""
         };
         this.flipPostState = this.flipPostState.bind(this);
         this.updateReplies = this.updateReplies.bind(this);
@@ -274,6 +276,18 @@ class Post extends React.Component {
 
     componentWillMount() {
         this.updateReplies();
+        this.getphoto();
+    }
+
+    getphoto() {
+        var ajaxURL = URL + "/api/photo?username=" + this.props.post.username;
+        fetch(ajaxURL).then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+        }).then(json => {
+            this.setState({ photo: json.photo });
+        });
     }
 
     flipPostState(e) {
@@ -342,12 +356,21 @@ class Post extends React.Component {
                 React.createElement("br", null),
                 React.createElement(
                     "div",
-                    { className: "postauthor", style: { textAlign: "right", paddingRight: 30 } },
+                    { className: "postauthor", style: { textAlign: "right", paddingRight: 30, color: "#93969b" } },
+                    React.createElement("img", { src: this.state.photo, width: "50px", height: "50px" }),
+                    React.createElement("br", null),
                     React.createElement(
                         "i",
                         null,
                         "by ",
-                        this.props.post.username + "   " + dateparser(this.props.post.currentTime)
+                        this.props.post.username
+                    ),
+                    React.createElement("br", null),
+                    React.createElement(
+                        "i",
+                        null,
+                        "on ",
+                        dateparser(this.props.post.currentTime)
                     )
                 ),
                 React.createElement("br", null),
@@ -521,7 +544,7 @@ class PostEditor extends React.Component {
         } else {
             return React.createElement(
                 "div",
-                { className: "postEditor block", id: "postEditor" },
+                { className: "postEditor block", id: "postEditor", style: { padding: "10px" } },
                 React.createElement(
                     "h1",
                     null,
@@ -557,7 +580,7 @@ class PostEditor extends React.Component {
                     React.createElement("input", { type: "file", id: "postImgUpload", style: { float: "left" }, accept: ".jpg, .jpeg, .png", multiple: true }),
                     React.createElement(
                         "button",
-                        { id: "post", style: { float: "right" }, onClick: () => {
+                        { id: "post", style: { width: "100%" }, onClick: () => {
                                 this.makePost(this.props.filter1, this.props.filter2);
                             } },
                         "Post"
