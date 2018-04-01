@@ -113,17 +113,14 @@ function register() {
     var photo = "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522528152/qm8qtuayijxdfj1t4jco.jpg";
     var correct = 1;
     
-    if (firstName.length == 0) {
-        alert("Invalid first name.")
-        correct = 0;
+    if (firstName == null) {
+        firstName = "";
     }
-    if (lastName.length == 0) {
-        alert("Invalid last name.")
-        correct = 0;
+    if (lastName == null) {
+        lastName = "";
     }
-    if (address.length == 0) {
-        alert("Invalid address")
-        correct = 0;
+    if (address == null) {
+        address = "";
     }
     if (email.length == 0 || email.indexOf("@") == -1 || email.indexOf(".") == -1) {
         alert("Invalid email address")
@@ -268,17 +265,14 @@ function editProfile() {
     var oPw = document.getElementById("Opassword").value;
     var nPw = document.getElementById("newPassword").value;
     var correct = 1;
-    if (firstName.length == 0) {
-        alert("Invalid first name.")
-        correct = 0;
+    if (firstName == null) {
+        firstName = "";
     }
-    if (lastName.length == 0) {
-        alert("Invalid last name.")
-        correct = 0;
+    if (lastName == null) {
+        lastName = "";
     }
-    if (address.length == 0) {
-        alert("Invalid address")
-        correct = 0;
+    if (address == null) {
+        address = "";
     }
     if (email.length == 0 || email.indexOf("@") == -1 || email.indexOf(".") == -1) {
         alert("Invalid email address")
