@@ -208,11 +208,84 @@ class Post extends React.Component {
                     {this.props.post.content}
                     <br/>
                     <PostImageViewer images={this.props.post.images}/>
+                    <br/>
+                    <PostReplies replies={this.props.post.reply}/>
+                    <br/>
+                    <Reply postId={this.props.post.postId}/>
+                    <br/>
                     <button onClick={this.flipPostState}>Fold</button>
                     <hr/>
                 </div>
             )
         }
+    }
+}
+
+class PostReplies extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+    render() {
+        return (
+            <ul>
+                {this.props.replies.map(reply => (
+                    <PostReply content={reply}/>
+                ))}
+            </ul>
+        )
+    }
+}
+
+function PostReply(props) {
+    return (
+        <li>
+            {props.content.content}       {props.content.username}
+        </li>
+    )
+}
+
+class Reply extends React.Component {
+    constructor(props) {
+        super(props)
+        this.submitReply = this.submitReply.bind(this)
+    }
+
+    submitReply() {
+        var content = document.getElementById("postReply" + this.props.postId).value
+        var correct = 1;
+        var id = this.props.postId
+        if (content.length < 5) {
+            correct = 0;
+            alert("Reply too short");
+        }
+        if (correct == 1) {
+            $(function(){
+                $.ajax({
+                url: URL + "/api/reply",
+                type: "POST",
+                data:   {'username': currentUser,
+                        'postId' : id,
+                        'content' : content},
+                dataType: "json",
+                success: function(response) {
+                    if (response["success"] == "success") {
+                        alert("Replied");
+                    } else {
+                        alert("Failed to reply. Please try again")
+                    }
+                }
+                });
+            });
+        }
+    }
+
+    render(){
+        return (
+            <div>
+                <input type="text" id={"postReply" + this.props.postId}/>
+                <button onClick={this.submitReply}>Submit Reply</button>
+            </div>
+        )  
     }
 }
 

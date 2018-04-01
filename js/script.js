@@ -376,31 +376,3 @@ function deleteProfile() {
 
 }
 
-
-function reply() {
-    var content = document.getElementById("replyContent").value;
-    var correct = 1;
-    if (content.length < 5) {
-        correct = 0;
-        alert("Reply too short");
-    }
-    if (correct == 1) {
-        $(function(){
-            $.ajax({
-            url: URL + "/api/reply",
-            type: "POST",
-            data:   {'username': currentUser,
-                    'postId' : "placeholder",
-                    'content' : content},
-            dataType: "json",
-            success: function(response) {
-                if (response["success"] == "success") {
-                    alert("Replied");
-                } else {
-                    alert("Failed to reply. Please try again")
-                }
-            }
-            });
-        });
-    }
-}

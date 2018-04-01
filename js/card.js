@@ -303,6 +303,11 @@ class Post extends React.Component {
                 this.props.post.content,
                 React.createElement("br", null),
                 React.createElement(PostImageViewer, { images: this.props.post.images }),
+                React.createElement("br", null),
+                React.createElement(PostReplies, { replies: this.props.post.reply }),
+                React.createElement("br", null),
+                React.createElement(Reply, { postId: this.props.post.postId }),
+                React.createElement("br", null),
                 React.createElement(
                     "button",
                     { onClick: this.flipPostState },
@@ -311,6 +316,78 @@ class Post extends React.Component {
                 React.createElement("hr", null)
             );
         }
+    }
+}
+
+class PostReplies extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return React.createElement(
+            "ul",
+            null,
+            this.props.replies.map(reply => React.createElement(PostReply, { content: reply }))
+        );
+    }
+}
+
+function PostReply(props) {
+    return React.createElement(
+        "li",
+        null,
+        props.content.content,
+        "       ",
+        props.content.username
+    );
+}
+
+class Reply extends React.Component {
+    constructor(props) {
+        super(props);
+        this.submitReply = this.submitReply.bind(this);
+    }
+
+    submitReply() {
+        var content = document.getElementById("postReply" + this.props.postId).value;
+        var correct = 1;
+        var id = this.props.postId;
+        if (content.length < 5) {
+            correct = 0;
+            alert("Reply too short");
+        }
+        if (correct == 1) {
+            $(function () {
+                $.ajax({
+                    url: URL + "/api/reply",
+                    type: "POST",
+                    data: { 'username': currentUser,
+                        'postId': id,
+                        'content': content },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response["success"] == "success") {
+                            alert("Replied");
+                        } else {
+                            alert("Failed to reply. Please try again");
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+    render() {
+        return React.createElement(
+            "div",
+            null,
+            React.createElement("input", { type: "text", id: "postReply" + this.props.postId }),
+            React.createElement(
+                "button",
+                { onClick: this.submitReply },
+                "Submit Reply"
+            )
+        );
     }
 }
 
