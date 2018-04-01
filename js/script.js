@@ -1,4 +1,4 @@
-var URL = "https://c3447765.ngrok.io"
+var URL = "https://cscdefault01.ngrok.io"
 
 
 $(function(){
@@ -20,6 +20,8 @@ $(function(){
                 account.href="#userprofile"
                 // hide register button
                 document.getElementById("registerButton").style.display = "none";
+                //show log out button
+                document.getElementById("logoutb").style.display = "block";
             }
         }
     });
@@ -55,7 +57,9 @@ function login(evt) {
                     account.innerHTML = "My Account"
                     account.href="#userprofile"
                     // hide register button
-                    document.getElementById("registerButton").style.display = "none";
+                    document.getElementById("registerButton").style.display = "none";              
+                    //show log out button
+                    document.getElementById("logoutb").style.display = "block";
                 }
             }
         });
