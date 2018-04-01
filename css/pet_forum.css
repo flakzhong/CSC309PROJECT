@@ -123,55 +123,6 @@ a:hover {
     float: left;
 }
 
-.upperforumtab {
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-}
-
-.upperforumtab button {
-    background-color: inherit;
-    float: left;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-    font-size: 17px;
-}
-
-.upperforumtab button:hover {
-    background-color: #ddd;
-}
-
-.upperforumtab button.active {
-    background-color: #ccc;
-    outline: none;
-    box-shadow: none;
-}
-
-table {
-    border-collapse: collapse;
-    table-layout: fixed;
-    font-family: Arial, "Times New Roman", Times, serif;
-
-}
-table th {
-    text-align: left;
-    color: #FFFFFF;
-    background-color: #008080;
-    padding: 2px 20px 3px 5px;
-}
-table td {
-    border: 1px solid grey;
-    background-color: #FAEBD7;
-    padding: 4px 8px;
-    word-wrap: break-word;
-}
-th, td { 
-    height: 80px;
-}
-
 
 /* =======================user profile======================= */
 .userprofile .column30 {
@@ -296,23 +247,6 @@ h1 { margin: 2rem 0 0; }
     }
 
     .forumtab ul li {
-        display: inline-block;
-		list-style: none;
-		padding: .36em 0.9375em;
-    }
-
-    .upperforumtab {
-        padding: .35em;
-        display: inline;
-    }
-
-    .upperforumtab ul {
-        margin: 0;
-		display: inline;
-		padding-right: .15em;
-    }
-
-    .upperforumtab ul li {
         display: inline-block;
 		list-style: none;
 		padding: .36em 0.9375em;

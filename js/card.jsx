@@ -38,7 +38,7 @@ class ForumBody extends React.Component {
                     <SecondFilterList updateFilter={this.updateSecondFilter}/>
                 </div>
                 <PostList postlist={this.state.posts} filter1={this.state.firstfilter} filter2={this.state.secondfilter}/>
-                <PostEditor filter1={this.state.firstfilter} filter2={this.state.secondfilter}/>
+                <PostEditor filter1={this.state.firstfilter} filter2={this.state.secondfilter} forceupdater={() => (this.updatePosts(this.state.filter1, this.state.filter2))}/>
             </div>
         );
     }
@@ -284,12 +284,16 @@ class Reply extends React.Component {
     }
 
     render(){
-        return (
-            <div>
-                <input type="text" id={"postReply" + this.props.postId}/>
-                <button onClick={this.submitReply}>Submit Reply</button>
-            </div>
-        )  
+        if (currentUser == "") {
+            return null
+        } else {
+            return (
+                <div>
+                    <input type="text" id={"postReply" + this.props.postId}/>
+                    <button onClick={this.submitReply}>Submit Reply</button>
+                </div>
+            )  
+        } 
     }
 }
 
@@ -379,6 +383,7 @@ class PostEditor extends React.Component {
         var title = document.getElementById("postTitle").value;
         var content = document.getElementById("postContent").value;
         var correct = 1;
+        var updater = this.props.forceupdater
         if (title.length < 5) {
             correct = 0;
             alert("Title too short.");
@@ -426,7 +431,8 @@ class PostEditor extends React.Component {
                                                 $("#postTitle").val("");
                                                 $("#postContent").val("");
                                                 $("#postImgUpload").val(null);
-                                                alert("posted")
+                                                alert("posted");
+                                                updater()
                                             }       
                                         }
                                     });
@@ -455,6 +461,7 @@ class PostEditor extends React.Component {
                             alert("failed to post");
                             } else {
                             alert("posted")
+                            updater();
                             }       
                         }
                     });
