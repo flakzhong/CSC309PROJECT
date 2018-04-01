@@ -337,13 +337,17 @@ class PostReplies extends React.Component {
 }
 
 function PostReply(props) {
-    return React.createElement(
-        "li",
-        null,
-        props.content.content,
-        "       ",
-        props.content.username
-    );
+    if (props.content.username == "") {
+        return null;
+    } else {
+        return React.createElement(
+            "li",
+            null,
+            props.content.content,
+            "       ",
+            props.content.username
+        );
+    }
 }
 
 class Reply extends React.Component {

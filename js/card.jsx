@@ -241,11 +241,16 @@ class PostReplies extends React.Component {
 }
 
 function PostReply(props) {
-    return (
+    if (props.content.username == "") {
+        return null
+    } else {
+        return (
         <li>
             {props.content.content}       {props.content.username}
         </li>
     )
+    }
+    
 }
 
 class Reply extends React.Component {
