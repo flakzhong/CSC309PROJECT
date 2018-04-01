@@ -235,7 +235,7 @@ class Post extends React.Component {
                     <div className="postauthor" style={{textAlign:"right", paddingRight:30, color:"#93969b"}}>
                         <i>by {this.props.post.username + "   " + dateparser(this.props.post.currentTime)}</i>
                     </div>
-                        <img onClick={this.flipPostState} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/down.png" width="20px"/>
+                        <img className="postUnfoldButton" onClick={this.flipPostState} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/down.png" width="20px"/>
                     <hr/>
                 </div>
             )
@@ -264,7 +264,7 @@ class Post extends React.Component {
                     <br/>
                     <Reply postId={this.props.post.postId} forceupdater={this.updateReplies}/>
                     <br/>
-                    <img onClick={this.flipPostState} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/up.png" width="20px"/>
+                    <img className="postFoldButton" onClick={this.flipPostState} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/up.png" width="20px"/>
                     <hr/>
                 </div>
             )
@@ -294,8 +294,13 @@ class PostReplies extends React.Component {
 function PostReply(props) {
     return (
         <li>
-            <div className="postreply" style={{borderLeft:"2px", textAlign:"left", paddingLeft:"60px"}}>
-                {props.content.content}       {props.content.username}
+            <div className="postreply" style={{textAlign:"left", paddingLeft:"60px"}}>
+                <div style={{borderLeft:"2px  solid #93969b", paddingLeft:"3px"}}>
+                    {props.content.content}
+                </div>
+                <div style={{color:"#93969b", display:"inline", paddingLeft:"60px"}}>
+                    <i>-----{props.content.username}</i>
+                </div> 
             </div>
         </li>
     )   
@@ -328,7 +333,6 @@ class Reply extends React.Component {
                 dataType: "json",
                 success: function(response) {
                     if (response["success"] == "success") {
-                        alert("Replied");
                         $(pRId).val("");
                         updater()
                     } else {
@@ -388,12 +392,41 @@ class PageSelector extends React.Component {
     }
 
     render() {
+        if (this.props.curr == 1 && this.props.max != 1) {
+            return(
+                <div className="block">
+                    <ul>
+                        <img style={{display:"inline"}} src="http://res.cloudinary.com/dfpktpjp8/image/upload/v1522617226/empty.png" width="30px"/>
+                        <div style={{display:"inline", padding:"5px", fontSize:"30px"}}>{this.props.curr}/{this.props.max}</div>
+                        <img style={{display:"inline"}} src="http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/right.png" width="30px" onClick={this.props.next}/>
+                    </ul>
+                </div>
+            )
+        } else if (this.props.curr == 1 && this.props.max == 1) {
+            return(
+                <div className="block">
+                    <ul>
+                        <div style={{display:"inline", padding:"5px", fontSize:"30px"}}>{this.props.curr}/{this.props.max}</div>
+                    </ul>
+                </div>
+            )
+        } else if (this.props.curr == this.props.max) {
+            return(
+                <div className="block">
+                    <ul>
+                        <img style={{display:"inline"}} src="http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/left.png" width="30px" onClick={this.props.prev}/>
+                        <div style={{display:"inline", padding:"5px", fontSize:"30px"}}>{this.props.curr}/{this.props.max}</div>
+                        <img style={{display:"inline"}} src="http://res.cloudinary.com/dfpktpjp8/image/upload/v1522617226/empty.png" width="30px"/>
+                    </ul>
+                </div>
+            )
+        } 
         return(
             <div className="block">
                 <ul>
-                    <button onClick={this.props.prev}>Prev Page</button>
-                    <div>{this.props.curr}/{this.props.max}</div>
-                    <button onClick={this.props.next}>Next Page</button>
+                    <img style={{display:"inline"}} src="http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/left.png" width="30px" onClick={this.props.prev}/>
+                    <div style={{display:"inline", padding:"5px", fontSize:"30px"}}>{this.props.curr}/{this.props.max}</div>
+                    <img style={{display:"inline"}} src="http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/right.png" width="30px" onClick={this.props.next}/>
                 </ul>
             </div>
         )

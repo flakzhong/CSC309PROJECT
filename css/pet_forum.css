@@ -210,6 +210,14 @@ h1 { margin: 2rem 0 0; }
     font-size: 16px;
 }
 
+.postFoldButton:hover{
+    content:url("https://res.cloudinary.com/dfpktpjp8/image/upload/v1522618749/up-blue.png")
+}
+
+.postUnfoldButton:hover{
+    content:url("https://res.cloudinary.com/dfpktpjp8/image/upload/v1522618749/down-blue.png")
+}
+
 #post:hover {
     background-color: #f1c01c;
 }

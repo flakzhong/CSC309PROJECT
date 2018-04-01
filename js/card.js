@@ -329,7 +329,7 @@ class Post extends React.Component {
                         this.props.post.username + "   " + dateparser(this.props.post.currentTime)
                     )
                 ),
-                React.createElement("img", { onClick: this.flipPostState, src: "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/down.png", width: "20px" }),
+                React.createElement("img", { className: "postUnfoldButton", onClick: this.flipPostState, src: "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/down.png", width: "20px" }),
                 React.createElement("hr", null)
             );
         } else {
@@ -378,7 +378,7 @@ class Post extends React.Component {
                 React.createElement("br", null),
                 React.createElement(Reply, { postId: this.props.post.postId, forceupdater: this.updateReplies }),
                 React.createElement("br", null),
-                React.createElement("img", { onClick: this.flipPostState, src: "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/up.png", width: "20px" }),
+                React.createElement("img", { className: "postFoldButton", onClick: this.flipPostState, src: "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/up.png", width: "20px" }),
                 React.createElement("hr", null)
             );
         }
@@ -408,10 +408,22 @@ function PostReply(props) {
         null,
         React.createElement(
             "div",
-            { className: "postreply", style: { borderLeft: "2px", textAlign: "left", paddingLeft: "60px" } },
-            props.content.content,
-            "       ",
-            props.content.username
+            { className: "postreply", style: { textAlign: "left", paddingLeft: "60px" } },
+            React.createElement(
+                "div",
+                { style: { borderLeft: "2px  solid #93969b", paddingLeft: "3px" } },
+                props.content.content
+            ),
+            React.createElement(
+                "div",
+                { style: { color: "#93969b", display: "inline", paddingLeft: "60px" } },
+                React.createElement(
+                    "i",
+                    null,
+                    "-----",
+                    props.content.username
+                )
+            )
         )
     );
 }
@@ -443,7 +455,6 @@ class Reply extends React.Component {
                     dataType: "json",
                     success: function (response) {
                         if (response["success"] == "success") {
-                            alert("Replied");
                             $(pRId).val("");
                             updater();
                         } else {
@@ -504,29 +515,74 @@ class PageSelector extends React.Component {
     }
 
     render() {
+        if (this.props.curr == 1 && this.props.max != 1) {
+            return React.createElement(
+                "div",
+                { className: "block" },
+                React.createElement(
+                    "ul",
+                    null,
+                    React.createElement("img", { style: { display: "inline" }, src: "http://res.cloudinary.com/dfpktpjp8/image/upload/v1522617226/empty.png", width: "30px" }),
+                    React.createElement(
+                        "div",
+                        { style: { display: "inline", padding: "5px", fontSize: "30px" } },
+                        this.props.curr,
+                        "/",
+                        this.props.max
+                    ),
+                    React.createElement("img", { style: { display: "inline" }, src: "http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/right.png", width: "30px", onClick: this.props.next })
+                )
+            );
+        } else if (this.props.curr == 1 && this.props.max == 1) {
+            return React.createElement(
+                "div",
+                { className: "block" },
+                React.createElement(
+                    "ul",
+                    null,
+                    React.createElement(
+                        "div",
+                        { style: { display: "inline", padding: "5px", fontSize: "30px" } },
+                        this.props.curr,
+                        "/",
+                        this.props.max
+                    )
+                )
+            );
+        } else if (this.props.curr == this.props.max) {
+            return React.createElement(
+                "div",
+                { className: "block" },
+                React.createElement(
+                    "ul",
+                    null,
+                    React.createElement("img", { style: { display: "inline" }, src: "http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/left.png", width: "30px", onClick: this.props.prev }),
+                    React.createElement(
+                        "div",
+                        { style: { display: "inline", padding: "5px", fontSize: "30px" } },
+                        this.props.curr,
+                        "/",
+                        this.props.max
+                    ),
+                    React.createElement("img", { style: { display: "inline" }, src: "http://res.cloudinary.com/dfpktpjp8/image/upload/v1522617226/empty.png", width: "30px" })
+                )
+            );
+        }
         return React.createElement(
             "div",
             { className: "block" },
             React.createElement(
                 "ul",
                 null,
-                React.createElement(
-                    "button",
-                    { onClick: this.props.prev },
-                    "Prev Page"
-                ),
+                React.createElement("img", { style: { display: "inline" }, src: "http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/left.png", width: "30px", onClick: this.props.prev }),
                 React.createElement(
                     "div",
-                    null,
+                    { style: { display: "inline", padding: "5px", fontSize: "30px" } },
                     this.props.curr,
                     "/",
                     this.props.max
                 ),
-                React.createElement(
-                    "button",
-                    { onClick: this.props.next },
-                    "Next Page"
-                )
+                React.createElement("img", { style: { display: "inline" }, src: "http://res.cloudinary.com/dfpktpjp8/image/upload/v1522616501/right.png", width: "30px", onClick: this.props.next })
             )
         );
     }
