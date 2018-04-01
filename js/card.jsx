@@ -298,7 +298,7 @@ function PostReply(props) {
                 <div style={{borderLeft:"2px  solid #93969b", paddingLeft:"3px"}}>
                     {props.content.content}
                 </div>
-                <div style={{color:"#93969b", display:"inline", paddingLeft:"60px"}}>
+                <div style={{color:"#93969b", display:"inline", paddingLeft:"100px"}}>
                     <i>-----{props.content.username}</i>
                 </div> 
             </div>

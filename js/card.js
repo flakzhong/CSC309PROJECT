@@ -416,7 +416,7 @@ function PostReply(props) {
             ),
             React.createElement(
                 "div",
-                { style: { color: "#93969b", display: "inline", paddingLeft: "60px" } },
+                { style: { color: "#93969b", display: "inline", paddingLeft: "100px" } },
                 React.createElement(
                     "i",
                     null,
