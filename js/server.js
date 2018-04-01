@@ -99,7 +99,7 @@ app.get('/api/page', function(req, res) {
           "reply": childSnapshot.val().reply,
           "currentTime" : childSnapshot.val().currentTime
         };
-        result.unshift(post);
+        console.log("posts send back", result);
       });
       try {
         res.send({"posts": result});
@@ -123,7 +123,7 @@ app.get('/api/page', function(req, res) {
           result.unshift(post);
         }
       });
-      console.log(result);
+      console.log("posts send back", result);
       try {
         res.send({"posts": result});
       } catch(err) {
@@ -146,7 +146,7 @@ app.get('/api/page', function(req, res) {
           result.unshift(post);
         }
       });
-      console.log(result);
+      console.log("posts send back", result);
       try {
         res.send({"posts": result});
       } catch(err) {
@@ -170,7 +170,7 @@ app.get('/api/page', function(req, res) {
           result.unshift(post);
         }
       });
-      console.log(result);
+      console.log("posts send back", result);
       try {
         res.send({"posts": result});
       } catch(err) {
@@ -334,7 +334,6 @@ app.delete('/api/accounts', function(req, res) {
   ref.child('accounts').orderByChild('username').equalTo(username).once('value', function(snapshot) {
     if (snapshot.child(username + '/' + 'password').val() == pw) {
       snapshot.forEach(function (childSnapshot) {
-        console.log(childSnapshot.val());
         ref.child('accounts/' + childSnapshot.key).remove();
       })
       res.send({'success':"success"});
