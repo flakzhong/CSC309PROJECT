@@ -264,9 +264,9 @@ app.post('/api/reply', function(req, res) {
     var temp = snapshot.val();
     if (temp == null) {
       temp = [];
-      temp.push({"username":username, "content":content});
+      temp.push({"username":username, "content":content, "date":Date()});
     } else {
-      temp.unshift({"username":username, "content":content});
+      temp.unshift({"username":username, "content":content, "date":Date()});
     }
     snapshot.ref.update(temp);
     res.send({'success':"success"});
