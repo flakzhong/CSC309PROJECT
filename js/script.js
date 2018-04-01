@@ -355,6 +355,7 @@ function deleteProfile() {
         success: function(response) {
             if (response["success"] == "success") {
                 alert("Profile deleted");
+                window.close();
             } else {
                 alert("Failed to delete profile. Please make sure that you type the correct old password.")
             }
