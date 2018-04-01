@@ -1,26 +1,3 @@
-class Webbody extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            login: false,
-            username: "",
-            currpage: "forum"
-        };
-        this.updateSession = this.updateSession.bind(this);
-    }
-
-    render() {
-        return React.createElement(LoginBar, { style: { "background-color": "#f1c01c" }, updateSession: this.updateSession, lgin: this.state.login, usrn: this.state.username });
-    }
-
-    updateSession(login, username) {
-        this.setState({ login: login });
-        this.setState({ username: username });
-    }
-}
-
-
-
 class ForumBody extends React.Component {
     constructor(props) {
         super(props);
@@ -36,7 +13,7 @@ class ForumBody extends React.Component {
     }
 
     updatePosts() {
-        fetch("https://07333461.ngrok.io/api/posts/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter).then(response => {
+        fetch("https://7d46c159.ngrok.io/api/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter).then(response => {
             console.log(response.status, response.statusCode);
             if (response.ok) {
                 return response.json();
@@ -109,6 +86,17 @@ class FirstFilterList extends React.Component {
                     null,
                     React.createElement(
                         "button",
+                        { id: "upperStoriesFilter", onClick: () => {
+                                this.props.updateFilter("Stories");
+                            } },
+                        "Stories"
+                    )
+                ),
+                React.createElement(
+                    "li",
+                    null,
+                    React.createElement(
+                        "button",
                         { id: "upperAdoptionFilter", onClick: () => {
                                 this.props.updateFilter("Adoption");
                             } },
@@ -124,17 +112,6 @@ class FirstFilterList extends React.Component {
                                 this.props.updateFilter("Lost");
                             } },
                         "Lost"
-                    )
-                ),
-                React.createElement(
-                    "li",
-                    null,
-                    React.createElement(
-                        "button",
-                        { id: "upperOthersFilter", onClick: () => {
-                                this.props.updateFilter("Others");
-                            } },
-                        "Others"
                     )
                 )
             )
@@ -314,51 +291,55 @@ class PostEditor extends React.Component {
     }
 
     render() {
-        return React.createElement(
-            "div",
-            { className: "postEditor block", id: "postEditor" },
-            React.createElement(
-                "h1",
-                null,
-                "Title:"
-            ),
-            React.createElement(
-                "section",
-                { className: "makePosts" },
+        if (currentUser == "") {
+            return null;
+        } else {
+            return React.createElement(
+                "div",
+                { className: "postEditor block", id: "postEditor" },
+                React.createElement(
+                    "h1",
+                    null,
+                    "Title:"
+                ),
+                React.createElement(
+                    "section",
+                    { className: "makePosts" },
+                    React.createElement(
+                        "div",
+                        { className: "stretch" },
+                        React.createElement("input", { type: "text", id: "postTitle" })
+                    )
+                ),
+                React.createElement(
+                    "h1",
+                    null,
+                    "Content: "
+                ),
+                React.createElement(
+                    "section",
+                    { className: "makePosts" },
+                    React.createElement("textarea", { className: "stretch", rows: "20", id: "postContent" })
+                ),
                 React.createElement(
                     "div",
-                    { className: "stretch" },
-                    React.createElement("input", { type: "text", id: "postTitle" })
+                    null,
+                    React.createElement(
+                        "label",
+                        { htmlFor: "postImgUpload", style: { float: "left" } },
+                        "Insert IMG"
+                    ),
+                    React.createElement("input", { type: "file", id: "postImgUpload", style: { float: "left" }, accept: ".jpg, .jpeg, .png", multiple: true }),
+                    React.createElement(
+                        "button",
+                        { id: "post", style: { float: "right" }, onClick: () => {
+                                this.makePost(this.props.filter1, this.props.filter2);
+                            } },
+                        "Post"
+                    )
                 )
-            ),
-            React.createElement(
-                "h1",
-                null,
-                "Content: "
-            ),
-            React.createElement(
-                "section",
-                { className: "makePosts" },
-                React.createElement("textarea", { className: "stretch", rows: "20", id: "postContent" })
-            ),
-            React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    "label",
-                    { htmlFor: "postImgUpload", style: { float: "left" } },
-                    "Insert IMG"
-                ),
-                React.createElement("input", { type: "file", id: "postImgUpload", style: { float: "left" }, accept: ".jpg, .jpeg, .png", multiple: true }),
-                React.createElement(
-                    "button",
-                    { id: "post", style: { float: "right" }, onClick: () => {
-                            this.makePost(this.props.filter1, this.props.filter2);
-                        } },
-                    "Post"
-                )
-            )
-        );
+            );
+        }
     }
 
     makePost(filter1, filter2) {

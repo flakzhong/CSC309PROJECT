@@ -1,30 +1,3 @@
-class Webbody extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            login:false,
-            username:"",
-            currpage:"forum"
-        }
-        this.updateSession = this.updateSession.bind(this)
-    }
-    
-    render() {
-        return(
-            <LoginBar style={{"background-color": "#f1c01c"}} updateSession={this.updateSession} lgin={this.state.login} usrn={this.state.username}/>
-        )
-    }
-
-    updateSession(login, username) {
-        this.setState({login: login})
-        this.setState({username: username})
-    }
-}
-
-
-
-
-
 class ForumBody extends React.Component {
     constructor(props) {
         super(props);
@@ -96,9 +69,9 @@ class FirstFilterList extends React.Component {
             <div className="block">
                 <ul>
                     <li><button id="upperAllFilter" className=" active" onClick={() => {this.props.updateFilter("All")}}>All</button></li>
+                    <li><button id="upperStoriesFilter" onClick={() => {this.props.updateFilter("Stories")}}>Stories</button></li>
                     <li><button id="upperAdoptionFilter" onClick={() => {this.props.updateFilter("Adoption")}}>Adoption</button></li>
                     <li><button id="upperLostFilter" onClick={() => {this.props.updateFilter("Lost")}}>Lost</button></li>
-                    <li><button id="upperOthersFilter" onClick={() => {this.props.updateFilter("Others")}}>Others</button></li>
                 </ul>
             </div>
 		)
@@ -216,25 +189,29 @@ class PostEditor extends React.Component {
     }
 
     render() {
-        return (
-            <div className="postEditor block" id="postEditor">
-                <h1>Title:</h1>
-                <section className="makePosts">
-                    <div className="stretch">
-                        <input type="text" id="postTitle"/>
+        if (currentUser == "") {
+            return null
+        } else {
+            return (
+                <div className="postEditor block" id="postEditor">
+                    <h1>Title:</h1>
+                    <section className="makePosts">
+                        <div className="stretch">
+                            <input type="text" id="postTitle"/>
+                        </div>
+                    </section>
+                    <h1>Content: </h1>
+                    <section className="makePosts">
+                        <textarea className="stretch" rows="20" id="postContent"></textarea>						
+                    </section>
+                    <div>
+                        <label htmlFor="postImgUpload" style={{float:"left"}}>Insert IMG</label>
+                        <input type="file" id="postImgUpload" style={{float:"left"}} accept=".jpg, .jpeg, .png" multiple/>
+                        <button id="post" style={{float:"right"}} onClick={() => {this.makePost(this.props.filter1, this.props.filter2)}}>Post</button>
                     </div>
-                </section>
-                <h1>Content: </h1>
-                <section className="makePosts">
-                    <textarea className="stretch" rows="20" id="postContent"></textarea>						
-                </section>
-                <div>
-                    <label htmlFor="postImgUpload" style={{float:"left"}}>Insert IMG</label>
-                    <input type="file" id="postImgUpload" style={{float:"left"}} accept=".jpg, .jpeg, .png" multiple/>
-                    <button id="post" style={{float:"right"}} onClick={() => {this.makePost(this.props.filter1, this.props.filter2)}}>Post</button>
                 </div>
-            </div>
-        )
+            )
+        }
     }
 
     makePost(filter1, filter2) {
