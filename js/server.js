@@ -18,10 +18,6 @@ firebase.initializeApp(config);
 //create references
 const dbRefObject = firebase.database().ref().child('accounts');
 
-//sync object changes
-//console.log("abc");
-// dbRefObject.on('value', snap => console.log(snap.val()));
-// ======================  ======================
 
 var express = require('express');
 var bodyParser = require('body-parser')
@@ -99,10 +95,12 @@ app.get('/api/page', function(req, res) {
           "reply": childSnapshot.val().reply,
           "currentTime" : childSnapshot.val().currentTime
         };
-        console.log("posts send back", result);
+        result.unshift(post);
       });
       try {
         res.send({"posts": result});
+        console.log("sended");
+        console.log(result);
       } catch(err) {
         
       }
@@ -123,9 +121,10 @@ app.get('/api/page', function(req, res) {
           result.unshift(post);
         }
       });
-      console.log("posts send back", result);
       try {
         res.send({"posts": result});
+        console.log("sended");
+        console.log(result);
       } catch(err) {
         
       }
@@ -144,11 +143,14 @@ app.get('/api/page', function(req, res) {
             "currentTime" : childSnapshot.val().currentTime
           };
           result.unshift(post);
+          console.log("sended");
+          console.log(result);
         }
       });
-      console.log("posts send back", result);
       try {
         res.send({"posts": result});
+        console.log("sended");
+        console.log(result);
       } catch(err) {
 
       }
@@ -170,9 +172,10 @@ app.get('/api/page', function(req, res) {
           result.unshift(post);
         }
       });
-      console.log("posts send back", result);
       try {
         res.send({"posts": result});
+        console.log("sended");
+        console.log(result);
       } catch(err) {
 
       }
