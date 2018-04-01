@@ -1,4 +1,4 @@
-URL = "https://cscdefault01.ngrok.io";
+URL = "https://52c637e2.ngrok.io";
 
 var dateparser = function (date) {
     date = date.split(" ");
@@ -19,7 +19,6 @@ class ForumBody extends React.Component {
     }
 
     updatePosts(filter1, filter2) {
-        console.log("trying to update" + filter1 + filter2);
         var ajaxURL = URL + "/api/page" + "?first=" + filter1 + "&second=" + filter2;
         fetch(ajaxURL).then(response => {
             if (response.ok) {
@@ -266,13 +265,30 @@ class Post extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            folded: true
+            folded: true,
+            replies: []
         };
         this.flipPostState = this.flipPostState.bind(this);
+        this.updateReplies = this.updateReplies.bind(this);
+    }
+
+    componentWillMount() {
+        this.updateReplies();
     }
 
     flipPostState(e) {
         this.setState({ folded: !this.state.folded });
+    }
+
+    updateReplies() {
+        var ajaxURL = URL + "/api/reply?postId=" + this.props.post.postId;
+        fetch(ajaxURL).then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+        }).then(json => {
+            this.setState({ replies: json.reply });
+        });
     }
 
     render() {
@@ -335,9 +351,9 @@ class Post extends React.Component {
                     )
                 ),
                 React.createElement("br", null),
-                React.createElement(PostReplies, { replies: this.props.post.reply }),
+                React.createElement(PostReplies, { replies: this.state.replies }),
                 React.createElement("br", null),
-                React.createElement(Reply, { postId: this.props.post.postId }),
+                React.createElement(Reply, { postId: this.props.post.postId, forceupdater: this.updateReplies }),
                 React.createElement("br", null),
                 React.createElement("img", { onClick: this.flipPostState, src: "https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/up.png", width: "20px" }),
                 React.createElement("hr", null)
@@ -387,6 +403,8 @@ class Reply extends React.Component {
         var content = document.getElementById("postReply" + this.props.postId).value;
         var correct = 1;
         var id = this.props.postId;
+        var pRId = "#postReply" + this.props.postId;
+        var updater = this.props.forceupdater;
         if (content.length < 5) {
             correct = 0;
             alert("Reply too short");
@@ -403,6 +421,8 @@ class Reply extends React.Component {
                     success: function (response) {
                         if (response["success"] == "success") {
                             alert("Replied");
+                            $(pRId).val("");
+                            updater();
                         } else {
                             alert("Failed to reply. Please try again");
                         }

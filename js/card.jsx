@@ -20,7 +20,6 @@ class ForumBody extends React.Component {
 
 
     updatePosts(filter1, filter2) {
-        console.log("trying to update" + filter1 + filter2)
         var ajaxURL = URL + "/api/page" + "?first=" + filter1 + "&second=" + filter2;
         fetch(ajaxURL).then(response => {
             if(response.ok) {
@@ -185,13 +184,30 @@ class Post extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            folded:true
+            folded:true,
+            replies:[]
         }
         this.flipPostState = this.flipPostState.bind(this)
+        this.updateReplies = this.updateReplies.bind(this)
+    }
+
+    componentWillMount() {
+        this.updateReplies()
     }
 
     flipPostState(e) {
         this.setState({folded:!this.state.folded})
+    }
+
+    updateReplies() {
+        var ajaxURL = URL + "/api/reply?postId=" + this.props.post.postId;
+        fetch(ajaxURL).then(response => {
+            if(response.ok) {
+                return response.json();
+            }
+        }).then(json => {
+            this.setState({replies: json.reply})
+        })
     }
 
 
@@ -226,9 +242,9 @@ class Post extends React.Component {
                         <i>by {this.props.post.username + "   " + dateparser(this.props.post.currentTime)}</i>
                     </div>
                     <br/>
-                    <PostReplies replies={this.props.post.reply}/>
+                    <PostReplies replies={this.state.replies}/>
                     <br/>
-                    <Reply postId={this.props.post.postId}/>
+                    <Reply postId={this.props.post.postId} forceupdater={this.updateReplies}/>
                     <br/>
                     <img onClick={this.flipPostState} src="https://res.cloudinary.com/dfpktpjp8/image/upload/v1522608454/up.png" width="20px"/>
                     <hr/>
@@ -277,6 +293,8 @@ class Reply extends React.Component {
         var content = document.getElementById("postReply" + this.props.postId).value
         var correct = 1;
         var id = this.props.postId
+        var pRId = "#postReply" + this.props.postId;
+        var updater = this.props.forceupdater
         if (content.length < 5) {
             correct = 0;
             alert("Reply too short");
@@ -293,6 +311,8 @@ class Reply extends React.Component {
                 success: function(response) {
                     if (response["success"] == "success") {
                         alert("Replied");
+                        $(pRId).val("");
+                        updater()
                     } else {
                         alert("Failed to reply. Please try again")
                     }
@@ -490,3 +510,4 @@ class PostEditor extends React.Component {
 
 
 ReactDOM.render(<ForumBody />, document.getElementById("forum"));
+
