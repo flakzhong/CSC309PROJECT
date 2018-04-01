@@ -324,11 +324,15 @@ class PostReplies extends React.Component {
         super(props);
     }
     render() {
-        return React.createElement(
-            "ul",
-            null,
-            this.props.replies.map(reply => React.createElement(PostReply, { content: reply }))
-        );
+        if (this.props.replies == null) {
+            return null;
+        } else {
+            return React.createElement(
+                "ul",
+                null,
+                this.props.replies.map(reply => React.createElement(PostReply, { content: reply }))
+            );
+        }
     }
 }
 

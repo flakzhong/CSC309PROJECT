@@ -226,13 +226,17 @@ class PostReplies extends React.Component {
         super(props)
     }
     render() {
-        return (
-            <ul>
-                {this.props.replies.map(reply => (
-                    <PostReply content={reply}/>
-                ))}
-            </ul>
-        )
+        if (this.props.replies == null) {
+            return null
+        } else {
+            return (
+                <ul>
+                    {this.props.replies.map(reply => (
+                        <PostReply content={reply}/>
+                    ))}
+                </ul>
+            )
+        }
     }
 }
 
