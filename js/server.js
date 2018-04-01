@@ -96,6 +96,7 @@ app.get('/api/page', function(req, res) {
           "title" : childSnapshot.val().title,
           "content" : childSnapshot.val().content,
           "images" : childSnapshot.val().images,
+          "reply": childSnapshot.val().reply,
           "currentTime" : childSnapshot.val().currentTime
         };
         result.push(post);
@@ -116,6 +117,7 @@ app.get('/api/page', function(req, res) {
             "title" : childSnapshot.val().title,
             "content" : childSnapshot.val().content,
             "images" : childSnapshot.val().images,
+            "reply": childSnapshot.val().reply,
             "currentTime" : childSnapshot.val().currentTime
           };
           result.push(post);
@@ -138,6 +140,7 @@ app.get('/api/page', function(req, res) {
             "title" : childSnapshot.val().title,
             "content" : childSnapshot.val().content,
             "images" : childSnapshot.val().images,
+            "reply": childSnapshot.val().reply,
             "currentTime" : childSnapshot.val().currentTime
           };
           result.push(post);
@@ -161,6 +164,7 @@ app.get('/api/page', function(req, res) {
             "title" : childSnapshot.val().title,
             "content" : childSnapshot.val().content,
             "images" : childSnapshot.val().images,
+            "reply": childSnapshot.val().reply,
             "currentTime" : childSnapshot.val().currentTime
           };
           result.push(post);
