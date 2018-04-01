@@ -87,7 +87,7 @@ app.get('/api/page', function(req, res) {
     f2 = f1.on('value', function(snapshot) {
       snapshot.forEach(function(childSnapshot) {
         var post = {
-          "posdId": childSnapshot.key,
+          "postId": childSnapshot.key,
           "username" : childSnapshot.val().username,
           "title" : childSnapshot.val().title,
           "content" : childSnapshot.val().content,
@@ -231,6 +231,8 @@ function writeNewPost(title, username, content, images, filter1, filter2) {
     username: username,
     content: content,
     images: images,
+    // place holder
+    reply: [{"username":"", "postId":"", "content":""}],
     filter1: filter1,
     filter2: filter2,
     currentTime: Date()
