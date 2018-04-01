@@ -91,6 +91,7 @@ app.get('/api/page', function(req, res) {
     f2 = f1.on('value', function(snapshot) {
       snapshot.forEach(function(childSnapshot) {
         var post = {
+          "posdId": childSnapshot.key,
           "username" : childSnapshot.val().username,
           "title" : childSnapshot.val().title,
           "content" : childSnapshot.val().content,
@@ -99,7 +100,6 @@ app.get('/api/page', function(req, res) {
         };
         result.push(post);
       });
-      console.log(result);
       try {
         res.send({"posts": result});
       } catch(err) {
@@ -111,8 +111,11 @@ app.get('/api/page', function(req, res) {
       snapshot.forEach(function(childSnapshot) {
         if (childSnapshot.val().filter1 == filter1) {
           var post = {
+            "posdId": childSnapshot.key,
             "username" : childSnapshot.val().username,
             "title" : childSnapshot.val().title,
+            "content" : childSnapshot.val().content,
+            "images" : childSnapshot.val().images,
             "currentTime" : childSnapshot.val().currentTime
           };
           result.push(post);
@@ -130,8 +133,11 @@ app.get('/api/page', function(req, res) {
       snapshot.forEach(function(childSnapshot) {
         if (childSnapshot.val().filter2 == filter2) {
           var post = {
+            "posdId": childSnapshot.key,
             "username" : childSnapshot.val().username,
             "title" : childSnapshot.val().title,
+            "content" : childSnapshot.val().content,
+            "images" : childSnapshot.val().images,
             "currentTime" : childSnapshot.val().currentTime
           };
           result.push(post);
@@ -150,8 +156,11 @@ app.get('/api/page', function(req, res) {
       snapshot.forEach(function(childSnapshot) {
         if (childSnapshot.val().filter2 == filter2 && childSnapshot.val().filter1 == filter1) {
           var post = {
+            "posdId": childSnapshot.key,
             "username" : childSnapshot.val().username,
             "title" : childSnapshot.val().title,
+            "content" : childSnapshot.val().content,
+            "images" : childSnapshot.val().images,
             "currentTime" : childSnapshot.val().currentTime
           };
           result.push(post);
