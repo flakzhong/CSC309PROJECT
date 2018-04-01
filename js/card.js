@@ -256,14 +256,88 @@ class PostPage extends React.Component {
     }
 }
 
-function Post(props) {
+class Post extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            folded: true
+        };
+        this.flipPostState = this.flipPostState.bind(this);
+    }
+
+    flipPostState(e) {
+        this.setState({ folded: !this.state.folded });
+    }
+
+    render() {
+        if (this.state.folded) {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "h3",
+                    null,
+                    this.props.post.title
+                ),
+                React.createElement("br", null),
+                this.props.post.username,
+                React.createElement(
+                    "button",
+                    { onClick: this.flipPostState },
+                    "Unfold"
+                ),
+                React.createElement("hr", null)
+            );
+        } else {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "h3",
+                    null,
+                    this.props.post.title
+                ),
+                " ",
+                this.props.post.username,
+                React.createElement("br", null),
+                this.props.post.content,
+                React.createElement("br", null),
+                React.createElement(PostImageViewer, { images: this.props.post.images }),
+                React.createElement(
+                    "button",
+                    { onClick: this.flipPostState },
+                    "Fold"
+                ),
+                React.createElement("hr", null)
+            );
+        }
+    }
+}
+
+class PostImageViewer extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        console.log(this.props.images == "");
+        console.log(this.props.images);
+        if (this.props.images != "") {
+            return React.createElement(
+                "ul",
+                null,
+                this.props.images.map(item => React.createElement(SingleImage, { url: item }))
+            );
+        } else {
+            return null;
+        }
+    }
+}
+
+function SingleImage(props) {
     return React.createElement(
-        "div",
+        "li",
         null,
-        props.post.title,
-        "  ",
-        props.post.username,
-        React.createElement("hr", null)
+        React.createElement("img", { src: props.url, width: "300px" })
     );
 }
 

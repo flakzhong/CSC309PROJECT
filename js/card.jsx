@@ -175,20 +175,80 @@ class PostPage extends React.Component {
     }
 }
 
-function Post(props) {
-    return (
-        <div>
-            {props.post.title}  {props.post.username}
-            <hr/>
-        </div>
+class Post extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            folded:true
+        }
+        this.flipPostState = this.flipPostState.bind(this)
+    }
 
+    flipPostState(e) {
+        this.setState({folded:!this.state.folded})
+    }
+
+
+    render() {
+        if (this.state.folded) {
+            return (
+                <div>
+                    <h3>{this.props.post.title}</h3>
+                    <br/> 
+                    {this.props.post.username}
+                    <button onClick={this.flipPostState}>Unfold</button>
+                    <hr/>
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    <h3>{this.props.post.title}</h3> {this.props.post.username}
+                    <br/> 
+                    {this.props.post.content}
+                    <br/>
+                    <PostImageViewer images={this.props.post.images}/>
+                    <button onClick={this.flipPostState}>Fold</button>
+                    <hr/>
+                </div>
+            )
+        }
+    }
+}
+
+class PostImageViewer extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        console.log(this.props.images == "");
+        console.log(this.props.images)
+        if (this.props.images != "") {
+            return (
+                <ul>
+                    {this.props.images.map(item => (
+                        <SingleImage url={item}></SingleImage>
+                    ))}
+                </ul>
+            )
+        } else {
+            return null
+        }        
+    }
+}
+
+function SingleImage(props) {
+    return (
+        <li>
+            <img src={props.url} width="300px" />
+        </li>
     )
 }
+
 
 class PageSelector extends React.Component {
     constructor(props) {
         super(props);
-
     }
 
     render() {
