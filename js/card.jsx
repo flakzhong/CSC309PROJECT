@@ -1,3 +1,5 @@
+URL = "https://7d46c159.ngrok.io"
+
 class ForumBody extends React.Component {
     constructor(props) {
         super(props);
@@ -13,7 +15,7 @@ class ForumBody extends React.Component {
     }
 
     updatePosts() {
-        fetch("https://7d46c159.ngrok.io/api/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter)
+        fetch(URL + "/api/page" + "?first=" + this.state.firstfilter + "&second=" + this.state.secondfilter)
         .then(response => {
             console.log(response.status, response.statusCode)
             if (response.ok) {
@@ -29,12 +31,16 @@ class ForumBody extends React.Component {
         .catch(error => console.log(error))
     }
 
+    componentWillMount() {
+        this.updatePosts()
+    }
+
     render() {
-	this.updatePosts();
         return (
             <div className="block">
                 <div className="forumtab">
                     <FirstFilterList updateFilter={this.updateFirstFilter}/>
+                    <hr/>
                     <SecondFilterList updateFilter={this.updateSecondFilter}/>
                 </div>
                 <PostList posts={this.state.posts} postsperpage={this.state.postsperpage}/>
@@ -49,6 +55,7 @@ class ForumBody extends React.Component {
         var targetfilter = document.getElementById("upper" + choice + "Filter")
         targetfilter.className += " active"
         this.setState({firstfilter: choice})
+        this.updatePosts()
     }
 
     updateSecondFilter(choice) {
@@ -57,6 +64,7 @@ class ForumBody extends React.Component {
         var targetfilter = document.getElementById("lower" + choice + "Filter")
         targetfilter.className += " active"
         this.setState({secondfilter: choice})
+        this.updatePosts()
     }
 }
 
