@@ -187,7 +187,8 @@ class Post extends React.Component {
         this.state = {
             folded:true,
             replies:[],
-            photo:""
+            photo:"",
+            id:""
         }
         this.flipPostState = this.flipPostState.bind(this)
         this.updateReplies = this.updateReplies.bind(this)
@@ -196,6 +197,13 @@ class Post extends React.Component {
     componentWillMount() {
         this.updateReplies()
         this.getphoto()
+    }
+
+    componentDidUpdate() {
+        if (this.state.id != this.props.post.postId) {
+            console.log("trying to update replies")
+            this.updateReplies()
+        }
     }
 
     getphoto(){
@@ -221,6 +229,7 @@ class Post extends React.Component {
             }
         }).then(json => {
             this.setState({replies: json.reply})
+            this.setState({id:this.props.post.postId})
         })
     }
 
