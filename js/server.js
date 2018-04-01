@@ -99,7 +99,7 @@ app.get('/api/page', function(req, res) {
           "reply": childSnapshot.val().reply,
           "currentTime" : childSnapshot.val().currentTime
         };
-        result.push(post);
+        result.unshift(post);
       });
       try {
         res.send({"posts": result});
@@ -120,7 +120,7 @@ app.get('/api/page', function(req, res) {
             "reply": childSnapshot.val().reply,
             "currentTime" : childSnapshot.val().currentTime
           };
-          result.push(post);
+          result.unshift(post);
         }
       });
       console.log(result);
@@ -143,7 +143,7 @@ app.get('/api/page', function(req, res) {
             "reply": childSnapshot.val().reply,
             "currentTime" : childSnapshot.val().currentTime
           };
-          result.push(post);
+          result.unshift(post);
         }
       });
       console.log(result);
@@ -167,7 +167,7 @@ app.get('/api/page', function(req, res) {
             "reply": childSnapshot.val().reply,
             "currentTime" : childSnapshot.val().currentTime
           };
-          result.push(post);
+          result.unshift(post);
         }
       });
       console.log(result);
