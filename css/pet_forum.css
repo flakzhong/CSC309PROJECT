@@ -6,7 +6,7 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #adadade3;
+    background-color: #10a359;
     height: 52px;
 }
 
@@ -34,13 +34,13 @@ a {
 }
 
 a:hover {
-    background-color: #f1c01c;
+    background-color: #21b46f;
 }
 
 .tab {
     overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #adadade3;
+    border: 1px solid #aaaaaa;
+    background-color: #aaaaaa;
     height: 50px;
 }
 
@@ -75,14 +75,14 @@ a:hover {
 
 .tabcontent {
     padding: 6px 12px;
-    border: 1px solid #adadade3;
+    border: 1px solid #39a389;
     border-top: none;
 }
 
 .forumtab {
     overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #adadade3;
+    border: 1px solid rgb(156, 156, 156);
+    background-color: #d4d4d4;
 }
 
 .forumtab button {
@@ -97,18 +97,18 @@ a:hover {
 }
 
 .forumtab button:hover {
-    background-color: #ddd;
+    background-color: rgb(182, 182, 182);
 }
 
 .forumtab button.active {
-    background-color: #ccc;
+    background-color: rgb(158, 158, 158);
     outline: none;
     box-shadow: none;
 }
 
 .forumtabcontent {
     padding: 6px 12px;
-    border: 1px solid #adadade3;
+    border: 1px solid #81818100;
     border-top: none;
 }
 
@@ -118,7 +118,7 @@ a:hover {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #adadade3;
+    background-color: #b9b9b98a;
     height: 52px;
 }
 
@@ -200,7 +200,7 @@ h1 { margin: 2rem 0 0; }
 .makePosts .stretch { flex: 1; }
 .makePosts div input { padding: .5em 1em; width: 100%; }
 
-.submitButton{
+#post{
     background-color: grey; 
     border: none;
     color: white;
@@ -218,7 +218,7 @@ h1 { margin: 2rem 0 0; }
     content:url("https://res.cloudinary.com/dfpktpjp8/image/upload/v1522618749/down-blue.png")
 }
 
-.submitButton:hover {
+#post:hover {
     background-color: #f1c01c;
 }
 
