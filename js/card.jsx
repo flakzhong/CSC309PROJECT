@@ -113,7 +113,7 @@ class PostList extends React.Component {
         this.updatecurrpage = this.updatecurrpage.bind(this)
     }
 
-    componentDidUpdate() {
+    componentWillUpdate() {
         if (this.props.filter1 != this.state.filter1 || this.props.filter2 != this.state.filter2) {
             this.updatecurrpage(1)
             this.setState({pagenum:1})

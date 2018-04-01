@@ -197,7 +197,7 @@ class PostList extends React.Component {
         this.updatecurrpage = this.updatecurrpage.bind(this);
     }
 
-    componentDidUpdate() {
+    componentWillUpdate() {
         if (this.props.filter1 != this.state.filter1 || this.props.filter2 != this.state.filter2) {
             this.updatecurrpage(1);
             this.setState({ pagenum: 1 });
@@ -442,16 +442,16 @@ class PostEditor extends React.Component {
             correct = 0;
             alert("Title too short.");
         }
-    
+
         if (content.length < 5) {
             correct = 0;
-            alert("Content too short.")
+            alert("Content too short.");
         }
         if (correct == 1) {
             var images = document.getElementById("postImgUpload").files;
             if (images.length > 0) {
                 var img_url = [];
-                for(var i = 0; i < images.length; i++) {
+                for (var i = 0; i < images.length; i++) {
                     var formData = new FormData();
                     formData.append('file', images[i]);
                     formData.append('upload_preset', 'tsqi28bt');
@@ -462,41 +462,41 @@ class PostEditor extends React.Component {
                             'Content-Type': 'application/x-www-form-urlencoded'
                         },
                         data: formData
-                    }).then(function(res) {
+                    }).then(function (res) {
                         img_url.push(res['data']['secure_url']);
-                            if (img_url.length == images.length) {
-                                $(function(){
-                                    $.ajax({
-                                        url: URL + "/api/posts",
-                                        type: "POST",
-                                        data: {
-                                            title: title,
-                                            username: currentUser,
-                                            content: content,
-                                            images: img_url,
-                                            filter1: filter1,
-                                            filter2: filter2
-                                        },
-                                        dataType: "json",
-                                        success: function(response) {
-                                            if (response['success'] != 'success') {
-                                                alert("failed to post");
-                                            } else {
-                                                $("#postTitle").val("");
-                                                $("#postContent").val("");
-                                                $("#postImgUpload").val(null);
-                                                alert("posted")
-                                            }       
+                        if (img_url.length == images.length) {
+                            $(function () {
+                                $.ajax({
+                                    url: URL + "/api/posts",
+                                    type: "POST",
+                                    data: {
+                                        title: title,
+                                        username: currentUser,
+                                        content: content,
+                                        images: img_url,
+                                        filter1: filter1,
+                                        filter2: filter2
+                                    },
+                                    dataType: "json",
+                                    success: function (response) {
+                                        if (response['success'] != 'success') {
+                                            alert("failed to post");
+                                        } else {
+                                            $("#postTitle").val("");
+                                            $("#postContent").val("");
+                                            $("#postImgUpload").val(null);
+                                            alert("posted");
                                         }
-                                    });
+                                    }
                                 });
-                            }
-                    }).catch(function(err) {
+                            });
+                        }
+                    }).catch(function (err) {
                         console.log(err);
                     });
                 }
             } else {
-                $(function(){
+                $(function () {
                     $.ajax({
                         url: URL + "/api/posts",
                         type: "POST",
@@ -509,12 +509,12 @@ class PostEditor extends React.Component {
                             filter2: filter2
                         },
                         dataType: "json",
-                        success: function(response) {
+                        success: function (response) {
                             if (response['success'] != 'success') {
-                            alert("failed to post");
+                                alert("failed to post");
                             } else {
-                            alert("posted")
-                            }       
+                                alert("posted");
+                            }
                         }
                     });
                 });
