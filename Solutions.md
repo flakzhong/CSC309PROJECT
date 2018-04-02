@@ -24,7 +24,41 @@ Posts will be displayed page by page, a single page can contain at most five pos
 
 A user can reply to a post in the forum once he/she has logged in.
 
-run
+To use our app, do
+
+1. go into the folder: assignment-3-default
+
+2. do npm install
 ```
+npm install
+```
+
+3. run server:
+
+```
+node js/server.js
+```
+
+4. open another shell, use ngrok (there are the ngrok executables in the ngroks for linux, windows and mac)
+
+if you are a mac user, do
+```
+cd ngroks/mac/
 ./ngrok authtoken 5Z6GXXCaSXU18Q6g2TMSt_6k6NLg5ucMPQL2XZgYsaz
+./ngrok http 3000 --subdomain cscdefault01
 ```
+
+if you are a linux user, do
+```
+cd ngroks/linux/
+./ngrok authtoken 5Z6GXXCaSXU18Q6g2TMSt_6k6NLg5ucMPQL2XZgYsaz
+./ngrok http 3000 --subdomain cscdefault01
+```
+
+if you are a windows user, do
+```
+cd ngroks/windows/
+ngrok authtoken 5Z6GXXCaSXU18Q6g2TMSt_6k6NLg5ucMPQL2XZgYsaz
+ngrok http 3000 --subdomain cscdefault01
+```
+Now you can open https://cscdefault01.ngrok.io
