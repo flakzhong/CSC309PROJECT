@@ -1,3 +1,4 @@
+
 var dateparser = function (date) {
     date = date.split(" ");
     return date[1] + " - " + date[2];
@@ -240,7 +241,7 @@ class PostList extends React.Component {
         var maxpagenum = Math.max(Math.ceil(this.props.postlist.length / this.postEveryPage), 1);
         return React.createElement(
             "div",
-            { className: "block" },
+            { className: "block", style: { textAlign: "center", padding: "5px" } },
             React.createElement(PostPage, { post: this.state.currpageposts }),
             React.createElement(PageSelector, { max: maxpagenum, curr: this.state.pagenum, next: this.nextpage, prev: this.prevpage })
         );
@@ -254,9 +255,13 @@ class PostPage extends React.Component {
 
     render() {
         return React.createElement(
-            "ul",
-            null,
-            this.props.post.map(item => React.createElement(Post, { post: item }))
+            "div",
+            { style: { textAlign: "center", padding: "5px" } },
+            React.createElement(
+                "ul",
+                null,
+                this.props.post.map(item => React.createElement(Post, { post: item }))
+            )
         );
     }
 }
@@ -319,7 +324,7 @@ class Post extends React.Component {
         if (this.state.folded) {
             return React.createElement(
                 "div",
-                { className: "postfolded" },
+                { className: "postfolded", style: { textAlign: "center", padding: "5px" } },
                 React.createElement(
                     "div",
                     { className: "posttitle" },
@@ -345,7 +350,7 @@ class Post extends React.Component {
         } else {
             return React.createElement(
                 "div",
-                { className: "postunfolded" },
+                { className: "postunfolded", style: { textAlign: "center", padding: "5px" } },
                 React.createElement(
                     "div",
                     { className: "posttitle" },

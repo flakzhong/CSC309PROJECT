@@ -157,7 +157,7 @@ class PostList extends React.Component {
     render() {
         var maxpagenum = Math.max(Math.ceil(this.props.postlist.length / this.postEveryPage), 1)
         return (
-            <div className="block">
+            <div className="block" style={{textAlign:"center", padding:"5px"}}>
                 <PostPage post={this.state.currpageposts}/>
                 <PageSelector max={maxpagenum} curr={this.state.pagenum} next={this.nextpage} prev={this.prevpage}/>
             </div>
@@ -172,11 +172,13 @@ class PostPage extends React.Component {
 
     render() {
         return (
-            <ul>
-                {this.props.post.map(item => (
-                    <Post post={item}></Post>
-                ))}
-            </ul>
+            <div style={{textAlign:"center", padding:"5px"}}>
+                <ul>
+                    {this.props.post.map(item => (
+                        <Post post={item}></Post>
+                    ))}
+                </ul>
+            </div>
         )
     }
 }
@@ -239,7 +241,7 @@ class Post extends React.Component {
     render() {
         if (this.state.folded) {
             return (
-                <div className="postfolded">
+                <div className="postfolded" style={{textAlign:"center", padding:"5px"}}>
                     <div className="posttitle">
                         <h3>{this.props.post.title}</h3>
                     </div>
@@ -252,7 +254,7 @@ class Post extends React.Component {
             )
         } else {
             return (
-                <div className="postunfolded">
+                <div className="postunfolded" style={{textAlign:"center", padding:"5px"}}>
                     <div className="posttitle">
                         <h3>{this.props.post.title}</h3>
                     </div>
