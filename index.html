@@ -12,12 +12,12 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="js/script.js"></script>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
 	</head>
-
+	<!-- -->
 	<body background="images/back.png" align="center">
 		<pre id="object"></pre>
 		<div class = "webbody" style="width:80%; background-color:#e0e0e0e1; margin:auto">
+		<!-- This part is for tabs on top of the page -->		
 		<div class="tab" >
 			<ul>
 				<img src="images/logo.png" alt="home" height="50" width="100" align="left">
@@ -28,6 +28,7 @@
 				<li style="float:right"><a id="logoutb" class="navButton" href="#loginbar" style="display:none" onclick="logout(event)">Log out</a></li>
 			</ul>
 		</div>
+		<!-- This part is for login -->
 		<div class="login-check" style="background-color: #adadade3">
 			<div class="loginbar" id="loginbar">
 				User name: <input type="text" id="userid" placeholder="User name">
@@ -36,14 +37,18 @@
 			</div>
 			<div id="hello-info" style="display: none"></div>
 		</div>
+		
+		<!-- Forum -->
 		<div id="forum">
-			<div></div><div></div>
 		</div>
-
+		
+		<!-- About -->
 		<div id="about" class="tabcontent" style="background-color: #e0e0e0e3">
 			<h3>About</h3>
 			<p>CSC309 PROJECT</p>
 		</div>
+		
+		<!-- User Profile -->
 		<div class="userprofile" id="userprofile" style="background-color: #e0e0e0e3">
 				<h1>My Account</h1>
 				<hr>
@@ -91,6 +96,8 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- Forum Register -->
 		<div class="forumRegister" id="forumRegister" style="text-align:center; padding:10px">
 			<div class="col-md-9 personal-info">
 				<div class="alert alert-info alert-dismissable">

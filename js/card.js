@@ -1,4 +1,3 @@
-
 var dateparser = function (date) {
     date = date.split(" ");
     return date[1] + " - " + date[2];

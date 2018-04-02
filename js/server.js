@@ -1,4 +1,3 @@
-
 // Initialize Firebase
 var firebase = require('firebase');
 
@@ -12,12 +11,8 @@ var config = {
 };
 firebase.initializeApp(config);
 
-//get elements
-//const preObject = document.getElementById('object');
-
 //create references
 const dbRefObject = firebase.database().ref().child('accounts');
-
 
 var express = require('express');
 var bodyParser = require('body-parser')
@@ -25,6 +20,11 @@ var path = require('path');
 const cookieParser = require('cookie-parser');
 var app = express();
 
+const PORT = process.env.PORT || 3000;
+
+/*
+	Display each request
+*/
 function myLogger(req, res, next) {
   console.log('------------------------------------');
   // console.log("Raw Cookies: ",req.headers.cookie)
@@ -36,8 +36,6 @@ function myLogger(req, res, next) {
   res.append('Set-Cookie', 'lastPage='+req.url);
   next()
 }
-
-const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -255,6 +253,7 @@ function writeNewPost(title, username, content, images, filter1, filter2) {
 
   return firebase.database().ref().update(updates);
 }
+
 // ====================== handling reply ==========================================
 app.post('/api/reply', function(req, res) {
   var postId = req.body.postId;
@@ -273,6 +272,7 @@ app.post('/api/reply', function(req, res) {
   });
 
 });
+
 // get all replies for a post
 app.get('/api/reply', function(req, res) {
   var postId = req.query.postId;
@@ -343,6 +343,7 @@ app.put('/api/accounts', function(req, res) {
   });
 
 });
+
 app.delete('/api/accounts', function(req, res) {
   // Client deletion
   var username = req.body.username;
@@ -420,7 +421,6 @@ function remove_username_from_sessions(cookie_name) {
   delete sessions[cookie_name];
 }
 
-
 // ====================== handling login ======================
 app.post('/api/login', function(req, res) {
   // get username and password
@@ -476,7 +476,8 @@ app.get('/api/login', function(req, res) {
     });    
   }
 });
-//=== logout ===
+
+//=============================== log out ===============================
 app.post('/api/logout', function(req, res) {
   remove_username_from_sessions(req.signedCookies.name);
   res.send({'success':"failed"});

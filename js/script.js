@@ -1,10 +1,12 @@
 var URL = "https://cscdefault01.ngrok.io"
-
+var currentUser=""
  
  if (window.location.hash == '') { 
      window.location.href = URL + '/#forum'; 
  } 
-
+/*
+	Avoid logging out the user after reloading the page using cookie
+*/
 $(function(){
     $.ajax({
         url: URL + "/api/login",
@@ -14,9 +16,6 @@ $(function(){
             if(response['success'] == 'success') {
                 put_account_info(response.payload);
                 currentUser = response.payload.username
-                //welcome = document.getElementById("hello-info")
-                //welcome.style.display = "block"
-                //welcome.innerHTML = "Welcome, " + response.payload.username;
                 loginbar = document.getElementById("loginbar")
                 loginbar.style.display = "none"
                 account = document.getElementById("myacc")
@@ -31,8 +30,10 @@ $(function(){
     });
 });
 
-var currentUser=""
 
+/*
+	Login
+*/
 function login(evt) {
     username = document.getElementById("userid").value;
     password = document.getElementById("userpass").value;
@@ -55,14 +56,11 @@ function login(evt) {
                     console.log("success")
                     put_account_info(response.payload);
                     currentUser = username
-                    //welcome = document.getElementById("hello-info")
-                    //welcome.style.display = "block"
-                    //welcome.innerHTML = "Welcome, " + username;
                     loginbar = document.getElementById("loginbar")
                     loginbar.style.display = "none"
                     account = document.getElementById("myacc")
                     account.innerHTML = "My Account"
-                    account.href="#userprofile"
+                    account.href="#userprofile"              
                     // hide register button
                     document.getElementById("registerButton").style.display = "none";              
                     //show log out button
@@ -73,7 +71,9 @@ function login(evt) {
         });
     });
 }
-//===logout===
+/*
+	Logout
+*/
 function logout(evt) {
     $(function(){
         $.ajax({
@@ -89,7 +89,9 @@ function logout(evt) {
 }
 
 
-
+/*
+	Helper function to load current user setting
+*/
 function put_account_info(user_info) {
     $('#editFName').val(user_info.firstName);
     $('#editLName').val(user_info.lastName);
@@ -99,13 +101,10 @@ function put_account_info(user_info) {
     $('#myaccUsername').text("Username: "+user_info.username);
 }
 
-// global variable to save the navigation bars' status for forum.
-var allUpper = ["upperAll", "Adoption", "Lost", "upperOthers"];
-var allLower = ["lowerAll", "Dog", "Cat", "lowerOthers"];
-var currUpper = "upperAll";
-var currLower = "lowerAll";
 
-
+/*
+	Register an account
+*/
 function register() {
     var firstName = document.getElementById("rFirstName").value;
     var lastName = document.getElementById("rLastName").value;
@@ -178,92 +177,9 @@ function register() {
     }
 }
 
-
-function makePost() {
-    var submitButton = document.getElementById('post');
-    var title = document.getElementById("postTitle").value;
-    var content = document.getElementById("postContent").value;
-    if (title.length < 5) {
-        alert("Title too short.");
-    }
-
-    if (content.length < 5) {
-        alert("Content too short.")
-    }
-    var images = document.getElementById("postImgUpload").files;
-    if (images.length > 0) {
-        var img_url = [];
-        for(var i = 0; i < images.length; i++) {
-            var formData = new FormData();
-            formData.append('file', images[i]);
-            formData.append('upload_preset', 'tsqi28bt');
-            axios({
-                url: "https://api.cloudinary.com/v1_1/dfpktpjp8/image/upload",
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                data: formData
-            }).then(function(res) {
-                img_url.push(res['data']['secure_url']);
-                    if (img_url.length == images.length) {
-                        $(function(){
-                            $.ajax({
-                                url: URL + "/api/posts",
-                                type: "POST",
-                                data: {
-                                    title: title,
-                                    username: currentUser,
-                                    content: content,
-                                    images: img_url,
-                                    filter1: "filter1",
-                                    filter2: "filter2"
-                                },
-                                dataType: "json",
-                                success: function(response) {
-                                    if (response['success'] != 'success') {
-                                        alert("failed to post");
-                                    } else {
-                                        $("#postTitle").val("");
-                                        $("#postContent").val("");
-                                        $("#postImgUpload").val(null);
-                                        alert("posted")
-                                    }       
-                                }
-                            });
-                        });
-                    }
-            }).catch(function(err) {
-                console.log(err);
-            });
-        }
-    } else {
-        $(function(){
-            $.ajax({
-                url: URL + "/api/posts",
-                type: "POST",
-                data: {
-                    title: title,
-                    username: currentUser,
-                    content: content,
-                    images: null,
-                    filter1: "filter1",
-                    filter2: "filter2"
-                },
-                dataType: "json",
-                success: function(response) {
-                    if (response['success'] != 'success') {
-                    alert("failed to post");
-                    } else {
-                    alert("posted")
-                    }       
-                }
-            });
-        });
-    }
-
-}
-
+/*
+	Edit user profile
+*/
 function editProfile() {
     var firstName = document.getElementById("editFName").value;
     var lastName = document.getElementById("editLName").value;
@@ -355,7 +271,9 @@ function editProfile() {
         })
     }
 }
-
+/*
+	Delete account
+*/
 function deleteProfile() {
     var oPw = document.getElementById("Opassword").value;
     $(function(){
