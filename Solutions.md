@@ -28,7 +28,7 @@ To use our app, do
 
 1. go into the folder: assignment-3-default
 
-2. do npm install
+2. do npm install (this may take 5 minutes or longer)
 ```
 npm install
 ```
