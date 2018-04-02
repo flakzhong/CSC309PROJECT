@@ -1,7 +1,7 @@
 # assignment-3-default
 
 
-Members:
+### Members:
 
 Shuhao Li: 1002920501
 
@@ -12,4 +12,4 @@ Keyan Wang: 1000652992
 Xuhong Zhong:1002924188
 
 
-please see solution.md for details
+### please see solution.md for details
