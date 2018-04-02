@@ -386,7 +386,11 @@ class Post extends React.Component {
                     )
                 ),
                 React.createElement("br", null),
-                React.createElement(PostReplies, { replies: this.state.replies }),
+                React.createElement(
+                    "div",
+                    { style: { padding: "0px 30px" } },
+                    React.createElement(PostReplies, { replies: this.state.replies })
+                ),
                 React.createElement("br", null),
                 React.createElement(Reply, { postId: this.props.post.postId, forceupdater: this.updateReplies }),
                 React.createElement("br", null),
@@ -406,9 +410,13 @@ class PostReplies extends React.Component {
             return null;
         } else {
             return React.createElement(
-                "ul",
-                null,
-                this.props.replies.map(reply => React.createElement(PostReply, { content: reply }))
+                "div",
+                { style: { borderTop: "2px  solid #93969b", padding: "10px" } },
+                React.createElement(
+                    "ul",
+                    null,
+                    this.props.replies.map(reply => React.createElement(PostReply, { content: reply }))
+                )
             );
         }
     }

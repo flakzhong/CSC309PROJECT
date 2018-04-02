@@ -272,7 +272,9 @@ class Post extends React.Component {
                         <i>on {dateparser(this.props.post.currentTime)}</i>
                     </div>
                     <br/>
-                    <PostReplies replies={this.state.replies}/>
+                    <div style={{padding:"0px 30px"}}>
+                        <PostReplies replies={this.state.replies}/>
+                    </div>
                     <br/>
                     <Reply postId={this.props.post.postId} forceupdater={this.updateReplies}/>
                     <br/>
@@ -293,11 +295,13 @@ class PostReplies extends React.Component {
             return null
         } else {
             return (
-                <ul>
-                    {this.props.replies.map(reply => (
-                        <PostReply content={reply}/>
-                    ))}
-                </ul>
+                <div style={{borderTop:"2px  solid #93969b", padding:"10px"}}>
+                    <ul>
+                        {this.props.replies.map(reply => (
+                            <PostReply content={reply}/>
+                        ))}
+                    </ul>
+                </div>
             )
         }
     }
