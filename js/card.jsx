@@ -465,13 +465,13 @@ class PostEditor extends React.Component {
     render() {
         if (currentUser == "" || this.props.filter1 == "All" || this.props.filter2 == "All") {
             return (
-                <div>
+                <div style={{textAlign:"center", padding:"5px"}>
                     <h4>You can only upload posts when you are logged in and neither filter is All</h4>
                 </div>
             )
         } else {
             return (
-                <div className="postEditor block" id="postEditor" style={{padding:"10px"}}>
+                <div className="postEditor block" id="postEditor" style={{textAlign:"center", padding:"10px"}}>
                     <h1>Title:</h1>
                     <section className="makePosts">
                         <div className="stretch">
