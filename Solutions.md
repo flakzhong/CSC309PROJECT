@@ -23,3 +23,6 @@ Post can also be unfolded by clicking the unfold button.
 Posts will be displayed page by page, a single page can contain at most five posts.
 
 A user can reply to a post in the forum once he/she has logged in.
+
+run 
+./ngrok authtoken 5Z6GXXCaSXU18Q6g2TMSt_6k6NLg5ucMPQL2XZgYsaz
