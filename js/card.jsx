@@ -465,7 +465,7 @@ class PostEditor extends React.Component {
     render() {
         if (currentUser == "" || this.props.filter1 == "All" || this.props.filter2 == "All") {
             return (
-                <div style={{textAlign:"center", padding:"5px"}>
+                <div style={{textAlign:"center", padding:"5px"}}>
                     <h4>You can only upload posts when you are logged in and neither filter is All</h4>
                 </div>
             )
