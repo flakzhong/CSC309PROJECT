@@ -11,7 +11,8 @@ class ForumBody extends React.Component {
         this.state = {
             firstfilter: "All",
             secondfilter: "All",
-            posts: []
+            posts: [],
+            updated: false
         };
         this.updatePosts = this.updatePosts.bind(this);
         this.updateFirstFilter = this.updateFirstFilter.bind(this);
@@ -26,6 +27,8 @@ class ForumBody extends React.Component {
             }
         }).then(json => {
             this.setState({ posts: json.posts });
+            this.setState({ updated: true });
+            this.setState({ updated: false });
         });
     }
 
@@ -44,9 +47,9 @@ class ForumBody extends React.Component {
                 React.createElement("hr", null),
                 React.createElement(SecondFilterList, { updateFilter: this.updateSecondFilter })
             ),
-            React.createElement(PostList, { postlist: this.state.posts, filter1: this.state.firstfilter, filter2: this.state.secondfilter }),
+            React.createElement(PostList, { postlist: this.state.posts, filter1: this.state.firstfilter, filter2: this.state.secondfilter, updated: this.state.updated }),
             React.createElement("hr", null),
-            React.createElement(PostEditor, { filter1: this.state.firstfilter, filter2: this.state.secondfilter, forceupdater: () => this.updatePosts(this.state.filter1, this.state.filter2) })
+            React.createElement(PostEditor, { filter1: this.state.firstfilter, filter2: this.state.secondfilter, forceupdater: this.updatePosts })
         );
     }
 
@@ -194,9 +197,7 @@ class PostList extends React.Component {
         super(props);
         this.state = {
             currpageposts: [],
-            pagenum: 1,
-            filter1: "",
-            filter2: ""
+            pagenum: 1
         };
         this.nextpage = this.nextpage.bind(this);
         this.prevpage = this.prevpage.bind(this);
@@ -204,15 +205,14 @@ class PostList extends React.Component {
     }
 
     componentWillUpdate() {
-        if (this.props.filter1 != this.state.filter1 || this.props.filter2 != this.state.filter2) {
+        if (this.props.updated) {
             this.updatecurrpage(1);
             this.setState({ pagenum: 1 });
-            this.setState({ filter1: this.props.filter1 });
-            this.setState({ filter2: this.props.filter2 });
         }
     }
 
     updatecurrpage(pagenum) {
+        console.log("trying to update page" + pagenum);
         var temp = [];
         var starti = (pagenum - 1) * 10;
         var endi = pagenum * 10;
@@ -282,7 +282,6 @@ class Post extends React.Component {
 
     componentDidUpdate() {
         if (this.state.id != this.props.post.postId) {
-            console.log("trying to update replies");
             this.updateReplies();
             if (!this.state.folded) {
                 this.setState({ folded: true });
@@ -620,6 +619,7 @@ class PostEditor extends React.Component {
     constructor(props) {
         super(props);
         this.makePost = this.makePost.bind(this);
+        this.cleanTextField = this.cleanTextField.bind(this);
     }
 
     render() {
@@ -674,12 +674,19 @@ class PostEditor extends React.Component {
         }
     }
 
+    cleanTextField() {
+        $("#postTitle").val("");
+        $("#postContent").val("");
+        $("#postImgUpload").val(null);
+    }
+
     makePost(filter1, filter2) {
         var submitButton = document.getElementById('post');
         var title = document.getElementById("postTitle").value;
         var content = document.getElementById("postContent").value;
         var correct = 1;
         var updater = this.props.forceupdater;
+        var clean = this.cleanTextField;
         if (title.length < 5) {
             correct = 0;
             alert("Title too short.");
@@ -724,9 +731,7 @@ class PostEditor extends React.Component {
                                         if (response['success'] != 'success') {
                                             alert("failed to post");
                                         } else {
-                                            $("#postTitle").val("");
-                                            $("#postContent").val("");
-                                            $("#postImgUpload").val(null);
+                                            clean();
                                             alert("posted");
                                             updater(filter1, filter2);
                                         }
@@ -757,7 +762,8 @@ class PostEditor extends React.Component {
                                 alert("failed to post");
                             } else {
                                 alert("posted");
-                                updater();
+                                clean();
+                                updater(filter1, filter2);
                             }
                         }
                     });
