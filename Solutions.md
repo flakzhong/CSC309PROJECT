@@ -68,18 +68,16 @@ There are two users available:
 
 User1:
 
-username: JamesGreen
-
+username: JamesGreen<br/>
 password: qwe123
 
 
 User2:
 
-username: AmySmith
-
+username: AmySmith<br/>
 password: zxcasd
 
 
-You can also register your own account.
+You can also register your own account.<br/>
 
 Thanks
