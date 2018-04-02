@@ -61,3 +61,4 @@ cd ngroks/windows/
 ngrok authtoken 5Z6GXXCaSXU18Q6g2TMSt_6k6NLg5ucMPQL2XZgYsaz
 ngrok http 3000 --subdomain cscdefault01
 ```
+Now you can open https://cscdefault01.ngrok.io
