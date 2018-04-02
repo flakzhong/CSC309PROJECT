@@ -33,14 +33,31 @@ To use our app, do
 npm install
 ```
 
-3. use ngrok (there are the ngrok executables in the ngroks for linux, windows and mac)
+3. run server:
+
+```
+node js/server.js
+```
+
+4. open another shell, use ngrok (there are the ngrok executables in the ngroks for linux, windows and mac)
 
 if you are a mac user, do
 ```
 cd ngroks/mac/
-```
-
-```
 ./ngrok authtoken 5Z6GXXCaSXU18Q6g2TMSt_6k6NLg5ucMPQL2XZgYsaz
+./ngrok http 3000 --subdomain cscdefault01
+```
 
+if you are a linux user, do
+```
+cd ngroks/linux/
+./ngrok authtoken 5Z6GXXCaSXU18Q6g2TMSt_6k6NLg5ucMPQL2XZgYsaz
+./ngrok http 3000 --subdomain cscdefault01
+```
+
+if you are a windows user, do
+```
+cd ngroks/windows/
+ngrok authtoken 5Z6GXXCaSXU18Q6g2TMSt_6k6NLg5ucMPQL2XZgYsaz
+ngrok http 3000 --subdomain cscdefault01
 ```
