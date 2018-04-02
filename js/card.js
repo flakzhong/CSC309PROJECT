@@ -1,5 +1,3 @@
-URL = "https://cscdefault01.ngrok.io";
-
 var dateparser = function (date) {
     date = date.split(" ");
     return date[1] + " - " + date[2];
@@ -199,6 +197,7 @@ class PostList extends React.Component {
             currpageposts: [],
             pagenum: 1
         };
+        this.postEveryPage = 5;
         this.nextpage = this.nextpage.bind(this);
         this.prevpage = this.prevpage.bind(this);
         this.updatecurrpage = this.updatecurrpage.bind(this);
@@ -214,8 +213,8 @@ class PostList extends React.Component {
     updatecurrpage(pagenum) {
         console.log("trying to update page" + pagenum);
         var temp = [];
-        var starti = (pagenum - 1) * 10;
-        var endi = pagenum * 10;
+        var starti = (pagenum - 1) * this.postEveryPage;
+        var endi = pagenum * this.postEveryPage;
         for (var i = starti; i < endi && i < this.props.postlist.length; i++) {
             temp.push(this.props.postlist[i]);
         }
@@ -223,7 +222,7 @@ class PostList extends React.Component {
     }
 
     nextpage(e) {
-        var maxpagenum = Math.ceil(this.props.postlist.length / 10);
+        var maxpagenum = Math.ceil(this.props.postlist.length / this.postEveryPage);
         if (this.state.pagenum + 1 <= maxpagenum) {
             this.updatecurrpage(this.state.pagenum + 1);
             this.setState({ pagenum: this.state.pagenum + 1 });
@@ -238,7 +237,7 @@ class PostList extends React.Component {
     }
 
     render() {
-        var maxpagenum = Math.max(Math.ceil(this.props.postlist.length / 10), 1);
+        var maxpagenum = Math.max(Math.ceil(this.props.postlist.length / this.postEveryPage), 1);
         return React.createElement(
             "div",
             { className: "block" },
@@ -624,7 +623,15 @@ class PostEditor extends React.Component {
 
     render() {
         if (currentUser == "" || this.props.filter1 == "All" || this.props.filter2 == "All") {
-            return null;
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "h4",
+                    null,
+                    "You can only upload posts when you are logged in and neither filter is All"
+                )
+            );
         } else {
             return React.createElement(
                 "div",
