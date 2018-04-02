@@ -1,4 +1,4 @@
-var URL = "https://cscdefault01.ngrok.io"
+var URL = "https://52c637e2.ngrok.io"
 
  
  if (window.location.hash == '') { 
@@ -50,7 +50,7 @@ function login(evt) {
                     alert("Failed to login. Please check your username and password.");
                 } else {
                     if (window.location.hash != 'forum') { 
-                        window.location.href = URL + '/#forum'; 
+                        window.location.href = URL; 
                     }
                     console.log("success")
                     put_account_info(response.payload);
@@ -168,6 +168,9 @@ function register() {
                     $('#rPassword').val("");
                     $('#rCPassword').val("");
                     alert("Registered.")
+                    if (window.location.hash != '/#loginbar') { 
+                        window.location.href = URL + '/#loginbar'; 
+                    } 
                   }       
               }
             });
@@ -342,6 +345,7 @@ function editProfile() {
                     if (response["success"] == "success") {
                         $('#editPhoto').val(null);
                         alert("Profile changed");
+                        window.location.reload(); 
                     } else {
                         alert("Failed to change profile. Please make sure that you type the correct old password.")
                     }
@@ -364,7 +368,10 @@ function deleteProfile() {
         success: function(response) {
             if (response["success"] == "success") {
                 alert("Profile deleted");
-                window.close();
+                currentUser = ""
+                if (window.location.hash != '/#forum') { 
+                    window.location.href = URL; 
+                } 
             } else {
                 alert("Failed to delete profile. Please make sure that you type the correct old password.")
             }
