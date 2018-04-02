@@ -66,14 +66,12 @@ Now you can open https://cscdefault01.ngrok.io
 
 There are two users available:
 
-User1:
-
+User1:<br/>
 username: JamesGreen<br/>
 password: qwe123
 
 
-User2:
-
+User2:<br/>
 username: AmySmith<br/>
 password: zxcasd
 
