@@ -24,7 +24,23 @@ Posts will be displayed page by page, a single page can contain at most five pos
 
 A user can reply to a post in the forum once he/she has logged in.
 
-run
+To use our app, do
+
+1. go into the folder: assignment-3-default
+
+2. do npm install
+```
+npm install
+```
+
+3. use ngrok (there are the ngrok executables in the ngroks for linux, windows and mac)
+
+if you are a mac user, do
+```
+cd ngroks/mac/
+```
+
 ```
 ./ngrok authtoken 5Z6GXXCaSXU18Q6g2TMSt_6k6NLg5ucMPQL2XZgYsaz
+
 ```
