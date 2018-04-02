@@ -63,14 +63,22 @@ ngrok http 3000 --subdomain cscdefault01
 ```
 Now you can open https://cscdefault01.ngrok.io
 
+
 There are two users available:
+
 User1:
+
 username: JamesGreen
+
 password: qwe123
 
+
 User2:
+
 username: AmySmith
+
 password: zxcasd
+
 
 You can also register your own account.
 
