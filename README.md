@@ -1,3 +1,5 @@
+#### Course Project for CSC309
+
 Our website is a forum about pets.
 
 For the forum part, we use 2-level filter to filter the posts of the forum, in other words, users can decide what kind of posts they can see on the forum. For example, they can choose to see posts about "Adoption - Dog".
