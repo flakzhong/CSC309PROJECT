@@ -60,6 +60,7 @@ ngrok http 3000
 ```
 
 After run these commands, you will get a temporary domain which looks like https://550d5ae4.ngrok.io
+
 Now change the URL in the script.js to the domain that you just got.
 
 Then the forum is good to go.
