@@ -1,4 +1,4 @@
-#### Course Project for CSC309
+# Course Project for CSC309
 
 Our website is a forum about pets.
 
